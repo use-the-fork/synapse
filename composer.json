@@ -5,7 +5,9 @@
     "illuminate/support": "^10.0|^11.0",
     "illuminate/container": "^10.0|^11.0",
     "illuminate/database": "^10.0|^11.0",
-    "illuminate/events": "^10.0|^11.0"
+    "illuminate/events": "^10.0|^11.0",
+    "saloonphp/saloon": "^3.0",
+    "spatie/laravel-data": "^4.7"
   },
   "require-dev": {
     "orchestra/testbench": "^9.2",
