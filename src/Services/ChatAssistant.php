@@ -36,7 +36,7 @@
     /**
      * @throws ReflectionException
      */
-    public function __construct(OnBoardingSteps $onBoardingSteps)
+    public function __construct()
     {
       $this->onBoardingSteps = $onBoardingSteps;
       $this->register([

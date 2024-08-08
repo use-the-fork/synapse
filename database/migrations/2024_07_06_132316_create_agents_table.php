@@ -10,20 +10,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('assistants', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('model');
-            $table->text('description')->nullable();
+        Schema::create('agents', function (Blueprint $table) {
+
+            $table->uuid('id');
+            $table->string('type');
+            $table->string('model')->default('gpt-4-turbo');
             $table->text('prompt');
+            $table->text('description')->nullable();
             $table->json('tools')->nullable();
-            $table->string('service')->default('openai');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('assistants');
+        Schema::dropIfExists('agents');
     }
 };

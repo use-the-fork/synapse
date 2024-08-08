@@ -5,22 +5,25 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class Thread extends Model
+class Agent extends Model
 {
-    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
-        'assistant_id',
-        'title',
+        'type',
+        'model',
+        'description',
+        'prompt',
+        'tools',
+        'service',
     ];
 
-    public function assistant()
-    {
-        return $this->belongsTo(Assistant::class);
-    }
+    protected $casts = [
+        'tools' => 'array',
+    ];
 
     public function messages()
     {

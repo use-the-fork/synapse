@@ -10,7 +10,7 @@
     use HasFactory;
 
     protected $fillable = [
-      'thread_id',
+      'assistant_id',
       'role',
       'content',
       'name',
@@ -22,8 +22,8 @@
       'tool_calls' => 'array',
     ];
 
-    public function thread()
+    public function assistant()
     {
-      return $this->belongsTo(Thread::class);
+      return $this->belongsTo(Assistant::class);
     }
   }

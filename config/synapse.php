@@ -1,20 +1,13 @@
 <?php
 
   return [
-    /*
-     * AI Service
-     */
-    'ai_service' => env('SYNAPSE_AI_SERVICE', 'openai'),
-
-    /*
-     * API Key
-     */
-    'api_key' => env('SYNAPSE_API_KEY'),
 
     /*
      * OpenAI Model
      */
-    'model' => env('SYNAPSE_MODEL'),
+    'openapi_key' => env('OPENAI_API_KEY'),
+
+    'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
 
     /*
      * OpenAI Assistant ID
