@@ -21,7 +21,7 @@
    */
   trait HasTools
   {
-    private array $registered_tools = [];
+    protected array $registered_tools = [];
 
     /**
      * @throws ReflectionException

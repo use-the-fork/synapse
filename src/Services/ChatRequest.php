@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Services\Request;
 
 use UseTheFork\Synapse\Data\MessageData;
-use UseTheFork\Synapse\Data\ToolCallData;
+use UseTheFork\Synapse\Data\ToolCallValueObject;
 use UseTheFork\Synapse\Models\Thread;
 
 class ChatRequest
@@ -48,7 +48,7 @@ class ChatRequest
         $tools = collect([]);
         if (isset($message['tool_calls'])) {
             foreach ($message['tool_calls'] as $toolCall) {
-                $tools->push(ToolCallData::from($toolCall));
+                $tools->push(ToolCallValueObject::from($toolCall));
             }
 
             $message['tool_calls'] = $tools;

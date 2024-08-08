@@ -27,6 +27,8 @@ class SimpleAgent extends BaseAgent
 
         $this->agent->save();
 
+        $this->register($tools);
+
         $apiKey = config('synapse.openapi_key');
         $this->client = OpenAI::client($apiKey);
     }

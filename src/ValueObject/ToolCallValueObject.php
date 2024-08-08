@@ -5,9 +5,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\ValueObject;
 
-use Illuminate\Support\Facades\Validator;
-
-class MessageValueObject extends ArrayValueObject
+class ToolCallValueObject extends ArrayValueObject
 {
     /**
      * Define the rules for email validator.
@@ -15,11 +13,11 @@ class MessageValueObject extends ArrayValueObject
     protected function validationRules(): array
     {
         return [
-            'role' => 'required',
-            'content' => 'nullable|sometimes|string',
-            'tool_call_id' => 'nullable|sometimes|string',
-            'tool_name' => 'nullable|sometimes|string',
-            'tool_calls' => 'nullable|sometimes',
+            'id' => 'required|string',
+            'type' => 'required|string',
+            'function' => 'required|array',
+            'function.name' => 'required|string',
+            'function.arguments' => 'required|json',
         ];
     }
 
@@ -28,10 +26,7 @@ class MessageValueObject extends ArrayValueObject
      */
     protected function sanitize(): void
     {
-
-        if (empty($this->value['tool_calls'])) {
-            $this->value['tool_calls'] = [];
-        }
+        $this->value['function'] = ToolFunctionValueObject::make($this->value['function']);
     }
 
     public function content(): string

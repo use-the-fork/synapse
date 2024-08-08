@@ -8,6 +8,9 @@
     'openapi_key' => env('OPENAI_API_KEY'),
 
     'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
+    'services' => [
+      'serper' => env('SERPER_API_KEY', 'gpt-4-turbo'),
+    ],
 
     /*
      * OpenAI Assistant ID

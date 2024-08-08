@@ -9,10 +9,10 @@
   use OpenAI;
   use OpenAI\Client;
 
-  use UseTheFork\Synapse\Data\ToolCallData;
   use UseTheFork\Synapse\Models\Agent;
   use UseTheFork\Synapse\Traits\HasTools;
   use UseTheFork\Synapse\ValueObject\MessageValueObject;
+  use UseTheFork\Synapse\ValueObject\ToolCallValueObject;
 
   class BaseAgent
   {
@@ -49,9 +49,8 @@
       $tools = collect([]);
       if (isset($message['tool_calls'])) {
         foreach ($message['tool_calls'] as $toolCall) {
-          $tools->push(ToolCallData::from($toolCall));
+          $tools->push(ToolCallValueObject::make($toolCall));
         }
-
         $message['tool_calls'] = $tools;
       }
 
@@ -87,6 +86,8 @@
 
     private function executeToolCall($toolCall): void
     {
+      dd($toolCall);
+
       try {
         $toolResponse = $this->call(
           $toolCall->function->name,
@@ -132,7 +133,7 @@
       ];
 
       if(!empty($this->agent->tools)){
-        $payload['tools'] = array_values($this->agent->tools);
+        $payload['tools'] = array_values($this->registered_tools);
       }
 
       return $payload;
