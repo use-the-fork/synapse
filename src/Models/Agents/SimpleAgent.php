@@ -1,31 +1,31 @@
 <?php
-  namespace UseTheFork\Synapse\Models\Agents;
 
+declare(strict_types=1);
 
-  use UseTheFork\Synapse\Models\Agent;
+namespace UseTheFork\Synapse\Models\Agents;
 
-  class SimpleAgent extends Agent
-  {
+use UseTheFork\Synapse\Models\Agent;
 
+class SimpleAgent extends Agent
+{
     protected $table = 'agents';
+
     protected $primaryKey = 'agent_id';
 
     protected $attributes = [
-      'prompt' =>  "You Are a helpful assistant",
-      'delayed' => false,
+        'prompt' => 'You Are a helpful assistant',
+        'delayed' => false,
     ];
 
-      public function invoke($query)
-      {
+    public function invoke($query)
+    {
         $this->messages()->create([
-                                      'role' => 'user',
-                                      'content' => $query,
-                                    ]);
-
+            'role' => 'user',
+            'content' => $query,
+        ]);
 
         dd(
-          $this->messages()
+            $this->messages()
         );
-      }
-
-  }
+    }
+}

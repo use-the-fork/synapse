@@ -1,28 +1,31 @@
 <?php
-  #Credits to https://github.com/bootstrapguru/dexor
-  namespace UseTheFork\Synapse\Models;
 
-  use Illuminate\Database\Eloquent\Factories\HasFactory;
-  use Illuminate\Database\Eloquent\Model;
-  use Illuminate\Database\Eloquent\Relations\BelongsTo;
-  use Illuminate\Database\Eloquent\Relations\HasMany;
+declare(strict_types=1);
+//Credits to https://github.com/bootstrapguru/dexor
 
-  class Project extends Model
-  {
+namespace UseTheFork\Synapse\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Project extends Model
+{
     use HasFactory;
 
     protected $fillable = [
-      'path',
-      'assistant_id',
+        'path',
+        'assistant_id',
     ];
 
     public function assistant(): BelongsTo
     {
-      return $this->belongsTo(Assistant::class);
+        return $this->belongsTo(Assistant::class);
     }
 
     public function threads(): HasMany
     {
-      return $this->hasMany(Thread::class);
+        return $this->hasMany(Thread::class);
     }
-  }
+}

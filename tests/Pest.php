@@ -1,8 +1,8 @@
 <?php
 
-  declare(strict_types=1);
+declare(strict_types=1);
 
-  use UseTheFork\Synapse\Tests\TestCase;
-  use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use UseTheFork\Synapse\Tests\TestCase;
 
-  uses(TestCase::class, RefreshDatabase::class)->in( __DIR__ );
+uses(TestCase::class, RefreshDatabase::class)->in(__DIR__);

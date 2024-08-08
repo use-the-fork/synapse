@@ -1,23 +1,26 @@
 <?php
-  #Credits to https://github.com/bootstrapguru/dexor
-  namespace UseTheFork\Synapse\Integrations\OpenAI;
 
-  use UseTheFork\Synapse\Models\Assistant;
-  use Saloon\Http\Connector;
-  use Saloon\Traits\Plugins\AcceptsJson;
-  use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
-  use Saloon\Traits\Plugins\HasTimeout;
+declare(strict_types=1);
+//Credits to https://github.com/bootstrapguru/dexor
 
-  class OpenAIConnector extends Connector
-  {
+namespace UseTheFork\Synapse\Integrations\OpenAI;
+
+use Saloon\Http\Connector;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use Saloon\Traits\Plugins\HasTimeout;
+
+class OpenAIConnector extends Connector
+{
     use AcceptsJson, AlwaysThrowOnErrors, HasTimeout;
 
     protected int $connectTimeout = 60;
 
     protected int $requestTimeout = 120;
 
-    public function __construct(protected readonly string $service) {
-      //
+    public function __construct(protected readonly string $service)
+    {
+        //
     }
 
     /**
@@ -25,10 +28,10 @@
      */
     public function resolveBaseUrl(): string
     {
-      return match ($this->service) {
-        'openai' => 'https://api.openai.com/v1',
-        'deep_seek' => 'https://api.deepseek.com/v1',
-      };
+        return match ($this->service) {
+            'openai' => 'https://api.openai.com/v1',
+            'deep_seek' => 'https://api.deepseek.com/v1',
+        };
 
     }
 
@@ -37,8 +40,8 @@
      */
     protected function defaultHeaders(): array
     {
-      return [
-        'Authorization' => 'Bearer '.config("aiproviders.{$this->service}.api_key"),
-      ];
+        return [
+            'Authorization' => 'Bearer '.config("aiproviders.{$this->service}.api_key"),
+        ];
     }
-  }
+}
