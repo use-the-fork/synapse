@@ -9,13 +9,28 @@
   },
   "require-dev": {
     "orchestra/testbench": "^9.2",
-    "friendsofphp/php-cs-fixer": "^3.62"
+    "friendsofphp/php-cs-fixer": "^3.62",
+    "pestphp/pest": "^2.35"
   },
   "autoload-dev": {
     "psr-4": {
+      "UseTheFork\\Synapse\\Tests\\": "tests/",
       "Workbench\\App\\": "workbench/app/",
       "Workbench\\Database\\Factories\\": "workbench/database/factories/",
       "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "UseTheFork\\Synapse\\": "src/",
+      "UseTheFork\\Synapse\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "UseTheFork\\Synapse\\SynapseServiceProvider"
+      ]
     }
   },
   "scripts": {
@@ -34,5 +49,10 @@
     "lint": [
       "@php vendor/bin/phpstan analyse --verbose --ansi"
     ]
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   }
 }
