@@ -34,7 +34,7 @@ class MessageValueObject extends ArrayValueObject
         }
     }
 
-    public function content(): string|null
+    public function content(): ?string
     {
         return ! empty($this->value['content']) ? $this->value['content'] : null;
     }
@@ -46,6 +46,6 @@ class MessageValueObject extends ArrayValueObject
 
     public function toolCalls(): array
     {
-        return $this->value['tool_calls']->toArray();
+        return $this->value['tool_calls'];
     }
 }

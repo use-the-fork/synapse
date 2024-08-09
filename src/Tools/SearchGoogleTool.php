@@ -7,6 +7,7 @@ namespace UseTheFork\Synapse\Tools;
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\SerperService;
+use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 #[Description('Search Google using a query.')]
 final class SearchGoogleTool

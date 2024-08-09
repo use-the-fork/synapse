@@ -29,16 +29,14 @@ trait HasTools
      */
     public function register(array $tool_classes): void
     {
-        foreach ($tool_classes as $class_name) {
-            if (! class_exists($class_name)) {
-                continue;
-            }
+        foreach ($tool_classes as $tool) {
 
-            $tool_class = new ReflectionClass($class_name);
-            $tool_name = Str::snake(basename(str_replace('\\', '/', $class_name)));
+            $reflection = new ReflectionClass($tool);
 
-            if (! $tool_class->hasMethod('handle')) {
-                Log::warning(sprintf('Tool class %s has no "handle" method', $tool_class));
+            $tool_name = Str::snake(basename(str_replace('\\', '/', $tool::class)));
+
+            if (! $reflection->hasMethod('handle')) {
+                Log::warning(sprintf('Tool class %s has no "handle" method', $tool));
 
                 continue;
             }
@@ -49,18 +47,21 @@ trait HasTools
             ];
 
             // set function description, if it has one
-            if (! empty($descriptions = $tool_class->getAttributes(Description::class))) {
+            if (! empty($descriptions = $reflection->getAttributes(Description::class))) {
                 $tool_definition['function']['description'] = implode(
                     separator: "\n",
                     array: array_map(static fn ($td) => $td->newInstance()->value, $descriptions),
                 );
             }
 
-            if ($tool_class->getMethod('handle')->getNumberOfParameters() > 0) {
-                $tool_definition['function']['parameters'] = $this->parseToolParameters($tool_class);
+            if ($reflection->getMethod('handle')->getNumberOfParameters() > 0) {
+                $tool_definition['function']['parameters'] = $this->parseToolParameters($reflection);
             }
 
-            $this->registered_tools[$class_name] = $tool_definition;
+            $this->registered_tools[$tool_name] = [
+                'definition' => $tool_definition,
+                'tool' => $tool,
+            ];
         }
     }
 
@@ -69,9 +70,10 @@ trait HasTools
      */
     public function call(string $tool_name, ?array $arguments = []): mixed
     {
-        if (null === $tool_class = array_key_first(array_filter($this->registered_tools, static fn ($registered_tools) => $registered_tools['function']['name'] === $tool_name))) {
+        if (null === $tool_class = $this->registered_tools[$tool_name]) {
             return null;
         }
+        $tool_class = $tool_class['tool'];
 
         $tool_class = new ReflectionClass($tool_class);
         $handle_method = $tool_class->getMethod('handle');

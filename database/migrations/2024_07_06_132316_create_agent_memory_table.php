@@ -10,14 +10,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('agent_memories', function (Blueprint $table) {
 
             $table->uuid('id');
-            $table->string('type');
-            $table->string('model')->default('gpt-4-turbo');
-            $table->text('prompt');
-            $table->text('description')->nullable();
-            $table->json('tools')->nullable();
+            $table->string('type')->nullable();
+//            $table->string('model')->default('gpt-4-turbo');
+//            $table->text('prompt');
+//            $table->text('description')->nullable();
+//            $table->json('tools')->nullable();
             $table->timestamps();
         });
     }
