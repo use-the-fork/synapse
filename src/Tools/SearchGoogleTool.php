@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Services\SerperService;
 
 #[Description('Search Google using a query.')]
 final class SearchGoogleTool
@@ -15,30 +16,41 @@ final class SearchGoogleTool
         string $query,
     ): string {
 
-        dd(
-            $query
-        );
+        $serperService = new SerperService();
+        $results = $serperService->__invoke($query);
 
-        // Make sure it's a relative path
-        if (str_contains($file_path, Storage::path(DIRECTORY_SEPARATOR))) {
-            $file_path = str_replace(Storage::path(DIRECTORY_SEPARATOR), '', $file_path);
+        return $this->parseResults($results);
+    }
+
+    private function parseResults($results): string
+    {
+      $snippets = collect();
+      if(!empty($results['knowledgeGraph'])){
+        $title = Arr::get($results, 'knowledgeGraph.title');
+        $entityType = Arr::get($results, 'knowledgeGraph.type');
+        if($entityType){
+          $snippets->push("{$title}: {$entityType}");
+        }
+        $description = Arr::get($results, 'knowledgeGraph.description');
+        if($description){
+          $snippets->push($description);
         }
 
-        if (Storage::exists($file_path)) {
-            render(view('tool', [
-                'name' => 'ReadFile',
-                'output' => $file_path,
-            ]));
-
-            return Storage::get($file_path);
+        foreach (Arr::get($results, 'knowledgeGraph.attributes', []) as $key => $value){
+          $snippets->push("{$title} {$key}: {$value}");
         }
+      }
 
-        $output = 'The file does not exist in the path: '.$file_path;
-        render(view('tool', [
-            'name' => 'ReadFile',
-            'output' => $output,
-        ]));
+      if(!empty($results['organic'])){
+        foreach ($results['organic'] as $key => $value){
+          $snippets->push($value['snippet']);
+        }
+      }
 
-        return $output;
+      if($snippets->isEmpty()){
+        return "No good Google Search Result was found";
+      }
+
+        return $snippets->implode("\n");
     }
 }

@@ -55,6 +55,7 @@ class BaseAgent
 
     private function handleTools($message): string
     {
+
         $answer = $message->content();
 
         $messageData = [
@@ -82,18 +83,16 @@ class BaseAgent
 
     private function executeToolCall($toolCall): void
     {
-        dd($toolCall);
-
         try {
             $toolResponse = $this->call(
-                $toolCall->function->name,
-                json_decode($toolCall->function->arguments, true, 512, JSON_THROW_ON_ERROR)
+                $toolCall['function']['name'],
+                json_decode($toolCall['function']['arguments'], true, 512, JSON_THROW_ON_ERROR)
             );
 
             $this->agent->messages()->create([
                 'role' => 'tool',
-                'tool_call_id' => $toolCall->id,
-                'name' => $toolCall->function->name,
+                'tool_call_id' => $toolCall['id'],
+                'name' => $toolCall['function']['name'],
                 'content' => $toolResponse,
             ]);
         } catch (Exception $e) {

@@ -11,7 +11,7 @@ return [
 
     'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
     'services' => [
-        'serper' => env('SERPER_API_KEY', 'gpt-4-turbo'),
+        'serper' => env('SERPER_API_KEY', ''),
     ],
 
     /*

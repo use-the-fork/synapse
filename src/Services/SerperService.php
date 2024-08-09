@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Services\Request;
+namespace UseTheFork\Synapse\Services;
 
 use Illuminate\Support\Facades\Http;
 
@@ -17,6 +17,7 @@ class SerperService
 
     public function __invoke($searchQuery, $type = 'search', $num = 10)
     {
+
         $response = Http::withHeaders([
             'X-API-KEY' => $this->apiKey,
             'Accept' => 'application/json',

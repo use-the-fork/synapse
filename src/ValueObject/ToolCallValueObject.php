@@ -26,7 +26,7 @@ class ToolCallValueObject extends ArrayValueObject
      */
     protected function sanitize(): void
     {
-        $this->value['function'] = ToolFunctionValueObject::make($this->value['function']);
+
     }
 
     public function content(): string
