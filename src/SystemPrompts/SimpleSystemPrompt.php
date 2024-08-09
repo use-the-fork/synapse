@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\SystemPrompts;
 
 use UseTheFork\Synapse\SystemPrompts\Contracts\SystemPrompt;
 
-class SimpleSystemSystemPrompt implements SystemPrompt
+class SimpleSystemPrompt extends BaseSystemPrompt  implements SystemPrompt
 {
     public function get(): string
     {
