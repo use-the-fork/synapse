@@ -32,4 +32,21 @@ class DatabaseMemory implements Memory
     {
         $this->agentMemory->load('messages');
     }
+
+  public function asString(): string
+  {
+    $payload = [];
+    $messages = $this->agentMemory->messages->toArray();
+
+    foreach ($messages as $message) {
+      if($message['role'] == 'tool'){
+        $payload[] = "assistant: Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
+        $payload[] = "{$message['tool_name']} response: {$message['content']}";
+      } else {
+        $payload[] = "{$message['role']}: {$message['content']}";
+      }
+    }
+
+    return implode("\n", $payload);
+  }
 }

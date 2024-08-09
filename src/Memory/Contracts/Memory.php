@@ -23,6 +23,8 @@ interface Memory
      */
     public function get(): array;
 
+    public function asString(): string;
+
     public function load(): void;
 
 }

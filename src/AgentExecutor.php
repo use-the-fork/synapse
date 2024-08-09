@@ -8,7 +8,7 @@ use Closure;
 use UseTheFork\Synapse\Integrations\Contracts\ModelIntegration;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
 use UseTheFork\Synapse\OutputParsers\Contracts\OutputParser;
-use UseTheFork\Synapse\SystemPrompts\Contracts\SystemPrompt;
+use UseTheFork\Synapse\Prompts\Contracts\Prompt;
 use UseTheFork\Synapse\Traits\HasTools;
 use UseTheFork\Synapse\ValueObject\MessageValueObject;
 
@@ -18,7 +18,7 @@ class AgentExecutor
 
     public function __construct(
         public ModelIntegration $integration,
-        public SystemPrompt $systemPrompt,
+        public Prompt $prompt,
         public Memory $memory,
         public OutputParser $outputParser,
         public array $tools = []
@@ -27,9 +27,9 @@ class AgentExecutor
         $this->register($tools);
     }
 
-    public function __invoke(?string $message): mixed
+    public function __invoke(?array $input): mixed
     {
-      $response = $this->getAnswer($message);
+      $response = $this->getAnswer($input);
 
       return $this->doValidate(
         $response,
@@ -41,55 +41,49 @@ class AgentExecutor
 
     }
 
-    public function getAnswer(?string $message): string
+    public function getAnswer(?array $input): string
     {
-
-        if ($message !== null) {
-            $this->memory->create(MessageValueObject::make([
-                'role' => 'user',
-                'content' => $message,
-            ]));
-        }
-
+      while(true){
         $this->memory->load();
 
-      $this->systemPrompt->setOutputFormat($this->outputParser->getOutputFormat());
-
-        $chatResponse = $this->integration->__invoke(
-            $this->systemPrompt->get(),
-            $this->memory->get(),
-            $this->registered_tools
+        $prompt = $this->prompt->get(
+          $input,
+          $this->outputParser,
+          $this->memory,
+          $this->registered_tools
         );
 
-        return $this->handleTools($chatResponse);
+        $chatResponse = $this->integration->__invoke($prompt, $this->registered_tools);
+
+        switch ($chatResponse->finishReason()) {
+          case "tool_calls";
+            $this->handleTools($chatResponse);
+            break;
+          case "stop";
+            return $chatResponse->content();
+          default:
+            dd($chatResponse);
+        }
+      }
     }
 
-    private function handleTools(MessageValueObject $message): string
+    private function handleTools(MessageValueObject $message): void
     {
 
-        $answer = $message->content();
-
+      if ( empty($message->toolCalls()) ) {
         $messageData = [
-            'role' => $message->role(),
-            'content' => $message->content(),
+          'role'    => $message->role(),
+          'content' => $message->content(),
         ];
 
-        if (! empty($message->toolCalls()) && count($message->toolCalls()) > 0) {
-            $messageData['tool_calls'] = $message->toolCalls();
-        }
-
         $this->memory->create(MessageValueObject::make($messageData));
+      }
 
-        if (! empty($message->toolCalls()) && count($message->toolCalls()) > 0) {
-
-            foreach ($message->toolCalls() as $toolCall) {
-                $this->executeToolCall($toolCall);
-            }
-
-            return $this->getAnswer(null);
-        }
-
-        return $answer;
+      if (! empty($message->toolCalls()) && count($message->toolCalls()) > 0) {
+          foreach ($message->toolCalls() as $toolCall) {
+              $this->executeToolCall($toolCall);
+          }
+      }
     }
 
     private function executeToolCall($toolCall): void
@@ -103,7 +97,8 @@ class AgentExecutor
             $this->memory->create(MessageValueObject::make([
                 'role' => 'tool',
                 'tool_call_id' => $toolCall['id'],
-                'name' => $toolCall['function']['name'],
+                'tool_name' => $toolCall['function']['name'],
+                'tool_arguments' => $toolCall['function']['arguments'],
                 'content' => $toolResponse,
             ]));
         } catch (Exception $e) {

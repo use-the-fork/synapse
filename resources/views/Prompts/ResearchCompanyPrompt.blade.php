@@ -10,5 +10,5 @@ Use the tools at your disposal to generate a detailed company overview.
 @endforeach
 @endisset
 
-### You must respond in this format:
-{{$expectedOutputFormat}}
+@include('synapse::Base.ExpectedOutputFormat')
+@include('synapse::Base.Query')

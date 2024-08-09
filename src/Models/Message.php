@@ -16,7 +16,8 @@ class Message extends Model
         'assistant_id',
         'role',
         'content',
-        'name',
+        'tool_name',
+        'tool_arguments',
         'tool_call_id',
         'tool_calls',
     ];

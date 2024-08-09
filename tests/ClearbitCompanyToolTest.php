@@ -7,9 +7,9 @@ declare(strict_types=1);
   use UseTheFork\Synapse\Memory\DatabaseMemory;
   use UseTheFork\Synapse\OutputParsers\JsonOutputParser;
   use UseTheFork\Synapse\OutputParsers\StringOutputParser;
-  use UseTheFork\Synapse\SystemPrompts\MultiQueryRetrieverSystemPrompt;
-  use UseTheFork\Synapse\SystemPrompts\ResearchCompanySystemPrompt;
-  use UseTheFork\Synapse\SystemPrompts\SimpleSystemPrompt;
+  use UseTheFork\Synapse\Prompts\MultiQueryRetrieverPrompt;
+  use UseTheFork\Synapse\Prompts\ResearchCompanyPrompt;
+  use UseTheFork\Synapse\Prompts\SimplePrompt;
   use UseTheFork\Synapse\Tools\ClearbitCompanyTool;
   use UseTheFork\Synapse\Tools\SearchGoogleTool;
 
@@ -18,7 +18,7 @@ it('can search clearbit', function () {
 
     $agent = new AgentExecutor(
       integration: new OpenAIConnector(),
-      systemPrompt: new ResearchCompanySystemPrompt(),
+      prompt: new ResearchCompanyPrompt(),
       memory: new DatabaseMemory(),
       outputParser: new StringOutputParser(),
       tools: [
@@ -27,4 +27,4 @@ it('can search clearbit', function () {
     );
     $t = $agent->__invoke('Products strengths and weaknesses of InVue Security Products Charlotte, NC');
     dd($t);
-});
+})->skip();

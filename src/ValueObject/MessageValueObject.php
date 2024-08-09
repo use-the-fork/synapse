@@ -16,9 +16,11 @@ class MessageValueObject extends ArrayValueObject
     {
         return [
             'role' => 'required',
+            'finish_reason' => 'nullable|sometimes|string',
             'content' => 'nullable|sometimes|string',
             'tool_call_id' => 'nullable|sometimes|string',
             'tool_name' => 'nullable|sometimes|string',
+            'tool_arguments' => 'nullable|sometimes|string',
             'tool_calls' => 'nullable|sometimes',
         ];
     }
@@ -32,6 +34,11 @@ class MessageValueObject extends ArrayValueObject
         if (empty($this->value['tool_calls'])) {
             $this->value['tool_calls'] = [];
         }
+    }
+
+    public function finishReason(): string
+    {
+        return $this->value['finish_reason'];
     }
 
     public function content(): ?string

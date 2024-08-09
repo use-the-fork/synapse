@@ -3,5 +3,6 @@ You are an AI language model assistant. Your task is to generate {{ $queryCount 
 
 By generating multiple perspectives on the user question, your goal is to help the user overcome some of the limitations of distance-based similarity search.
 
-### You must respond in this format:
-{{$expectedOutputFormat}}
+@include('synapse::Base.ExpectedOutputFormat')
+
+@include('synapse::Base.Query')

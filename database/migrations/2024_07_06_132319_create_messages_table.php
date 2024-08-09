@@ -15,7 +15,8 @@ return new class extends Migration
             $table->foreignId('agent_memory_id')->constrained('agent_memories')->onDelete('cascade');
             $table->string('role');
             $table->text('content')->nullable();
-            $table->string('name')->nullable();
+            $table->string('tool_name')->nullable();
+            $table->string('tool_arguments')->nullable();
             $table->string('tool_call_id')->nullable();
             $table->json('tool_calls')->nullable();
             $table->timestamps();

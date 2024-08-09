@@ -27,7 +27,7 @@ interface ModelIntegration
      * Implement method to fire request.
      *
      */
-    public function __invoke(string $systemPrompt, array $messages, array $tools = []): MessageValueObject;
+    public function __invoke(string $prompt, array $tools = []): MessageValueObject;
 
     /**
      * Implement Environment validation.

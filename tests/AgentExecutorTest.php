@@ -7,22 +7,23 @@ declare(strict_types=1);
   use UseTheFork\Synapse\Memory\DatabaseMemory;
   use UseTheFork\Synapse\OutputParsers\JsonOutputParser;
   use UseTheFork\Synapse\OutputParsers\StringOutputParser;
-  use UseTheFork\Synapse\SystemPrompts\MultiQueryRetrieverSystemPrompt;
-  use UseTheFork\Synapse\SystemPrompts\SimpleSystemPrompt;
+  use UseTheFork\Synapse\Prompts\MultiQueryRetrieverPrompt;
+  use UseTheFork\Synapse\Prompts\SimplePrompt;
   use UseTheFork\Synapse\Tools\SearchGoogleTool;
 
 it('connects to OpenAI', function () {
   $agent = new AgentExecutor(
       integration: new OpenAIConnector(),
-      systemPrompt: new SimpleSystemPrompt(),
+      prompt: new SimplePrompt(),
       memory: new DatabaseMemory(),
       outputParser: new StringOutputParser(),
       tools: [
         new SearchGoogleTool()
        ]
     );
-    $t = $agent->__invoke('search google for the current president of the united states.');
-})->skip();
+    $t = $agent->__invoke(['query' => 'search google for the current president of the united states.']);
+    dd($t);
+})->only();
 
 it('can parse JSON output', function () {
 
@@ -37,11 +38,11 @@ it('can parse JSON output', function () {
 
     $agent = new AgentExecutor(
       integration: new OpenAIConnector(),
-      systemPrompt: new MultiQueryRetrieverSystemPrompt(),
+      prompt: new MultiQueryRetrieverPrompt(),
       memory: new DatabaseMemory(),
       outputParser: new JsonOutputParser($expectedOutput),
       tools: []
     );
-    $t = $agent->__invoke('Products strengths and weaknesses of InVue Security Products Charlotte, NC');
+    $t = $agent->__invoke(['query' => 'Products strengths and weaknesses of InVue Security Products Charlotte, NC']);
     dd($t);
 })->skip();
