@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\SystemPrompts;
 
 use UseTheFork\Synapse\SystemPrompts\Contracts\SystemPrompt;
 
-class BaseSystemPrompt implements SystemPrompt
+abstract class BaseSystemPrompt implements SystemPrompt
 {
     protected string $expectedOutputFormat;
 
@@ -17,6 +17,6 @@ class BaseSystemPrompt implements SystemPrompt
 
     public function setOutputFormat(string $format): void
     {
-      $this->expectedOutputFormat = $format;
+        $this->expectedOutputFormat = $format;
     }
 }

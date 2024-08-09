@@ -3,12 +3,10 @@
 declare(strict_types=1);
 
   use UseTheFork\Synapse\AgentExecutor;
-  use UseTheFork\Synapse\Agents\SimpleAgent;
   use UseTheFork\Synapse\Integrations\OpenAI\OpenAIConnector;
   use UseTheFork\Synapse\Memory\DatabaseMemory;
   use UseTheFork\Synapse\OutputParsers\JsonOutputParser;
   use UseTheFork\Synapse\OutputParsers\StringOutputParser;
-  use UseTheFork\Synapse\SystemPrompts\ChatPromptTemplate;
   use UseTheFork\Synapse\SystemPrompts\MultiQueryRetrieverSystemPrompt;
   use UseTheFork\Synapse\SystemPrompts\SimpleSystemPrompt;
   use UseTheFork\Synapse\Tools\SearchGoogleTool;
