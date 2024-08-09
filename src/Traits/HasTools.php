@@ -73,9 +73,9 @@ trait HasTools
         if (null === $tool_class = $this->registered_tools[$tool_name]) {
             return null;
         }
-        $tool_class = $tool_class['tool'];
+        $tool = $tool_class['tool'];
 
-        $tool_class = new ReflectionClass($tool_class);
+        $tool_class = new ReflectionClass($tool_class['tool']);
         $handle_method = $tool_class->getMethod('handle');
 
         $params = [];
@@ -97,7 +97,7 @@ trait HasTools
             $params[$parameter->name] = $arguments[$parameter->name] ?? $parameter->getDefaultValue();
         }
 
-        return $handle_method->invoke(new $tool_class->name, ...$params);
+        return $tool->handle(...$params);
     }
 
     /**

@@ -1,14 +1,13 @@
 ### Instruction
 You are a world class company researcher.
 
-Use the tools at your disposal to generate a detailed company overview.
+Use the tools at your disposal to generate a company overview.
 
 @isset($tools)
 ### You MUST use each of the below tools At LEAST one time.
-@foreach ($tools as $name => $tool)
-- {{ $name }}
-@endforeach
+@include('synapse::Base.ToolList')
 @endisset
 
+@include('synapse::Base.Memory')
 @include('synapse::Base.ExpectedOutputFormat')
 @include('synapse::Base.Query')

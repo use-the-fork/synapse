@@ -23,7 +23,7 @@ it('connects to OpenAI', function () {
     );
     $t = $agent->__invoke(['query' => 'search google for the current president of the united states.']);
     dd($t);
-})->only();
+})->skip();
 
 it('can parse JSON output', function () {
 

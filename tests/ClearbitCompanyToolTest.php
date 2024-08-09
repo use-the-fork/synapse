@@ -22,9 +22,10 @@ it('can search clearbit', function () {
       memory: new DatabaseMemory(),
       outputParser: new StringOutputParser(),
       tools: [
-        new ClearbitCompanyTool(env("CLEARBIT_API_KEY"))
+        new ClearbitCompanyTool(env("CLEARBIT_API_KEY")),
+        new SearchGoogleTool()
              ]
     );
-    $t = $agent->__invoke('Products strengths and weaknesses of InVue Security Products Charlotte, NC');
+    $t = $agent->__invoke(['query' => 'Products strengths and weaknesses of InVue Security Products Charlotte, NC']);
     dd($t);
-})->skip();
+})->only();

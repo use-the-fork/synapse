@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\ClearbitService;
-use UseTheFork\Synapse\Services\SerperService;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 #[Description('Search Clearbit Company data.')]
 final class ClearbitCompanyTool
@@ -17,7 +14,6 @@ final class ClearbitCompanyTool
       private readonly string $apiKey
     ) {
     }
-
 
     public function handle(
         #[Description('the Top Level domain name to lookup for example `clearbit.com`')]
@@ -29,39 +25,40 @@ final class ClearbitCompanyTool
 
         return $this->parseResults($results);
     }
+  public function parseResults($result): string
+  {
 
-    private function parseResults($results): string
-    {
-
-      dd($results);
-
-      $snippets = collect();
-      if(!empty($results['knowledgeGraph'])){
-        $title = Arr::get($results, 'knowledgeGraph.title');
-        $entityType = Arr::get($results, 'knowledgeGraph.type');
-        if($entityType){
-          $snippets->push("{$title}: {$entityType}");
-        }
-        $description = Arr::get($results, 'knowledgeGraph.description');
-        if($description){
-          $snippets->push($description);
-        }
-
-        foreach (Arr::get($results, 'knowledgeGraph.attributes', []) as $key => $value){
-          $snippets->push("{$title} {$key}: {$value}");
-        }
-      }
-
-      if(!empty($results['organic'])){
-        foreach ($results['organic'] as $key => $value){
-          $snippets->push($value['snippet']);
-        }
-      }
-
-      if($snippets->isEmpty()){
-        return "No good Google Search Result was found";
-      }
-
-        return $snippets->implode("\n");
+    if (
+      !empty($result['error'])
+    ) {
+      return "Error: {$result['error']['type']} - {$result['error']['message']}";
     }
+
+    $snip = collect([]);
+    if (!empty($result['name'])) {
+      $snip->push("Company Name: {$result['name']}");
+    }
+
+    if (!empty($result['legalName'])) {
+      $snip->push("Legal Name: {$result['legalName']}");
+    }
+
+    if (!empty($result['description'])) {
+      $snip->push("Description: {$result['description']}");
+    }
+
+    if (!empty($result['category']['sector'])) {
+      $snip->push("Category Sector: {$result['category']['sector']}");
+    }
+
+    if (!empty($result['category']['industry'])) {
+      $snip->push("Category Industry: {$result['category']['industry']}");
+    }
+
+    if (!empty($result['tags'])) {
+      $snip->push('Tags:' . implode(', ', $result['tags']));
+    }
+
+    return $snip->implode("\n");
+  }
 }
