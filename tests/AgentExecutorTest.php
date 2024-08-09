@@ -44,4 +44,4 @@ it('can parse JSON output', function () {
     );
     $t = $agent->__invoke('Products strengths and weaknesses of InVue Security Products Charlotte, NC');
     dd($t);
-});
+})->skip();

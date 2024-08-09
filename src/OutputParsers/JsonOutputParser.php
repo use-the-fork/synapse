@@ -10,13 +10,6 @@ class JsonOutputParser extends BaseOutputParser implements OutputParser
 {
     public function __construct($expectedOutputFormat)
     {
-
-        //    $schema = [];
-        //    foreach ($expectedOutputFormat as $property => $value) {
-        //      $schema[$property] = gettype($value);
-        //    }
-        //    dd($schema);
-
         $this->expectedOutputFormat = "```json\n".json_encode($expectedOutputFormat, JSON_PRETTY_PRINT)."\n```";
     }
 
