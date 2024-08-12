@@ -95,13 +95,15 @@ trait HasOutputRules
 
     protected function doRevalidate(string $result)
     {
+      dump($result);
+
         $prompt = Message::make([
             'role' => 'user',
             'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n### User Content\n{$result}",
-        ])->toArray();
+        ]);
 
         return $this->integration->handle(
-            $prompt,
+            [$prompt],
             []
         );
     }

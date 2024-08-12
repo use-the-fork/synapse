@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 
 class FirecrawlService
@@ -15,11 +16,13 @@ class FirecrawlService
     public function __invoke($url)
     {
 
+      try {
+
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$this->apiKey}",
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-        ])->post('https://api.firecrawl.dev/v0/scrape', [
+        ])->throw()->post('https://api.firecrawl.dev/v0/scrape', [
             'pageOptions' => [
                 'onlyMainContent' => true,
             ],
@@ -27,5 +30,16 @@ class FirecrawlService
         ])->json();
 
         return $response;
+
+      } catch (Exception $e){
+        return [
+          'data' => [
+            'metadata' => [
+              'title' => '500 Page had error.'
+            ],
+            'content' => 'Oops something went wrong and the page could not be scraped.'
+          ]
+        ];
+      }
     }
 }
