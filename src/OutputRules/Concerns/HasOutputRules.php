@@ -10,102 +10,99 @@ use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 
 /**
  * Trait HasOutputParser
- *
  */
 trait HasOutputRules
 {
-  protected bool $hasOutputRules = true;
+    protected bool $hasOutputRules = true;
 
-  protected array $outputRules = [];
+    protected array $outputRules = [];
 
-  /**
-   * returns the memory type this Agent should use.
-   *
-   * @return []
-   */
-  protected function registerOutputRules(): array
-  {
-    return [];
-  }
-
-  /**
-   * sets the initial output rules type this agent will use.
-   *
-   * @return void
-   */
-  protected function initializeOutputRules(): void
-  {
-    $this->outputRules = $this->registerOutputRules();
-  }
-
-  public function setOutputRules(array $rules = []) : void
-  {
-    $this->outputRules = $rules;
-  }
-
-  public function addOutputRule(OutputRule $rule) : void
-  {
-    $this->outputRules[] = $rule;
-  }
-
-  public function getOutputRules(): string|null
-  {
-    if(!$this->hasOutputRules){
-      return null;
+    /**
+     * returns the memory type this Agent should use.
+     *
+     * @return []
+     */
+    protected function registerOutputRules(): array
+    {
+        return [];
     }
 
-    $outputParserPromptPart = [];
-    foreach ($this->outputRules as $rule) {
-      $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
+    /**
+     * sets the initial output rules type this agent will use.
+     */
+    protected function initializeOutputRules(): void
+    {
+        $this->outputRules = $this->registerOutputRules();
     }
 
-    return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
-  }
-
-  protected function doValidate(string $response)
-  {
-    if(!$this->hasOutputRules){
-      return $response;
+    public function setOutputRules(array $rules = []): void
+    {
+        $this->outputRules = $rules;
     }
 
-    $outputRules = [];
-    collect($this->outputRules)->each(function ($rule) use (&$outputRules) {
-      $outputRules[$rule->getName()] = $rule->getRules();
-    });
+    public function addOutputRule(OutputRule $rule): void
+    {
+        $this->outputRules[] = $rule;
+    }
 
-    while (TRUE) {
-      $result = $this->parseResponse($response);
-      if (!empty($result)) {
-        $validator = Validator::make($result, $outputRules);
-        if (!$validator->fails()) {
-          return $validator->validated();
+    public function getOutputRules(): ?string
+    {
+        if (! $this->hasOutputRules) {
+            return null;
         }
-        dd($validator->fails());
-      }
-      $response = $this->doRevalidate($response);
+
+        $outputParserPromptPart = [];
+        foreach ($this->outputRules as $rule) {
+            $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
+        }
+
+        return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
     }
-  }
 
-  protected function parseResponse($input)
-  {
-    return json_decode(
-      str($input)->replace([
-                             '```json',
-                             '```',
-                           ], '')->toString(), true
-    );
-  }
+    protected function doValidate(string $response)
+    {
+        if (! $this->hasOutputRules) {
+            return $response;
+        }
 
-  protected function doRevalidate(string $result)
-  {
-    $prompt = Message::make([
-      'role'    => 'user',
-      'content' => "###Instruction###\nRewrite user-generated content to adhere to a specified format.\n\n{$this->getOutputRules()}\n\n###User Content###\n{$result}",
-    ]);
+        $outputRules = [];
+        collect($this->outputRules)->each(function ($rule) use (&$outputRules) {
+            $outputRules[$rule->getName()] = $rule->getRules();
+        });
 
-    return $this->integration->handle(
-      $prompt,
-      []
-    );
-  }
+        while (true) {
+            $result = $this->parseResponse($response);
+            if (! empty($result)) {
+                $validator = Validator::make($result, $outputRules);
+                if (! $validator->fails()) {
+                    return $validator->validated();
+                }
+                dd($validator->fails());
+            }
+            $response = $this->doRevalidate($response);
+        }
+    }
+
+    protected function parseResponse($input)
+    {
+        return json_decode(
+            str($input)->replace([
+                '```json',
+                '```',
+            ], '')->toString(), true
+        );
+    }
+
+    protected function doRevalidate(string $result)
+    {
+        $prompt = Message::make([
+            'role' => 'user',
+            'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n### User Content\n{$result}",
+        ]);
+
+        return $this->integration->handle(
+            $prompt,
+            []
+        );
+    }
 }
