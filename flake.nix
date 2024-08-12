@@ -20,6 +20,11 @@
         composer = "${lang.php.packages.composer}/bin/composer";
         php = "${lang.php.package}/bin/php";
 
+        publicKeys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSE69dmDxQ/UJ8k+8CL3lzc/PyJXXO/2aCcYQOjkTW+ " #Greg Home Machine
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBheo89VICojUMhqeSykFVEBoO0R+kKwlFxkS4DZ+NER" #Greg
+        ];
+
         envKeys = builtins.attrNames config.snow-blower.env;
         unsetEnv = builtins.concatStringsSep "\n" (
           map (key: "unset ${key}") envKeys
@@ -72,6 +77,14 @@
           };
 
           integrations = {
+            #secrets
+            agenix = {
+              enable = true;
+              secrets = {
+                ".env" = {inherit publicKeys;};
+              };
+            };
+
             #Creates Changelogs based on commits
             git-cliff.enable = true;
 
