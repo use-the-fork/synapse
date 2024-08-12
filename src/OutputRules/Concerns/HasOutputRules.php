@@ -80,6 +80,8 @@ trait HasOutputRules
                 dd($validator->fails());
             }
             $response = $this->doRevalidate($response);
+            //since all integrations return a Message value object we need to grab the content
+            $response = $response->content();
         }
     }
 
@@ -95,13 +97,15 @@ trait HasOutputRules
 
     protected function doRevalidate(string $result)
     {
+        dump($result);
+
         $prompt = Message::make([
             'role' => 'user',
             'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n### User Content\n{$result}",
-        ])->toArray();
+        ]);
 
         return $this->integration->handle(
-            $prompt,
+            [$prompt],
             []
         );
     }
