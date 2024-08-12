@@ -90,5 +90,5 @@ declare(strict_types=1);
 
   expect($iterativePrompt)->toBeArray()
                         ->and($agentResponse)->toHaveKeys(["draft_1", 'draft_2', 'draft_3', "final_draft"]);
-})->only();
+});
 

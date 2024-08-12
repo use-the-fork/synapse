@@ -12,4 +12,4 @@ it('can handle multiple inputs for a query.', function () {
         ->and($agentResponse)->toHaveKey('answer')
         ->and($agentResponse['answer'])->toBeArray()
         ->and($agentResponse['answer'])->toHaveCount(5);
-});
+})->only();

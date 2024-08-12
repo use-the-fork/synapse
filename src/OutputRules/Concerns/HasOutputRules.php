@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\OutputRules\Concerns;
 
 use Illuminate\Support\Facades\Validator;
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 
 /**
@@ -58,7 +59,7 @@ trait HasOutputRules
       $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
     }
 
-    return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
+    return "\```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n\```";
   }
 
   protected function doValidate(string $response)
@@ -97,14 +98,14 @@ trait HasOutputRules
 
   protected function doRevalidate(string $result)
   {
-    $prompt = [
+    $prompt = Message::make([
       'role'    => 'user',
       'content' => "###Instruction###\nRewrite user-generated content to adhere to a specified format.\n\n{$this->getOutputRules()}\n\n###User Content###\n{$result}",
-    ];
+    ]);
 
-    return $this->integration->__invoke(
-      '',
-      $prompt
+    return $this->integration->handle(
+      $prompt,
+      []
     );
   }
 }

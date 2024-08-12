@@ -27,7 +27,7 @@ class OpenAIConnector implements Integration
         $this->client = OpenAI::client($this->apiKey);
     }
 
-    public function handle(string $prompt, array $tools = []): Message
+    public function handle(array $prompt, array $tools = []): Message
     {
         $payload = $this->generateRequestBody($prompt, $tools);
         $response = $this->client->chat()->create($payload);
@@ -61,12 +61,16 @@ class OpenAIConnector implements Integration
     /**
      * Data to be sent in the body of the request
      */
-    public function generateRequestBody(string $prompt, array $tools = []): array
+    public function generateRequestBody(array $messages, array $tools = []): array
     {
-        $payload = [[
-            'role' => 'user',
-            'content' => $prompt,
-        ]];
+
+      $payload = [];
+      foreach ($messages as $message){
+        $payload[] = [
+          'role' => $message->role(),
+          'content' => $message->content(),
+        ];
+      }
 
         $payload = [
             'model' => $this->model,

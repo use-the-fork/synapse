@@ -21,8 +21,10 @@ interface Integration
 
     /**
      * Implement method to fire request.
+     *
+     * @param  Message[]  $prompt  An array of Message objects
      */
-    public function handle(string $prompt, array $tools = []): Message;
+    public function handle(array $prompt, array $tools = []): Message;
 
     /**
      * Implement Environment validation.
