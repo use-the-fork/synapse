@@ -6,8 +6,6 @@
     "illuminate/container": "^10.0|^11.0",
     "illuminate/database": "^10.0|^11.0",
     "illuminate/events": "^10.0|^11.0",
-    "saloonphp/saloon": "^3.0",
-    "spatie/laravel-data": "^4.7",
     "openai-php/client": "^0.10.1"
   },
   "require-dev": {
