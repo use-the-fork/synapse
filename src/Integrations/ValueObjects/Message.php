@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse\Integrations\ValueObjects;
 
 use UseTheFork\Synapse\ValueObject\ArrayValueObject;
 
-class MessageValueObject extends ArrayValueObject
+class Message extends ArrayValueObject
 {
     /**
      * Define the rules for email validator.

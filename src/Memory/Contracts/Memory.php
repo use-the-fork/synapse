@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Memory\Contracts;
 
 
-use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 
 interface Memory
 {
@@ -14,7 +14,7 @@ interface Memory
      * implement method to add to message.
      *
      */
-    public function create(MessageValueObject $message): void;
+    public function create(Message $message): void;
 
     /**
      * Implement method to get message history.

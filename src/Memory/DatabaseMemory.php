@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Memory;
 
-use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
 use UseTheFork\Synapse\Models\AgentMemory;
 
@@ -18,7 +18,7 @@ class DatabaseMemory implements Memory
         $this->agentMemory->save();
     }
 
-    public function create(MessageValueObject $message): void
+    public function create(Message $message): void
     {
         $this->agentMemory->messages()->create($message->toArray());
     }
