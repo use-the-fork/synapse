@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Memory;
 
+use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
 use UseTheFork\Synapse\Models\AgentMemory;
-use UseTheFork\Synapse\ValueObject\MessageValueObject;
 
 class DatabaseMemory implements Memory
 {

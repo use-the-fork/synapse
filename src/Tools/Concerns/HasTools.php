@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\Traits;
+namespace UseTheFork\Synapse\Tools\Concerns;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -23,13 +23,25 @@ use UseTheFork\Synapse\Attributes\Description;
 trait HasTools
 {
     protected array $registered_tools = [];
+    protected array $tools = [];
+
+
+    /**
+     * sets the memory type this agent will use.
+     *
+     * @return void
+     */
+    protected function registerTools(): array
+    {
+      return [];
+    }
 
     /**
      * @throws ReflectionException
      */
-    public function register(array $tool_classes): void
+    public function initializeTools(): void
     {
-        foreach ($tool_classes as $tool) {
+        foreach ($this->registerTools() as $tool) {
 
             $reflection = new ReflectionClass($tool);
 

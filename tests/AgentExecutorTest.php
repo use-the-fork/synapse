@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-  use UseTheFork\Synapse\AgentExecutor;
+  use UseTheFork\Synapse\Agent;
   use UseTheFork\Synapse\Integrations\OpenAI\OpenAIConnector;
   use UseTheFork\Synapse\Memory\DatabaseMemory;
   use UseTheFork\Synapse\OutputParsers\JsonOutputParser;
@@ -12,15 +12,16 @@ declare(strict_types=1);
   use UseTheFork\Synapse\Tools\SearchGoogleTool;
 
 it('connects to OpenAI', function () {
-  $agent = new AgentExecutor(
+  $agent = new Agent(
       integration: new OpenAIConnector(),
       prompt: new SimplePrompt(),
       memory: new DatabaseMemory(),
-      outputParser: new StringOutputParser(),
       tools: [
         new SearchGoogleTool()
        ]
     );
+  $agent->setOutputRules();
+
     $t = $agent->__invoke(['query' => 'search google for the current president of the united states.']);
     dd($t);
 })->skip();
@@ -36,7 +37,7 @@ it('can parse JSON output', function () {
     ];
 
 
-    $agent = new AgentExecutor(
+    $agent = new Agent(
       integration: new OpenAIConnector(),
       prompt: new MultiQueryRetrieverPrompt(),
       memory: new DatabaseMemory(),

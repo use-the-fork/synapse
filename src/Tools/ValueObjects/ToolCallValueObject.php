@@ -3,7 +3,9 @@
 declare(strict_types=1);
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\ValueObject;
+namespace UseTheFork\Synapse\Tools\ValueObjects;
+
+use UseTheFork\Synapse\ValueObject\ArrayValueObject;
 
 class ToolCallValueObject extends ArrayValueObject
 {

@@ -6,12 +6,12 @@ namespace UseTheFork\Synapse\Integrations\OpenAI;
 
 use OpenAI;
 use OpenAI\Client;
-use UseTheFork\Synapse\Integrations\Contracts\ModelIntegration;
+use UseTheFork\Synapse\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
-use UseTheFork\Synapse\ValueObject\MessageValueObject;
-use UseTheFork\Synapse\ValueObject\ToolCallValueObject;
+use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
+use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 
-class OpenAIConnector implements ModelIntegration
+class OpenAIConnector implements Integration
 {
     private string $apiKey;
 
@@ -27,7 +27,7 @@ class OpenAIConnector implements ModelIntegration
         $this->client = OpenAI::client($this->apiKey);
     }
 
-    public function __invoke(string $prompt, array $tools = []): MessageValueObject
+    public function handle(string $prompt, array $tools = []): MessageValueObject
     {
         $payload = $this->generateRequestBody($prompt, $tools);
         $response = $this->client->chat()->create($payload);

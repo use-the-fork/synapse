@@ -6,9 +6,9 @@ namespace UseTheFork\Synapse\Integrations\Contracts;
 
 
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
-use UseTheFork\Synapse\ValueObject\MessageValueObject;
+use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
 
-interface ModelIntegration
+interface Integration
 {
 
     /**
@@ -27,7 +27,7 @@ interface ModelIntegration
      * Implement method to fire request.
      *
      */
-    public function __invoke(string $prompt, array $tools = []): MessageValueObject;
+    public function handle(string $prompt, array $tools = []): MessageValueObject;
 
     /**
      * Implement Environment validation.

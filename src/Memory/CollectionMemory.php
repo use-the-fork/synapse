@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Memory;
 
 use Illuminate\Support\Collection;
+use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
-use UseTheFork\Synapse\ValueObject\MessageValueObject;
 
 class CollectionMemory implements Memory
 {

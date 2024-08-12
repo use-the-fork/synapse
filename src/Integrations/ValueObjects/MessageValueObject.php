@@ -3,9 +3,9 @@
 declare(strict_types=1);
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\ValueObject;
+namespace UseTheFork\Synapse\Integrations\ValueObjects;
 
-use Illuminate\Support\Facades\Validator;
+use UseTheFork\Synapse\ValueObject\ArrayValueObject;
 
 class MessageValueObject extends ArrayValueObject
 {

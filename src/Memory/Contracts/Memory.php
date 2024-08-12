@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Memory\Contracts;
 
 
-use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
-use UseTheFork\Synapse\ValueObject\MessageValueObject;
+use UseTheFork\Synapse\Integrations\ValueObjects\MessageValueObject;
 
 interface Memory
 {
