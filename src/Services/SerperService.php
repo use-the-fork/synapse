@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 class SerperService
 {
-    private string $apiKey;
-
-    public function __construct()
-    {
-        $this->apiKey = (string) (config('synapse.services.serper'));
-    }
+    public function __construct(
+        private readonly string $apiKey
+    ) {}
 
     public function __invoke($searchQuery, $type = 'search', $num = 10)
     {
