@@ -71,44 +71,49 @@ class Agent
 
     public function parsePrompt(string $prompt): array
     {
-      $prompts = [];
-      $pattern = '/```[^\S\n]*<prompt(?P<role>:[\w| |\[|\]]+)?>\n(?P<prompt>.*?)\n```[ |\t\n]*/s';
-      preg_match_all($pattern, $prompt, $matches, PREG_SET_ORDER);
+        $prompts = [];
+        // Adjusted pattern to account for possible newlines and nested content
+        $pattern = '/<message\s+type=[\'"](?P<role>\w+)[\'"](?:\s+tool=[\'"](?P<tool>[\w\-+=\/]+)[\'"])?\s*>\s*(?P<message>.*?)\s*<\/message>/s';
+        preg_match_all($pattern, $prompt, $matches, PREG_SET_ORDER);
 
-      foreach ($matches as $i => $promptBlock) {
-        $role = $promptBlock['role'] ?? null;
-        $prompt = $promptBlock['prompt'] ?? '';
+        foreach ($matches as $promptBlock) {
+            $role = $promptBlock['role'] ?? null;
+            $tool = $promptBlock['tool'] ?? null;
+            $promptContent = $promptBlock['message'] ?? '';
 
-        // Remove the \ escape before ```
-        $prompt = preg_replace('/((?<=\s)\\\\(?=```))|^\\\\(?=```)/m', '', $prompt);
-        $prompt = trim($prompt);
+            $promptContent = trim($promptContent);
 
-        if (!$role) {
-          if ($i > 1) {
-            throw new \InvalidArgumentException("Only one prompt can be defined in code block. If you intend to define messages, you need to specify a role.\nExample:\n```<prompt:role>\nFoo {bar}\n```");
-          } else {
-            $prompts[] = Message::make([
-                                         'role' => $prompt[0],
-                                         'content' => $prompt[1],
-                                       ]);
-          }
-        } else {
-          $prompts[] = Message::make([
-                                       'role' => ltrim($role, ':'),
-                                       'content' => $prompt,
-                                     ]);
+            if (! $role) {
+                throw new \InvalidArgumentException("Each message block must define a type.\nExample:\n<message type='assistant'>Foo {bar}</message>");
+            } else {
+                $messageData = [
+                    'role' => $role,
+                    'content' => $promptContent,
+                ];
+
+                if ($tool) {
+                    $tool = json_decode(base64_decode($tool), true);
+                    $messageData['tool_call_id'] = $tool['id'];
+
+                    if ($role == Role::ASSISTANT) {
+                        $messageData['tool_name'] = $tool['name'] ?? null;
+                        $messageData['tool_arguments'] = $tool['arguments'] ?? null;
+                    }
+                }
+
+                $prompts[] = Message::make($messageData);
+            }
         }
-      }
 
-      if (empty($prompts)) {
-        // The whole document is a prompt
-        $prompts[] = Message::make([
-          'role' => Role::USER->value,
-          'content' => trim($prompt),
-                                   ]);
-      }
+        if (empty($prompts)) {
+            // The whole document is a prompt
+            $prompts[] = Message::make([
+                'role' => Role::USER,
+                'content' => trim($prompt),
+            ]);
+        }
 
-      return $prompts;
+        return $prompts;
     }
 
     /**
@@ -144,16 +149,16 @@ class Agent
             $this->memory->load();
 
             $prompt = $this->parsePrompt(
-              $this->getPrompt($input)
+                $this->getPrompt($input)
             );
 
             $chatResponse = $this->integration->handle($prompt, $this->registered_tools);
 
             switch ($chatResponse->finishReason()) {
-                case ResponseType::TOOL_CALL->value:
+                case ResponseType::TOOL_CALL:
                     $this->handleTools($chatResponse);
                     break;
-                case ResponseType::STOP->value:
+                case ResponseType::STOP:
                     return $chatResponse->content();
                 default:
                     dd($chatResponse);

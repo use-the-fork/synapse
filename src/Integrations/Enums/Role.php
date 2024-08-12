@@ -4,9 +4,10 @@
 
   namespace UseTheFork\Synapse\Integrations\Enums;
 
-  enum Role: string
+  final class Role
   {
-    case SYSTEM = 'system';
-    case USER = 'user';
-    case AGENT = 'agent';
+    public const SYSTEM = 'system';
+    public const USER = 'user';
+    public const ASSISTANT = 'assistant';
+    public const TOOL = 'tool';
   }

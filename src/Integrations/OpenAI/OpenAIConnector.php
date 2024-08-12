@@ -7,6 +7,7 @@ namespace UseTheFork\Synapse\Integrations\OpenAI;
 use OpenAI;
 use OpenAI\Client;
 use UseTheFork\Synapse\Integrations\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
@@ -66,10 +67,30 @@ class OpenAIConnector implements Integration
 
       $payload = [];
       foreach ($messages as $message){
-        $payload[] = [
-          'role' => $message->role(),
-          'content' => $message->content(),
+
+        $message = $message->toArray();
+        $payloadMessage = [
+          'role' => $message['role'],
+          'content' => $message['content'],
         ];
+
+        if(!empty($message['tool_call_id'])){
+            if($message['role'] == Role::ASSISTANT){
+              $payloadMessage['tool_calls'][] = [
+                'id' => $message['tool_call_id'],
+                'type' => 'function',
+                'function' => [
+                  'name' => $message['tool_name'],
+                  'arguments' => $message['tool_arguments'],
+                ],
+              ];
+            } else {
+              # we know this is a tool response
+              $payloadMessage['tool_call_id'] = $message['tool_call_id'];
+            }
+        }
+
+        $payload[] = $payloadMessage;
       }
 
         $payload = [

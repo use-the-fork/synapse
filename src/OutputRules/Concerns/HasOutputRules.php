@@ -59,7 +59,7 @@ trait HasOutputRules
       $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
     }
 
-    return "\```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n\```";
+    return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
   }
 
   protected function doValidate(string $response)

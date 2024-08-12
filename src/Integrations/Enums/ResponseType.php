@@ -4,8 +4,8 @@
 
   namespace UseTheFork\Synapse\Integrations\Enums;
 
-  enum ResponseType: string
+  final class ResponseType
   {
-    case TOOL_CALL = 'tool_calls';
-    case STOP = 'stop';
+    public const TOOL_CALL = 'tool_calls';
+    public const STOP = 'stop';
   }

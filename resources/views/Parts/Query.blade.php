@@ -1,4 +1,5 @@
 @isset($query)
-### User Input:
+<message type="user">
 {{$query}}
+</message>
 @endisset

@@ -34,15 +34,6 @@ abstract class TestCase extends Orchestra
 
     protected function defineEnvironment($app): void
     {
-        tap($app['config'], function (Repository $config) {
-            $config->set('synapse', [
-                'openapi_key' => env('OPENAI_API_KEY'),
-                'services' => [
-                    'serper' => env('SERPER_API_KEY'),
-                ],
-                'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
-            ]);
-        });
     }
 
     protected function defineDatabaseSeeders(): void {}
@@ -52,6 +43,17 @@ abstract class TestCase extends Orchestra
         // make sure, our .env file is loaded
         $app->useEnvironmentPath(__DIR__.'/..');
         $app->bootstrapWith([LoadEnvironmentVariables::class]);
+
+      tap($app['config'], function (Repository $config) {
+        $config->set('synapse', [
+          'openapi_key' => env('OPENAI_API_KEY'),
+          'services' => [
+            'serper' => env('SERPER_API_KEY'),
+          ],
+          'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
+        ]);
+      });
+
         parent::getEnvironmentSetUp($app);
     }
 }
