@@ -64,7 +64,7 @@ class Agent
         return view($this->promptView, [
             ...$inputs,
             ...$this->extraInputs,
-            # We return both Memory With Messages and without.
+            // We return both Memory With Messages and without.
             ...$this->memory->asInputs(),
             'outputRules' => $this->getOutputRules(),
             'tools' => $toolNames,
@@ -147,14 +147,14 @@ class Agent
         //
     }
 
-    public function handle(?array $input): array
+    public function handle(?array $input, ?array $extraAgentArgs = []): array
     {
-        $response = $this->getAnswer($input);
+        $response = $this->getAnswer($input, $extraAgentArgs);
 
         return $this->doValidate($response);
     }
 
-    public function getAnswer(?array $input): string
+    public function getAnswer(?array $input, ?array $extraAgentArgs = []): string
     {
         while (true) {
             $this->memory->load();
@@ -163,7 +163,7 @@ class Agent
                 $this->getPrompt($input)
             );
 
-            $chatResponse = $this->integration->handle($prompt, $this->registered_tools);
+            $chatResponse = $this->integration->handle($prompt, $this->registered_tools, $extraAgentArgs);
 
             switch ($chatResponse->finishReason()) {
                 case ResponseType::TOOL_CALL:

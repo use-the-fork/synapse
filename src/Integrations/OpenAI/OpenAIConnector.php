@@ -9,7 +9,6 @@ use OpenAI\Client;
 use UseTheFork\Synapse\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 
@@ -29,9 +28,9 @@ class OpenAIConnector implements Integration
         $this->client = OpenAI::client($this->apiKey);
     }
 
-    public function handle(array $prompt, array $tools = []): Response
+    public function handle(array $prompt, ?array $tools = [], ?array $extraAgentArgs = []): Response
     {
-        $payload = $this->generateRequestBody($prompt, $tools);
+        $payload = $this->generateRequestBody($prompt, $tools, $extraAgentArgs);
         $response = $this->client->chat()->create($payload);
 
         return $this->createDtoFromResponse($response);
@@ -63,7 +62,7 @@ class OpenAIConnector implements Integration
     /**
      * Data to be sent in the body of the request
      */
-    public function generateRequestBody(array $messages, array $tools = []): array
+    public function generateRequestBody(array $messages, ?array $tools = [], ?array $extraAgentArgs = []): array
     {
 
       $payload = [];
@@ -73,6 +72,7 @@ class OpenAIConnector implements Integration
         $payloadMessage = [
           'role' => $message['role'],
           'content' => $message['content'],
+          ...$extraAgentArgs
         ];
 
         if(!empty($message['tool_call_id'])){

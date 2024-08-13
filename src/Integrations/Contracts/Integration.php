@@ -25,7 +25,7 @@ interface Integration
      *
      * @param  Message[]  $prompt  An array of Message objects
      */
-    public function handle(array $prompt, array $tools = []): Response;
+    public function handle(array $prompt, ?array $tools = [], ?array $extraAgentArgs = []): Response;
 
     /**
      * Implement Environment validation.
