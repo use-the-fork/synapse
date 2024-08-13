@@ -36,7 +36,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
     }
 
     public function handle(
-        #[Description('Parameter defines the query you want to search. You can use anything that you would use in a regular Google search. e.g. `inurl:`, `site:`, `intitle:`.')]
+        #[Description('Parameter defines the query you want to search.')]
         string $query,
         #[Description('Parameter defines the maximum number of results to return. (e.g., 10 (default) returns 10 results, 40 returns 40 results, and 100 returns 100 results)')]
         int $numberOfResults = 10,
