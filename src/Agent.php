@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
@@ -148,6 +149,8 @@ class Agent
     {
         $response = $this->getAnswer($input, $extraAgentArgs);
 
+        $this->log('Start validation', [$response]);
+
         return $this->doValidate($response);
     }
 
@@ -160,7 +163,9 @@ class Agent
                 $this->getPrompt($input)
             );
 
+            $this->log('Call Integration');
             $chatResponse = $this->integration->handle($prompt, $this->registered_tools, $extraAgentArgs);
+            $this->log("Finished Integration with {$chatResponse->finishReason()}");
 
             switch ($chatResponse->finishReason()) {
                 case ResponseType::TOOL_CALL:
@@ -195,6 +200,8 @@ class Agent
 
     private function executeToolCall($toolCall): void
     {
+        $this->log('Tool Call', $toolCall);
+
         try {
             $toolResponse = $this->call(
                 $toolCall['function']['name'],
@@ -211,5 +218,11 @@ class Agent
         } catch (Exception $e) {
             throw new Exception("Error calling tool: {$e->getMessage()}");
         }
+    }
+
+    protected function log(string $event, ?array $context = []): void
+    {
+        $class = get_class($this);
+        Log::debug("{$event} in {$class}", $context);
     }
 }
