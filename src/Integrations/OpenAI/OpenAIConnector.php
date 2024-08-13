@@ -10,6 +10,7 @@ use UseTheFork\Synapse\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 
 class OpenAIConnector implements Integration
@@ -28,7 +29,7 @@ class OpenAIConnector implements Integration
         $this->client = OpenAI::client($this->apiKey);
     }
 
-    public function handle(array $prompt, array $tools = []): Message
+    public function handle(array $prompt, array $tools = []): Response
     {
         $payload = $this->generateRequestBody($prompt, $tools);
         $response = $this->client->chat()->create($payload);
@@ -43,7 +44,7 @@ class OpenAIConnector implements Integration
         }
     }
 
-    public function createDtoFromResponse($response): Message
+    public function createDtoFromResponse($response): Response
     {
         $data = $response->toArray();
         $message = $data['choices'][0]['message'] ?? [];
@@ -56,7 +57,7 @@ class OpenAIConnector implements Integration
             $message['tool_calls'] = $tools->toArray();
         }
 
-        return Message::makeOrNull($message);
+        return Response::makeOrNull($message);
     }
 
     /**

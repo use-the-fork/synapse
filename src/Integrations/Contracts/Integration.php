@@ -6,6 +6,7 @@ namespace UseTheFork\Synapse\Integrations\Contracts;
 
 use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 
 interface Integration
 {
@@ -17,14 +18,14 @@ interface Integration
     /**
      * Implement method to fire request.
      */
-    public function createDtoFromResponse($response): Message;
+    public function createDtoFromResponse($response): Response;
 
     /**
      * Implement method to fire request.
      *
      * @param  Message[]  $prompt  An array of Message objects
      */
-    public function handle(array $prompt, array $tools = []): Message;
+    public function handle(array $prompt, array $tools = []): Response;
 
     /**
      * Implement Environment validation.

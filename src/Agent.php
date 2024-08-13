@@ -8,6 +8,7 @@ use Exception;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\OutputRules\Concerns\HasOutputRules;
 
 class Agent
@@ -72,13 +73,14 @@ class Agent
     public function parsePrompt(string $prompt): array
     {
         $prompts = [];
-        // Adjusted pattern to account for possible newlines and nested content
-        $pattern = '/<message\s+type=[\'"](?P<role>\w+)[\'"](?:\s+tool=[\'"](?P<tool>[\w\-+=\/]+)[\'"])?\s*>\s*(?P<message>.*?)\s*<\/message>/s';
+        // Adjusted pattern to account for possible newlines, nested content, and the new 'image' attribute
+        $pattern = '/<message\s+type=[\'"](?P<role>\w+)[\'"](?:\s+tool=[\'"](?P<tool>[\w\-+=\/]+)[\'"])?(?:\s+image=[\'"](?P<image>[\w\-+=\/]+)[\'"])?\s*>\s*(?P<message>.*?)\s*<\/message>/s';
         preg_match_all($pattern, $prompt, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $promptBlock) {
             $role = $promptBlock['role'] ?? null;
             $tool = $promptBlock['tool'] ?? null;
+            $image = $promptBlock['image'] ?? null;
             $promptContent = $promptBlock['message'] ?? '';
 
             $promptContent = trim($promptContent);
@@ -94,10 +96,18 @@ class Agent
                 if ($tool) {
                     $tool = json_decode(base64_decode($tool), true);
                     $messageData['tool_call_id'] = $tool['id'];
-
                     if ($role == Role::ASSISTANT) {
                         $messageData['tool_name'] = $tool['name'] ?? null;
                         $messageData['tool_arguments'] = $tool['arguments'] ?? null;
+                    }
+                }
+
+                if ($image) {
+                    $image = json_decode(base64_decode($image), true);
+                    $messageData['image_call_id'] = $image['id'];
+                    if ($role == Role::ASSISTANT) {
+                        $messageData['image_name'] = $image['name'] ?? null;
+                        $messageData['image_arguments'] = $image['arguments'] ?? null;
                     }
                 }
 
@@ -166,20 +176,20 @@ class Agent
         }
     }
 
-    private function handleTools(Message $message): void
+    private function handleTools(Response $responseMessage): void
     {
 
-        if (empty($message->toolCalls())) {
+        if (empty($responseMessage->toolCalls())) {
             $messageData = [
-                'role' => $message->role(),
-                'content' => $message->content(),
+                'role' => $responseMessage->role(),
+                'content' => $responseMessage->content(),
             ];
 
             $this->memory->create(Message::make($messageData));
         }
 
-        if (! empty($message->toolCalls()) && count($message->toolCalls()) > 0) {
-            foreach ($message->toolCalls() as $toolCall) {
+        if (! empty($responseMessage->toolCalls()) && count($responseMessage->toolCalls()) > 0) {
+            foreach ($responseMessage->toolCalls() as $toolCall) {
                 $this->executeToolCall($toolCall);
             }
         }
@@ -195,9 +205,11 @@ class Agent
 
             $this->memory->create(Message::make([
                 'role' => 'tool',
-                'tool_call_id' => $toolCall['id'],
-                'tool_name' => $toolCall['function']['name'],
-                'tool_arguments' => $toolCall['function']['arguments'],
+                'tool' => [
+                    'call_id' => $toolCall['id'],
+                    'name' => $toolCall['function']['name'],
+                    'arguments' => $toolCall['function']['arguments'],
+                ],
                 'content' => $toolResponse,
             ]));
         } catch (Exception $e) {

@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse\Integrations\ValueObjects;
 
 use UseTheFork\Synapse\ValueObject\ArrayValueObject;
 
-class Message extends ArrayValueObject
+class Response extends ArrayValueObject
 {
     /**
      * Define the rules for email validator.
@@ -18,14 +18,7 @@ class Message extends ArrayValueObject
             'role' => 'required',
             'finish_reason' => 'nullable|sometimes|string',
             'content' => 'nullable|sometimes|string',
-
-            'tool' => 'nullable|sometimes|array',
-            'tool.call_id' => 'nullable|sometimes|string',
-            'tool.name' => 'nullable|sometimes|string',
-            'tool.arguments' => 'nullable|sometimes|string',
-
-            'image' => 'nullable|sometimes|array',
-            'image.url' => 'nullable|sometimes|string',
+            'tool_calls' => 'nullable|sometimes',
         ];
     }
 
@@ -35,6 +28,9 @@ class Message extends ArrayValueObject
     protected function sanitize(): void
     {
 
+        if (empty($this->value['tool_calls'])) {
+            $this->value['tool_calls'] = [];
+        }
     }
 
     public function finishReason(): string

@@ -40,16 +40,16 @@ class DatabaseMemory implements Memory
         $messages = $this->agentMemory->messages->toArray();
 
         foreach ($messages as $message) {
-            if ($message['role'] == 'tool') {
-
+            if ($message['role'] == Role::IMAGE_URL) {
+              $payload[] = "<message type='".Role::IMAGE_URL."' image='{$message['image']['url']}'></message>";
+            } else if ($message['role'] == Role::TOOL) {
                 $tool = base64_encode(json_encode([
-                    'name' => $message['tool_name'],
-                    'id' => $message['tool_call_id'],
-                    'arguments' => $message['tool_arguments'],
+                    'name' => $message['tool']['name'],
+                    'id' => $message['tool']['call_id'],
+                    'arguments' => $message['tool']['arguments'],
                 ]));
 
                 $payload[] = "<message type='".Role::ASSISTANT."' tool='{$tool}'></message>";
-
                 $payload[] = "<message type='".Role::TOOL."' tool='{$tool}'>
          {$message['content']}
         </message>";
