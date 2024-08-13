@@ -58,6 +58,10 @@ class Agent
             $toolNames[] = $name;
         }
 
+        if (isset($inputs['image'])) {
+            $inputs['image'] = base64_encode(json_encode($inputs['image']));
+        }
+
         return view($this->promptView, [
             ...$inputs,
             ...$this->extraInputs,
@@ -79,7 +83,7 @@ class Agent
         foreach ($matches as $promptBlock) {
             $role = $promptBlock['role'] ?? null;
             $tool = $promptBlock['tool'] ?? null;
-            //            $image = $promptBlock['image'] ?? null;
+            $image = $promptBlock['image'] ?? null;
             $promptContent = $promptBlock['message'] ?? '';
 
             $promptContent = trim($promptContent);
@@ -101,14 +105,23 @@ class Agent
                     }
                 }
 
-                //                if ($image) {
-                //                    $image = json_decode(base64_decode($image), true);
-                //                    $messageData['image_call_id'] = $image['id'];
-                //                    if ($role == Role::ASSISTANT) {
-                //                        $messageData['image_name'] = $image['name'] ?? null;
-                //                        $messageData['image_arguments'] = $image['arguments'] ?? null;
-                //                    }
-                //                }
+                if ($image) {
+                    $image = json_decode(base64_decode($image), true);
+                    if ($role == Role::USER) {
+                        //since this is an image we convert the content to have both text and image URL.
+                        $messageData['content'] = [
+                            [
+                                'type' => 'text',
+                                'text' => $messageData['content'],
+                            ],
+                            [
+                                'type' => 'image_url',
+                                'image_url' => $image,
+                            ],
+                        ];
+
+                    }
+                }
 
                 $prompts[] = Message::make($messageData);
             }
