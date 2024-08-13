@@ -34,14 +34,17 @@ class DatabaseMemory implements Memory
         $this->agentMemory->load('messages');
     }
 
-    public function asString(): string
+    public function asInputs(): array
     {
-        $payload = [];
+        $payload = [
+            'memory' => [],
+            'memoryWithMessages' => [],
+          ];
         $messages = $this->agentMemory->messages->toArray();
 
         foreach ($messages as $message) {
             if ($message['role'] == Role::IMAGE_URL) {
-              $payload[] = "<message type='".Role::IMAGE_URL."' image='{$message['image']['url']}'></message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."' image='{$message['image']['url']}'></message>";
             } else if ($message['role'] == Role::TOOL) {
                 $tool = base64_encode(json_encode([
                     'name' => $message['tool']['name'],
@@ -49,18 +52,21 @@ class DatabaseMemory implements Memory
                     'arguments' => $message['tool']['arguments'],
                 ]));
 
-                $payload[] = "<message type='".Role::ASSISTANT."' tool='{$tool}'></message>";
-                $payload[] = "<message type='".Role::TOOL."' tool='{$tool}'>
-         {$message['content']}
-        </message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::ASSISTANT."' tool='{$tool}'></message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>{$message['content']}</message>";
+
+              $payload['memory'][] = Role::ASSISTANT . ": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
+              $payload['memory'][] = "{$message['tool_name']} response: {$message['content']}";
 
             } else {
-                $payload[] = "<message type='{$message['role']}'>
-         {$message['content']}
-        </message>";
+              $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>{$message['content']}</message>";
+              $payload['memory'][] = "{$message['role']}: {$message['content']}";
             }
         }
 
-        return implode("\n", $payload);
+      return [
+        'memoryWithMessages' => implode("\n", $payload),
+        'memory' => implode("\n", $payload)
+      ];
     }
 }

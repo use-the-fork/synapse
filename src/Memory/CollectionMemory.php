@@ -28,8 +28,10 @@ class CollectionMemory implements Memory
         return $this->agentMemory->toArray();
     }
 
-    public function asString(): string
+    public function asInputs(): array
     {
+
+        //MemoryAsMessages
         $payload = [];
         $messages = $this->agentMemory->toArray();
 
@@ -55,7 +57,10 @@ class CollectionMemory implements Memory
             }
         }
 
-        return implode("\n", $payload);
+        return [
+            'memoryWithMessages' => implode("\n", $payload),
+            'memory' => implode("\n", $payload),
+        ];
     }
 
     public function load(): void {}

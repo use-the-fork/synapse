@@ -64,8 +64,9 @@ class Agent
         return view($this->promptView, [
             ...$inputs,
             ...$this->extraInputs,
+            # We return both Memory With Messages and without.
+            ...$this->memory->asInputs(),
             'outputRules' => $this->getOutputRules(),
-            'memory' => $this->memory->asString(),
             'tools' => $toolNames,
         ])->render();
     }

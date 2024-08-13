@@ -1,10 +1,10 @@
 <message type="system">
-### Instruction
-Use tools to complete the users research task.
+	### Instruction
+	Use tools to complete the users research task.
 
-@include('synapse::Parts.OutputRules')
+	@include('synapse::Parts.OutputRules')
 </message>
 
 
-@include('synapse::Parts.Memory')
-@include('synapse::Parts.Query')
+@include('synapse::Parts.MemoryAsMessages')
+@include('synapse::Parts.Input')

@@ -1,5 +1,5 @@
-@isset($query)
+@isset($input)
 <message type="user">
-{{$query}}
+{{$input}}
 </message>
 @endisset
