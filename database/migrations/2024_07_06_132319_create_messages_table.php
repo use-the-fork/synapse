@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('agent_memory_id')->constrained('agent_memories')->onDelete('cascade');
+            $table->foreignUuid('agent_memory_id')->constrained('agent_memories')->onDelete('cascade');
             $table->string('role');
             $table->text('content')->nullable();
             $table->string('tool_name')->nullable();
