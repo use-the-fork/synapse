@@ -12,13 +12,13 @@ class SerperService
         private readonly string $apiKey
     ) {}
 
-    public function __invoke($searchQuery, $type = 'search', $num = 10)
+    public function __invoke($searchQuery, string $type = 'search', int $num = 10)
     {
 
         $response = Http::withHeaders([
             'X-API-KEY' => $this->apiKey,
-            'Accept' => 'application/json',
-        ])->post("https://google.serper.dev/{$type}", [
+            'Content-Type' => 'application/json',
+        ])->retry(3, 100)->post("https://google.serper.dev/{$type}", [
             'q' => $searchQuery,
             'num' => $num,
         ])->json();
