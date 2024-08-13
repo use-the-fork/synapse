@@ -13,27 +13,26 @@ use UseTheFork\Synapse\Tools\Contracts\Tool;
 #[Description('Search Google using a query.')]
 final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
 {
-
     private string $apiKey;
 
     public function __construct(?string $apiKey = null)
     {
 
-      if (! empty($apiKey)) {
-        $this->apiKey = $apiKey;
-      }
+        if (! empty($apiKey)) {
+            $this->apiKey = $apiKey;
+        }
 
-      parent::__construct();
+        parent::__construct();
     }
 
     protected function initializeTool(): void
     {
-      if (empty($this->apiKey) && ! empty(env('SERPAPI_API_KEY'))) {
-        $this->apiKey = env('SERPAPI_API_KEY');
+        if (empty($this->apiKey) && ! empty(env('SERPAPI_API_KEY'))) {
+            $this->apiKey = env('SERPAPI_API_KEY');
 
-        return;
-      }
-      throw new \Exception('API (SERPAPI_API_KEY) key is required.');
+            return;
+        }
+        throw new \Exception('API (SERPAPI_API_KEY) key is required.');
     }
 
     public function handle(
@@ -44,13 +43,13 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
     ): string {
 
         $this->log('Entered', [
-          'query'              => $query,
-          'numberOfResults' => $numberOfResults,
+            'query' => $query,
+            'numberOfResults' => $numberOfResults,
         ]);
 
         $serperService = new SerpAPIService($this->apiKey);
         $results = $serperService->__invoke($query, ['num' => $numberOfResults]);
-        $this->log('Finished', ['results' => $results]);
+        $this->log('Finished');
 
         return $this->parseResults($results);
     }
@@ -58,40 +57,40 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
     private function parseResults($results): string
     {
 
-      $snippets = collect();
-      if(!empty($results['knowledge_graph'])){
-        $knowledgeGraph = Arr::get($results, 'knowledge_graph');
-        $title = Arr::get($knowledgeGraph, 'title', "");
+        $snippets = collect();
+        if (! empty($results['knowledge_graph'])) {
+            $knowledgeGraph = Arr::get($results, 'knowledge_graph');
+            $title = Arr::get($knowledgeGraph, 'title', '');
 
-        $description = Arr::get($knowledgeGraph, 'description');
-        if($description){
-          $snippets->push($description);
+            $description = Arr::get($knowledgeGraph, 'description');
+            if ($description) {
+                $snippets->push($description);
+            }
+            foreach ($knowledgeGraph as $key => $value) {
+                if (
+                    is_string($key) &&
+                    is_string($value) &&
+                    ($key != 'title' && $key != 'description') &&
+                    ! Str::endsWith($key, '_stick') &&
+                    ! Str::endsWith($key, '_link') &&
+                    ! Str::startsWith($value, 'http')
+                ) {
+                    $snippets->push("{$title} {$key}: {$value}.");
+                }
+            }
         }
-        foreach ($knowledgeGraph as $key => $value){
-          if(
-            is_string($key) &&
-            is_string($value) &&
-            ($key != "title" && $key != "description") &&
-            !Str::endsWith($key,'_stick') &&
-            !Str::endsWith($key,'_link') &&
-            !Str::startsWith($value,'http')
-          ){
-            $snippets->push("{$title} {$key}: {$value}.");
-          }
+
+        if (! empty($results['organic_results'])) {
+            $organicResults = Arr::get($results, 'organic_results');
+
+            foreach ($organicResults as $key => $value) {
+                $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
+            }
         }
-      }
 
-      if(!empty($results['organic_results'])){
-        $organicResults = Arr::get($results, 'organic_results');
-
-        foreach ($organicResults as $key => $value){
-          $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
+        if ($snippets->isEmpty()) {
+            return 'No good Google Search Result was found';
         }
-      }
-
-      if($snippets->isEmpty()){
-        return "No good Google Search Result was found";
-      }
 
         return $snippets->implode("\n");
     }

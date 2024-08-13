@@ -18,7 +18,7 @@ abstract class BaseTool implements Tool
 
     protected function initializeTool(): void {}
 
-    protected function log(string $event, ?array $context): void
+    protected function log(string $event, ?array $context = []): void
     {
         $class = get_class($this);
         Log::debug("{$event} in {$class}", $context);

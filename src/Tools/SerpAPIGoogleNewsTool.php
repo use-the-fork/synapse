@@ -46,7 +46,7 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
 
         $serperService = new SerpAPIService($this->apiKey);
         $results = $serperService->__invoke($query, ['engine' => 'google_news']);
-        $this->log('Finished', ['results' => $results]);
+        $this->log('Finished');
 
         return $this->parseResults($results);
     }
