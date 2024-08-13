@@ -36,7 +36,9 @@ class CollectionMemory implements Memory
         $messages = $this->agentMemory->toArray();
 
         foreach ($messages as $message) {
-            if ($message['role'] == 'tool') {
+            if ($message['role'] == Role::IMAGE_URL) {
+                $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."'>\n{$message['image']['url']}}\n</message>";
+            } elseif ($message['role'] == Role::TOOL) {
 
                 $tool = base64_encode(json_encode([
                     'name' => $message['tool_name'],
@@ -44,16 +46,15 @@ class CollectionMemory implements Memory
                     'arguments' => $message['tool_arguments'],
                 ]));
 
-                $payload[] = "<message type='".Role::ASSISTANT."' tool='{$tool}'></message>";
+                $payload['memoryWithMessages'][] = "<message type='".Role::ASSISTANT."' tool='{$tool}'>\n</message>";
+                $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>\n{$message['content']}\n</message>";
 
-                $payload[] = "<message type='".Role::TOOL."' tool='{$tool}'>
-         {$message['content']}
-        </message>";
+                $payload['memory'][] = Role::ASSISTANT.": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
+                $payload['memory'][] = "{$message['tool_name']} response: {$message['content']}";
 
             } else {
-                $payload[] = "<message type='{$message['role']}'>
-         {$message['content']}
-        </message>";
+                $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>\n{$message['content']}\n</message>";
+                $payload['memory'][] = "{$message['role']}: {$message['content']}";
             }
         }
 

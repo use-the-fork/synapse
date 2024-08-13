@@ -44,22 +44,23 @@ class DatabaseMemory implements Memory
 
         foreach ($messages as $message) {
             if ($message['role'] == Role::IMAGE_URL) {
-              $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."' image='{$message['image']['url']}'></message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."'>\n{$message['image']['url']}}\n</message>";
             } else if ($message['role'] == Role::TOOL) {
+
                 $tool = base64_encode(json_encode([
-                    'name' => $message['tool']['name'],
-                    'id' => $message['tool']['call_id'],
-                    'arguments' => $message['tool']['arguments'],
+                    'name' => $message['tool_name'],
+                    'id' => $message['tool_call_id'],
+                    'arguments' => $message['tool_arguments'],
                 ]));
 
-              $payload['memoryWithMessages'][] = "<message type='".Role::ASSISTANT."' tool='{$tool}'></message>";
-              $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>{$message['content']}</message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::ASSISTANT."' tool='{$tool}'>\n</message>";
+              $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>\n{$message['content']}\n</message>";
 
               $payload['memory'][] = Role::ASSISTANT . ": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
               $payload['memory'][] = "{$message['tool_name']} response: {$message['content']}";
 
             } else {
-              $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>{$message['content']}</message>";
+              $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>\n{$message['content']}\n</message>";
               $payload['memory'][] = "{$message['role']}: {$message['content']}";
             }
         }
