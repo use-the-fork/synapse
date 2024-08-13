@@ -19,10 +19,9 @@ class Message extends ArrayValueObject
             'finish_reason' => 'nullable|sometimes|string',
             'content' => 'nullable|sometimes|string',
 
-            'tool' => 'nullable|sometimes|array',
-            'tool.call_id' => 'nullable|sometimes|string',
-            'tool.name' => 'nullable|sometimes|string',
-            'tool.arguments' => 'nullable|sometimes|string',
+            'tool_call_id' => 'nullable|sometimes|string',
+            'tool_name' => 'nullable|sometimes|string',
+            'tool_arguments' => 'nullable|sometimes|string',
 
             'image' => 'nullable|sometimes|array',
             'image.url' => 'nullable|sometimes|string',
@@ -32,10 +31,7 @@ class Message extends ArrayValueObject
     /**
      * Apply sanitization rules
      */
-    protected function sanitize(): void
-    {
-
-    }
+    protected function sanitize(): void {}
 
     public function finishReason(): string
     {
@@ -50,10 +46,5 @@ class Message extends ArrayValueObject
     public function role(): string
     {
         return $this->value['role'];
-    }
-
-    public function toolCalls(): array
-    {
-        return $this->value['tool_calls'];
     }
 }
