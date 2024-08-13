@@ -28,6 +28,6 @@ class Message extends Model
 
     public function assistant()
     {
-        return $this->belongsTo(Assistant::class);
+        return $this->belongsTo(AgentMemory::class);
     }
 }
