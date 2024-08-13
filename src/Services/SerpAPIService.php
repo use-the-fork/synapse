@@ -13,13 +13,13 @@ class SerpAPIService
         private readonly string $apiKey
     ) {}
 
-    public function __invoke($searchQuery, int $num = 10, string $endpoint = 'https://serpapi.com/search')
+    public function __invoke($searchQuery, array $extraParams = [], string $endpoint = 'https://serpapi.com/search')
     {
         $params = Arr::query([
             'api_key' => $this->apiKey,
             'output' => 'json',
             'q' => $searchQuery,
-            'num' => $num,
+            ...$extraParams,
         ]);
         $response = Http::retry(3, 250)->get("{$endpoint}?{$params}")->json();
 

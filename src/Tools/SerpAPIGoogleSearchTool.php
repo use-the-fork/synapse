@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\SerpAPIService;
-use UseTheFork\Synapse\Services\SerperService;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 #[Description('Search Google using a query.')]
@@ -50,7 +49,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
         ]);
 
         $serperService = new SerpAPIService($this->apiKey);
-        $results = $serperService->__invoke($query, $numberOfResults);
+        $results = $serperService->__invoke($query, ['num' => $numberOfResults]);
         $this->log('Finished', ['results' => $results]);
 
         return $this->parseResults($results);
