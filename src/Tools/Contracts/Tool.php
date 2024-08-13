@@ -9,11 +9,5 @@ use UseTheFork\Synapse\Integrations\Exceptions\InvalidEnvironmentException;
 
 interface Tool
 {
-  /**
-   * Implement Environment validation.
-   *
-   * @throws InvalidEnvironmentException
-   */
-  public function validateEnvironment(): void;
 
 }
