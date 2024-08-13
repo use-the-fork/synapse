@@ -65,8 +65,8 @@ class DatabaseMemory implements Memory
         }
 
       return [
-        'memoryWithMessages' => implode("\n", $payload),
-        'memory' => implode("\n", $payload)
+        'memoryWithMessages' => implode("\n", $payload['memoryWithMessages']),
+        'memory' => implode("\n", $payload['memory'])
       ];
     }
 }
