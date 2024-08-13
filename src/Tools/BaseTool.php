@@ -20,7 +20,7 @@ abstract class BaseTool implements Tool
 
     protected function log(string $event, ?array $context): void
     {
-        $class = __CLASS__;
+        $class = get_class($this);
         Log::debug("{$event} in {$class}", $context);
     }
 }
