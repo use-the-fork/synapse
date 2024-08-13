@@ -12,9 +12,9 @@
   trait HasEvents
   {
     /**
-     * The event map for the model.
+     * The event map for the agent.
      *
-     * Allows for object-based events for native Eloquent events.
+     * Allows for object-based events for native events.
      *
      * @var array
      */
@@ -88,7 +88,7 @@
       // it into the model's event system, making it convenient to watch these.
       foreach ($this->getObservableEvents() as $event) {
         if (method_exists($class, $event)) {
-          static::registerModelEvent($event, $className.'@'.$event);
+          static::registerAgentEvent($event, $className.'@'.$event);
         }
       }
     }
@@ -177,12 +177,12 @@
      * @param  \Illuminate\Events\QueuedClosure|\Closure|string|array  $callback
      * @return void
      */
-    protected static function registerModelEvent($event, $callback)
+    protected static function registerAgentEvent($event, $callback)
     {
       if (isset(static::$dispatcher)) {
         $name = static::class;
 
-        static::$dispatcher->listen("eloquent.{$event}: {$name}", $callback);
+        static::$dispatcher->listen("synapse.{$event}: {$name}", $callback);
       }
     }
 
@@ -193,7 +193,7 @@
      * @param  bool  $halt
      * @return mixed
      */
-    protected function fireModelEvent($event, $halt = true)
+    protected function fireAgentEvent($event, $halt = true)
     {
       if (! isset(static::$dispatcher)) {
         return true;
@@ -213,7 +213,7 @@
       }
 
       return ! empty($result) ? $result : static::$dispatcher->{$method}(
-        "eloquent.{$event}: ".static::class, $this
+        "synapse.{$event}: ".static::class, $this
       );
     }
 
@@ -262,7 +262,7 @@
      */
     public static function retrieved($callback)
     {
-      static::registerModelEvent('retrieved', $callback);
+      static::registerAgentEvent('retrieved', $callback);
     }
 
     /**
@@ -273,7 +273,7 @@
      */
     public static function saving($callback)
     {
-      static::registerModelEvent('saving', $callback);
+      static::registerAgentEvent('saving', $callback);
     }
 
     /**
@@ -284,7 +284,7 @@
      */
     public static function saved($callback)
     {
-      static::registerModelEvent('saved', $callback);
+      static::registerAgentEvent('saved', $callback);
     }
 
     /**
@@ -295,7 +295,7 @@
      */
     public static function updating($callback)
     {
-      static::registerModelEvent('updating', $callback);
+      static::registerAgentEvent('updating', $callback);
     }
 
     /**
@@ -306,7 +306,7 @@
      */
     public static function updated($callback)
     {
-      static::registerModelEvent('updated', $callback);
+      static::registerAgentEvent('updated', $callback);
     }
 
     /**
@@ -317,7 +317,7 @@
      */
     public static function creating($callback)
     {
-      static::registerModelEvent('creating', $callback);
+      static::registerAgentEvent('creating', $callback);
     }
 
     /**
@@ -328,7 +328,7 @@
      */
     public static function created($callback)
     {
-      static::registerModelEvent('created', $callback);
+      static::registerAgentEvent('created', $callback);
     }
 
     /**
@@ -339,7 +339,7 @@
      */
     public static function replicating($callback)
     {
-      static::registerModelEvent('replicating', $callback);
+      static::registerAgentEvent('replicating', $callback);
     }
 
     /**
@@ -350,7 +350,7 @@
      */
     public static function deleting($callback)
     {
-      static::registerModelEvent('deleting', $callback);
+      static::registerAgentEvent('deleting', $callback);
     }
 
     /**
@@ -361,7 +361,7 @@
      */
     public static function deleted($callback)
     {
-      static::registerModelEvent('deleted', $callback);
+      static::registerAgentEvent('deleted', $callback);
     }
 
     /**
@@ -378,7 +378,7 @@
       $instance = new static;
 
       foreach ($instance->getObservableEvents() as $event) {
-        static::$dispatcher->forget("eloquent.{$event}: ".static::class);
+        static::$dispatcher->forget("synapse.{$event}: ".static::class);
       }
 
       foreach (array_values($instance->dispatchesEvents) as $event) {

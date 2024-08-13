@@ -37,21 +37,17 @@ class Agent
 
     public function __construct(array $attributes = [])
     {
-        $this->fireModelEvent('booting', false);
+        $this->fireAgentEvent('booting', false);
         $this->initializeAgent();
-        $this->fireModelEvent('booted', false);
+        $this->fireAgentEvent('booted', false);
     }
 
     protected function initializeAgent(): void
     {
-        $this->fireModelEvent('booting', false);
-
         $this->initializeIntegration();
         $this->initializeMemory();
         $this->initializeTools();
         $this->initializeOutputRules();
-
-        $this->fireModelEvent('booted', false);
     }
 
     public function getPrompt(array $inputs): string
@@ -73,6 +69,7 @@ class Agent
 
     public function parsePrompt(string $prompt): array
     {
+
         $prompts = [];
         // Adjusted pattern to account for possible newlines, nested content, and the new 'image' attribute
         $pattern = '/<message\s+type=[\'"](?P<role>\w+)[\'"](?:\s+tool=[\'"](?P<tool>[\w\-+=\/]+)[\'"])?(?:\s+image=[\'"](?P<image>[\w\-+=\/]+)[\'"])?\s*>\s*(?P<message>.*?)\s*<\/message>/s';
@@ -81,7 +78,7 @@ class Agent
         foreach ($matches as $promptBlock) {
             $role = $promptBlock['role'] ?? null;
             $tool = $promptBlock['tool'] ?? null;
-            $image = $promptBlock['image'] ?? null;
+            //            $image = $promptBlock['image'] ?? null;
             $promptContent = $promptBlock['message'] ?? '';
 
             $promptContent = trim($promptContent);
@@ -103,14 +100,14 @@ class Agent
                     }
                 }
 
-                if ($image) {
-                    $image = json_decode(base64_decode($image), true);
-                    $messageData['image_call_id'] = $image['id'];
-                    if ($role == Role::ASSISTANT) {
-                        $messageData['image_name'] = $image['name'] ?? null;
-                        $messageData['image_arguments'] = $image['arguments'] ?? null;
-                    }
-                }
+                //                if ($image) {
+                //                    $image = json_decode(base64_decode($image), true);
+                //                    $messageData['image_call_id'] = $image['id'];
+                //                    if ($role == Role::ASSISTANT) {
+                //                        $messageData['image_name'] = $image['name'] ?? null;
+                //                        $messageData['image_arguments'] = $image['arguments'] ?? null;
+                //                    }
+                //                }
 
                 $prompts[] = Message::make($messageData);
             }
@@ -206,11 +203,9 @@ class Agent
 
             $this->memory->create(Message::make([
                 'role' => 'tool',
-                'tool' => [
-                    'call_id' => $toolCall['id'],
-                    'name' => $toolCall['function']['name'],
-                    'arguments' => $toolCall['function']['arguments'],
-                ],
+                'tool_call_id' => $toolCall['id'],
+                'tool_name' => $toolCall['function']['name'],
+                'tool_arguments' => $toolCall['function']['arguments'],
                 'content' => $toolResponse,
             ]));
         } catch (Exception $e) {
