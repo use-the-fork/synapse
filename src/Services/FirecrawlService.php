@@ -26,7 +26,7 @@ class FirecrawlService
                 'url' => $url,
                 'extractorOptions' => [
                     'mode' => 'llm-extraction',
-                    'extractionPrompt' => "content related to **{$extractionPrompt}** if no relevant content is found simply return `No Relevant Content On Page`",
+                    'extractionPrompt' => "detailed markdown list related to **{$extractionPrompt}** if no relevant content is found simply return `No Relevant Content On Page` do not respond with only a URL or Link.",
                     'extractionSchema' => [
                         'type' => 'object',
                         'properties' => [
