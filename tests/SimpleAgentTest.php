@@ -10,4 +10,4 @@ it('can do a simple query', function () {
 
   expect($agentResponse)->toBeArray()
                         ->and($agentResponse)->toHaveKey("answer");
-})->only();
+});
