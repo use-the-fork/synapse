@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
+use Illuminate\Support\Facades\Log;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 
@@ -16,4 +17,10 @@ abstract class BaseTool implements Tool
     }
 
     protected function initializeTool(): void {}
+
+    protected function log(string $event, ?array $context): void
+    {
+        $class = __CLASS__;
+        Log::debug("{$event} in {$class}", $context);
+    }
 }

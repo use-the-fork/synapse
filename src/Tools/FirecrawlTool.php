@@ -41,10 +41,10 @@ final class FirecrawlTool extends BaseTool implements Tool
         string $extractionPrompt,
     ): string {
 
-        Log::debug('Entered FirecrawlTool', ['url' => $url, 'extractionPrompt' => $extractionPrompt]);
+        $this->log("Entered", ['url' => $url, 'extractionPrompt' => $extractionPrompt]);
         $firecrawlService = new FirecrawlService($this->apiKey);
         $results = $firecrawlService->__invoke($url, $extractionPrompt);
-        Log::debug('Finished FirecrawlTool', ['results' => $results]);
+        $this->log('Finished', ['results' => $results]);
 
         return $this->parseResults($results);
     }
