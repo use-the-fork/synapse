@@ -18,6 +18,10 @@ interface Memory
      */
     public function get(): array;
 
+    public function set(array $messages): void;
+
+    public function clear(): void;
+
     public function asInputs(): array;
 
     public function load(): void;

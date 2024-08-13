@@ -29,4 +29,28 @@ trait HasMemory
     {
         $this->memory = $this->registerMemory();
     }
+
+    /**
+     * returns the memory of the agent.
+     */
+    public function getMemory(): Memory
+    {
+        return $this->memory;
+    }
+
+    /**
+     * sets the memory of the agent
+     */
+    public function setMemory(array $messages): void
+    {
+        $this->memory->set($messages);
+    }
+
+    /**
+     * clears the memory of the agent
+     */
+    public function clearMemory(): void
+    {
+        $this->memory->clear();
+    }
 }

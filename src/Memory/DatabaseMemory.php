@@ -70,4 +70,25 @@ class DatabaseMemory implements Memory
         'memory' => implode("\n", $payload['memory'])
       ];
     }
+
+  public function set(array $messages): void
+  {
+    //First we delete all the agents memory
+    $this->agentMemory->messages()->delete();
+
+    //Iterate over the messages and insert them in to memory
+    foreach ($messages as $message){
+      $message = Message::make($message);
+      $this->agentMemory->messages()->create($message->toArray());
+    }
+
+  }
+
+  public function clear(): void
+  {
+    $this->agentMemory->delete();
+
+    $this->agentMemory = new AgentMemory();
+    $this->agentMemory->save();
+  }
 }

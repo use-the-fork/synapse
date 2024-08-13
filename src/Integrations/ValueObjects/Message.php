@@ -17,7 +17,7 @@ class Message extends ArrayValueObject
         return [
             'role' => 'required',
             'finish_reason' => 'nullable|sometimes|string',
-            'content' => 'nullable|sometimes|string',
+            'content' => 'nullable|sometimes',
 
             'tool_call_id' => 'nullable|sometimes|string',
             'tool_name' => 'nullable|sometimes|string',
