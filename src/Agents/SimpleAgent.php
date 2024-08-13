@@ -7,7 +7,6 @@ namespace UseTheFork\Synapse\Agents;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 use UseTheFork\Synapse\Tools\FirecrawlTool;
-use UseTheFork\Synapse\Tools\SearchGoogleTool;
 
 class SimpleAgent extends Agent
 {
