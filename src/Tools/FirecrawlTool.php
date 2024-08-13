@@ -5,27 +5,46 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\FirecrawlService;
 use UseTheFork\Synapse\Services\SerperService;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 #[Description('Useful for getting the contents of a webpage.')]
-final class FirecrawlTool
+final class FirecrawlTool extends BaseTool implements Tool
 {
 
-    public function __construct(
-      private readonly string $apiKey
-    ) {
+  private string $apiKey;
+
+    public function __construct(?string $apiKey = null) {
+
+      if(!empty($apiKey)){
+        $this->apiKey = $apiKey;
+      }
+
+      parent::__construct();
+    }
+
+    protected function initializeTool(): void {
+      if(empty($this->apiKey) && !empty(env('FIRECRAWL_API_KEY'))){
+        $this->apiKey = env('FIRECRAWL_API_KEY');
+        return;
+      }
+      throw new \Exception('API key is required.');
     }
 
     public function handle(
-        #[Description('the full URL to get the contents from')]
+        #[Description('The full URL to get the contents from')]
         string $url,
+        #[Description('A prompt describing what information to extract from the page')]
+        string $extractionPrompt,
     ): string {
 
+        Log::debug('Entered FirecrawlTool',['url' => $url, 'extractionPrompt' => $extractionPrompt]);
         $firecrawlService = new FirecrawlService($this->apiKey);
-        $results = $firecrawlService->__invoke($url);
+        $results = $firecrawlService->__invoke($url, $extractionPrompt);
+        Log::debug('Finished FirecrawlTool',['results' => $results]);
 
         return $this->parseResults($results);
     }

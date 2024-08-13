@@ -13,33 +13,49 @@ class FirecrawlService
         private readonly string $apiKey
     ) {}
 
-    public function __invoke($url)
+    public function __invoke(string $url, string $extractionPrompt)
     {
 
-      try {
+        try {
 
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer {$this->apiKey}",
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ])->throw()->post('https://api.firecrawl.dev/v0/scrape', [
-            'pageOptions' => [
-                'onlyMainContent' => true,
-            ],
-            'url' => $url,
-        ])->json();
+            $response = Http::withHeaders([
+                'Authorization' => "Bearer {$this->apiKey}",
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->throw()->post('https://api.firecrawl.dev/v0/scrape', [
+                'url' => $url,
+                'extractorOptions' => [
+                    'mode' => 'llm-extraction',
+                    'extractionPrompt' => $extractionPrompt,
+                    'extractionSchema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'result' => ['type' => 'string'],
+                        ],
+                        'required' => [
+                            'result',
+                        ],
+                    ],
+                ],
+            ])->json();
 
-        return $response;
+            return [
+                'data' => [
+                    'metadata' => $response['data']['metadata'],
+                    'linksOnPage' => $response['data']['linksOnPage'],
+                    'content' => $response['data']['llm_extraction']['result'],
+                ],
+            ];
 
-      } catch (Exception $e){
-        return [
-          'data' => [
-            'metadata' => [
-              'title' => '500 Page had error.'
-            ],
-            'content' => 'Oops something went wrong and the page could not be scraped.'
-          ]
-        ];
-      }
+        } catch (Exception $e) {
+            return [
+                'data' => [
+                    'metadata' => [
+                        'title' => '500 Page had error.',
+                    ],
+                    'content' => 'Oops something went wrong and the page could not be scraped.',
+                ],
+            ];
+        }
     }
 }
