@@ -72,14 +72,20 @@ trait HasOutputRules
 
         while (true) {
             $result = $this->parseResponse($response);
+            $errorsAsString = '';
             if (! empty($result)) {
                 $validator = Validator::make($result, $outputRules);
                 if (! $validator->fails()) {
                     return $validator->validated();
                 }
-                dd($validator->fails());
+
+                $errors = $validator->errors()->toArray();
+                $errorsFlat = array_reduce($errors, function ($carry, $item) {
+                    return array_merge($carry, is_array($item) ? $item : [$item]);
+                }, []);
+                $errorsAsString = "### Here are the errors that Failed validation \n".implode("\n", $errorsFlat)."\n\n";
             }
-            $response = $this->doRevalidate($response);
+            $response = $this->doRevalidate($response, $errorsAsString);
             //since all integrations return a Message value object we need to grab the content
             $response = $response->content();
         }
@@ -95,11 +101,11 @@ trait HasOutputRules
         );
     }
 
-    protected function doRevalidate(string $result)
+    protected function doRevalidate(string $result, string $errors = '')
     {
         $prompt = Message::make([
             'role' => 'user',
-            'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n### User Content\n{$result}",
+            'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n{$errors}### User Content\n{$result}",
         ]);
 
         return $this->integration->handle(
