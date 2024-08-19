@@ -32,7 +32,10 @@ class CollectionMemory implements Memory
     {
 
         //MemoryAsMessages
-        $payload = [];
+        $payload = [
+            'memory' => [],
+            'memoryWithMessages' => [],
+        ];
         $messages = $this->agentMemory->toArray();
 
         foreach ($messages as $message) {
