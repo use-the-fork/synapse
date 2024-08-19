@@ -17,7 +17,7 @@ class SynapseServiceProvider extends ServiceProvider
             __DIR__.'/../config/synapse.php' => config_path('synapse.php'),
         ]);
 
-        $this->publishesMigrations([
+        $this->loadMigrationsFrom([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ]);
 
