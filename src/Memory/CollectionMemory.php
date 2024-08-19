@@ -65,4 +65,14 @@ class CollectionMemory implements Memory
     }
 
     public function load(): void {}
+
+    public function set(array $messages): void
+    {
+        $this->agentMemory = collect($messages);
+    }
+
+    public function clear(): void
+    {
+        $this->agentMemory = collect();
+    }
 }
