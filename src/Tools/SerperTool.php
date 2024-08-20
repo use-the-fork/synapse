@@ -12,42 +12,41 @@ use UseTheFork\Synapse\Tools\Contracts\Tool;
 #[Description('Search Google using a query.')]
 final class SerperTool extends BaseTool implements Tool
 {
-
     private string $apiKey;
 
     public function __construct(?string $apiKey = null)
     {
 
-      if (! empty($apiKey)) {
-        $this->apiKey = $apiKey;
-      }
+        if (! empty($apiKey)) {
+            $this->apiKey = $apiKey;
+        }
 
-      parent::__construct();
+        parent::__construct();
     }
 
     protected function initializeTool(): void
     {
-      if (empty($this->apiKey) && ! empty(env('SERPER_API_KEY'))) {
-        $this->apiKey = env('SERPER_API_KEY');
+        if (empty($this->apiKey) && ! empty(config('synapse.services.serper.key'))) {
+            $this->apiKey = config('synapse.services.serper.key');
 
-        return;
-      }
-      throw new \Exception('API (SERPER_API_KEY) key is required.');
+            return;
+        }
+        throw new \Exception('API (SERPER_API_KEY) key is required.');
     }
 
     public function handle(
         #[Description('the search query to execute')]
         string $query,
         #[Description('the type of search must be one of `search`, `places`, `news`.  (usually search)')]
-        string $searchType = "search",
+        string $searchType = 'search',
         #[Description('the number of results to return must be one of `10`, `20`, `30`, `40`, `50` (usually `10`).')]
         int $numberOfResults = 10,
     ): string {
 
         $this->log('Entered', [
-          'query'              => $query,
-          'searchType' => $searchType,
-          'numberOfResults' => $numberOfResults,
+            'query' => $query,
+            'searchType' => $searchType,
+            'numberOfResults' => $numberOfResults,
         ]);
 
         $serperService = new SerperService($this->apiKey);
@@ -60,32 +59,32 @@ final class SerperTool extends BaseTool implements Tool
     private function parseResults($results): string
     {
 
-      $snippets = collect();
-      if(!empty($results['knowledgeGraph'])){
-        $title = Arr::get($results, 'knowledgeGraph.title');
-        $entityType = Arr::get($results, 'knowledgeGraph.type');
-        if($entityType){
-          $snippets->push("{$title}: {$entityType}");
-        }
-        $description = Arr::get($results, 'knowledgeGraph.description');
-        if($description){
-          $snippets->push($description);
+        $snippets = collect();
+        if (! empty($results['knowledgeGraph'])) {
+            $title = Arr::get($results, 'knowledgeGraph.title');
+            $entityType = Arr::get($results, 'knowledgeGraph.type');
+            if ($entityType) {
+                $snippets->push("{$title}: {$entityType}");
+            }
+            $description = Arr::get($results, 'knowledgeGraph.description');
+            if ($description) {
+                $snippets->push($description);
+            }
+
+            foreach (Arr::get($results, 'knowledgeGraph.attributes', []) as $key => $value) {
+                $snippets->push("{$title} {$key}: {$value}");
+            }
         }
 
-        foreach (Arr::get($results, 'knowledgeGraph.attributes', []) as $key => $value){
-          $snippets->push("{$title} {$key}: {$value}");
+        if (! empty($results['organic'])) {
+            foreach ($results['organic'] as $key => $value) {
+                $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
+            }
         }
-      }
 
-      if(!empty($results['organic'])){
-        foreach ($results['organic'] as $key => $value){
-          $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
+        if ($snippets->isEmpty()) {
+            return 'No good Google Search Result was found';
         }
-      }
-
-      if($snippets->isEmpty()){
-        return "No good Google Search Result was found";
-      }
 
         return $snippets->implode("\n");
     }

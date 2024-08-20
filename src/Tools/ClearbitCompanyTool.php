@@ -6,13 +6,31 @@ namespace UseTheFork\Synapse\Tools;
 
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\ClearbitService;
+use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 #[Description('Search Clearbit Company data.')]
-final class ClearbitCompanyTool
+final class ClearbitCompanyTool extends BaseTool implements Tool
 {
-    public function __construct(
-      private readonly string $apiKey
-    ) {
+    private string $apiKey;
+
+    public function __construct(?string $apiKey = null)
+    {
+
+      if (! empty($apiKey)) {
+        $this->apiKey = $apiKey;
+      }
+
+      parent::__construct();
+    }
+
+    protected function initializeTool(): void
+    {
+      if (empty($this->apiKey) && ! empty(config('synapse.services.clearbit.key'))) {
+        $this->apiKey = config('synapse.services.clearbit.key');
+
+        return;
+      }
+      throw new \Exception('API (CLEARBIT_API_KEY) key is required.');
     }
 
     public function handle(

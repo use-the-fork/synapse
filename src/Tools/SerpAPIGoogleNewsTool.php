@@ -26,8 +26,8 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (empty($this->apiKey) && ! empty(env('SERPAPI_API_KEY'))) {
-            $this->apiKey = env('SERPAPI_API_KEY');
+        if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
+            $this->apiKey = config('synapse.services.serp_api.key');
 
             return;
         }

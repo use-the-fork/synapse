@@ -26,12 +26,12 @@ final class FirecrawlTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (empty($this->apiKey) && ! empty(env('FIRECRAWL_API_KEY'))) {
-            $this->apiKey = env('FIRECRAWL_API_KEY');
+        if (empty($this->apiKey) && ! empty(config('synapse.services.firecrawl.key'))) {
+            $this->apiKey = config('synapse.services.firecrawl.key');
 
             return;
         }
-        throw new \Exception('API key is required.');
+      throw new \Exception('API (FIRECRAWL_API_KEY) key is required.');
     }
 
     public function handle(
