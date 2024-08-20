@@ -19,11 +19,15 @@ class OpenAIConnector implements Integration
     private Client $client;
 
     public function __construct(
-        public string $model = 'gpt-4-turbo',
+        public ?string $model = null,
         public float $temperature = 1,
         public ?int $maxTokens = null,
     ) {
-        $this->apiKey = config('synapse.openapi_key');
+        $this->apiKey = config('synapse.integrations.openai.key');
+        if(empty($this->model)){
+          $this->model = config('synapse.integrations.openai.model');
+        }
+
         $this->validateEnvironment();
         $this->client = OpenAI::client($this->apiKey);
     }
