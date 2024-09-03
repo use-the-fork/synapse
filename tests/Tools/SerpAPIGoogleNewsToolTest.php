@@ -8,27 +8,28 @@
   use UseTheFork\Synapse\Tools\BaseTool;
   use UseTheFork\Synapse\Tools\Contracts\Tool;
   use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
+  use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
   use UseTheFork\Synapse\Tools\SerpAPIGoogleSearchTool;
 
   test('Requires API Key', function () {
-    $tool = new SerpAPIGoogleSearchTool();
+    $tool = new SerpAPIGoogleNewsTool();
     $tool->handle('current President of the United States');
   })->throws(MissingApiKeyException::class);
 
   test('Send Request', function () {
 
     MockClient::global([
-                         SerpApiSearchRequest::class => MockResponse::fixture('tools/serpapi-google'),
+                         SerpApiSearchRequest::class => MockResponse::fixture('tools/serpapi-google-news'),
                        ]);
 
-    $tool = new SerpAPIGoogleSearchTool('abc');
-    $result = $tool->handle('current President of the United States');
+    $tool = new SerpAPIGoogleNewsTool('abc');
+    $result = $tool->handle('apple stock');
     expect(!empty($result))->toBeTrue();
   });
 
   test('Architecture', function () {
 
-    expect(SerpAPIGoogleSearchTool::class)
+    expect(SerpAPIGoogleNewsTool::class)
       ->toExtend(BaseTool::class)
       ->toImplement(Tool::class);
 

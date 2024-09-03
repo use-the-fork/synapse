@@ -28,10 +28,17 @@ class SerpApiSearchRequest extends Request implements HasBody
 
     public function defaultQuery(): array
     {
-        return [
+
+        $payload = [
             'q' => $this->searchQuery,
             'num' => $this->numberOfResults,
             'engine' => $this->engine,
         ];
+
+        if ($this->engine == 'google_news') {
+            unset($payload['num']);
+        }
+
+        return $payload;
     }
 }

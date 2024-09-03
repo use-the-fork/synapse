@@ -32,7 +32,6 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
         return;
       }
 
-
       if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
             $this->apiKey = config('synapse.services.serp_api.key');
 
