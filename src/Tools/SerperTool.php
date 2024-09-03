@@ -6,11 +6,10 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
-use UseTheFork\Synapse\Services\Serper\Requests\SearchRequest;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Services\Serper\SerperConnector;
-use UseTheFork\Synapse\Services\SerperService;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Google using a query.')]
 final class SerperTool extends BaseTool implements Tool
@@ -29,12 +28,17 @@ final class SerperTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
+
+        if (! empty($this->apiKey)) {
+            return;
+        }
+
         if (empty($this->apiKey) && ! empty(config('synapse.services.serper.key'))) {
             $this->apiKey = config('synapse.services.serper.key');
 
             return;
         }
-        throw new \Exception('API (SERPER_API_KEY) key is required.');
+        throw new MissingApiKeyException('API (SERPER_API_KEY) key is required.');
     }
 
     public function handle(
