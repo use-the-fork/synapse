@@ -7,8 +7,10 @@ namespace UseTheFork\Synapse\Tools;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use UseTheFork\Synapse\Attributes\Description;
-use UseTheFork\Synapse\Services\SerpAPIService;
+use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
+use UseTheFork\Synapse\Services\SerpApi\SerpApiConnector;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Google using a query.')]
 final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
@@ -27,12 +29,16 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (empty($this->apiKey) && ! empty(env('SERPAPI_API_KEY'))) {
-            $this->apiKey = env('SERPAPI_API_KEY');
+        if (! empty($this->apiKey)) {
+            return;
+        }
+
+        if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
+            $this->apiKey = config('synapse.services.serp_api.key');
 
             return;
         }
-        throw new \Exception('API (SERPAPI_API_KEY) key is required.');
+        throw new MissingApiKeyException('API (SERPAPI_API_KEY) key is required.');
     }
 
     public function handle(
@@ -47,8 +53,10 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
             'numberOfResults' => $numberOfResults,
         ]);
 
-        $serperService = new SerpAPIService($this->apiKey);
-        $results = $serperService->__invoke($query, ['num' => $numberOfResults]);
+        $serpApiConnector = new SerpApiConnector($this->apiKey);
+        $serpApiSearchRequest = new SerpApiSearchRequest($query, $numberOfResults);
+
+        $results = $serpApiConnector->send($serpApiSearchRequest)->array();
         $this->log('Finished');
 
         return $this->parseResults($results);
