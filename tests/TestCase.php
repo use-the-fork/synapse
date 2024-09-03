@@ -44,19 +44,14 @@ abstract class TestCase extends Orchestra
 
         tap($app['config'], function (Repository $config) {
             $config->set('synapse',
-            [
-              'integrations' => [
-              'openai' => [
-                'key' => env('OPENAI_API_KEY'),
-                'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
-              ]
-            ],
-              'services' => [
-                'serper' => [
-                  'key' => env('SERPER_API_KEY')
+                [
+                    'integrations' => [
+                        'openai' => [
+                            'key' => env('OPENAI_API_KEY'),
+                            'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
+                        ],
+                    ],
                 ]
-              ]
-            ]
             );
 
         });
