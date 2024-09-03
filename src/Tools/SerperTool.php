@@ -6,6 +6,9 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Services\Serper\Requests\SearchRequest;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Services\Serper\SerperConnector;
 use UseTheFork\Synapse\Services\SerperService;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 
@@ -49,8 +52,9 @@ final class SerperTool extends BaseTool implements Tool
             'numberOfResults' => $numberOfResults,
         ]);
 
-        $serperService = new SerperService($this->apiKey);
-        $results = $serperService->__invoke($query, $searchType, $numberOfResults);
+        $serperConnector = new SerperConnector($this->apiKey);
+        $serperSearchRequest = new SerperSearchRequest($query, $searchType, $numberOfResults);
+        $results = $serperConnector->send($serperSearchRequest)->array();
         $this->log('Finished', ['results' => $results]);
 
         return $this->parseResults($results);

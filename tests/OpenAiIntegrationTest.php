@@ -8,6 +8,7 @@ use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 
 test('Connects', function () {
@@ -70,6 +71,7 @@ test('uses tools', function () {
 
             return MockResponse::fixture("openai/uses-tools/message-{$count}");
         },
+        SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),
     ]);
 
     $agent = new OpenAiToolTestAgent();
