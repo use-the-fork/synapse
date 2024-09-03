@@ -6,7 +6,8 @@
     "illuminate/container": "^10.0|^11.0",
     "illuminate/database": "^10.0|^11.0",
     "illuminate/events": "^10.0|^11.0",
-    "openai-php/client": "^0.10.1"
+    "openai-php/client": "^0.10.1",
+    "saloonphp/saloon": "^3.0"
   },
   "require-dev": {
     "orchestra/testbench": "^9.2",

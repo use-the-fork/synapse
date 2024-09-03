@@ -5,8 +5,8 @@ declare(strict_types=1);
 return [
     'integrations' => [
         'openai' => [
-            'key' => env('OPENAI_API_KEY'),
-            'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
+          'key' => env('OPENAI_API_KEY'),
+          'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo')
         ],
     ],
     'services' => [

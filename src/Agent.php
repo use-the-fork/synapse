@@ -177,7 +177,10 @@ class Agent
             );
 
             $this->log('Call Integration');
-            $chatResponse = $this->integration->handle($prompt, $this->registered_tools, $extraAgentArgs);
+
+            # Create the Chat request we will be sending.
+            $chatRequest = $this->getChatRequest($prompt, $extraAgentArgs);
+            $chatResponse = $this->integration->send($chatRequest)->dto();
             $this->log("Finished Integration with {$chatResponse->finishReason()}");
 
             switch ($chatResponse->finishReason()) {
