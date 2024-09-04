@@ -10,7 +10,7 @@ use UseTheFork\Synapse\ValueObject\ArrayValueObject;
 class Message extends ArrayValueObject
 {
     /**
-     * Define the rules for email validator.
+     * Define the rules for Message validator.
      */
     protected function validationRules(): array
     {
