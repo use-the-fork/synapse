@@ -41,7 +41,7 @@
          */
         public function defaultBody(): array
         {
-            $model = config('synapse.integrations.claude.model');
+            $model = config('synapse.integrations.claude.chat_model');
 
             $payload = [
                 'model' => $model,

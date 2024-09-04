@@ -32,7 +32,7 @@ class ValidateOutputRequest extends Request implements HasBody
 
     public function defaultBody(): array
     {
-        $model = config('synapse.integrations.openai.model');
+        $model = config('synapse.integrations.openai.validate_model');
 
         $userMessage = "### Instruction\nRewrite user-generated content to adhere to the specified format. DO NOT EXPLAIN.\n\n{$this->prompt->content()}";
 

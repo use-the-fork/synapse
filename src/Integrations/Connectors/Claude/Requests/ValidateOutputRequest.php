@@ -42,7 +42,7 @@ class ValidateOutputRequest extends Request implements HasBody
      */
     public function defaultBody(): array
     {
-        $model = config('synapse.integrations.claude.model');
+        $model = config('synapse.integrations.claude.validate_model');
 
         $payload = [
             'model' => $model,

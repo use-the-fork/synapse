@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
- namespace UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests;
+namespace UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
@@ -32,7 +32,7 @@ class ChatRequest extends Request implements HasBody
 
     public function defaultBody(): array
     {
-        $model = config('synapse.integrations.openai.model');
+        $model = config('synapse.integrations.openai.chat_model');
 
         $payload = [
             'model' => $model,
@@ -48,7 +48,7 @@ class ChatRequest extends Request implements HasBody
         return [
             ...$payload,
             ...$this->extraAgentArgs,
-            # Always set parallel_tool_calls to false. True is more headache than its worth.
+            // Always set parallel_tool_calls to false. True is more headache than its worth.
             'parallel_tool_calls' => false,
         ];
     }
@@ -57,16 +57,16 @@ class ChatRequest extends Request implements HasBody
     {
         $payload = collect();
         foreach ($this->prompt as $message) {
-            switch ($message->role()){
+            switch ($message->role()) {
                 case Role::TOOL:
                     $toolPayload = $this->formatToolMessage($message);
                     $payload->push(...$toolPayload);
                     break;
                 default:
                     $payload->push([
-                                       'role' => $message->role(),
-                                       'content' => $message->content(),
-                                   ]);
+                        'role' => $message->role(),
+                        'content' => $message->content(),
+                    ]);
                     break;
             }
         }
@@ -88,14 +88,14 @@ class ChatRequest extends Request implements HasBody
                     'function' => [
                         'name' => $message['tool_name'],
                         'arguments' => $message['tool_arguments'],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
         $payload[] = [
             'role' => 'tool',
             'tool_call_id' => $message['tool_call_id'],
-            'content' => $message['tool_content']
+            'content' => $message['tool_content'],
         ];
 
         return $payload;
@@ -110,7 +110,7 @@ class ChatRequest extends Request implements HasBody
             $message['tool_call'] = ToolCallValueObject::make($message['tool_calls'][0])->toArray();
             unset($message['tool_calls']);
 
-            # Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
+            // Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
             $message['role'] = Role::TOOL;
         }
 

@@ -27,4 +27,13 @@ interface Integration
      * @return Response The response from the chat request.
      */
     public function handleValidationCompletion(Message $prompt, array $extraAgentArgs = []): Response;
+
+    /**
+     * Creates an embedding vector representing the input text.
+     *
+     * @param  string  $input  Input text to embed, encoded as a string or array of tokens.
+     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
+     * @return Response The response from the chat request.
+     */
+    public function createEmbeddings(Message $prompt, array $extraAgentArgs = []): Response;
 }
