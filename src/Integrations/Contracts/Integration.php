@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Integrations\Contracts;
 
+use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
@@ -33,7 +34,7 @@ interface Integration
      *
      * @param  string  $input  Input text to embed, encoded as a string or array of tokens.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
+     * @return EmbeddingResponse The response from the request.
      */
-    public function createEmbeddings(Message $prompt, array $extraAgentArgs = []): Response;
+    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse;
 }

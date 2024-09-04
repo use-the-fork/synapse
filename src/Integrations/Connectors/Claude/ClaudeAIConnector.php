@@ -13,6 +13,8 @@ use Saloon\Traits\Plugins\HasTimeout;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Integrations\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\Exceptions\NotImplementedException;
+use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
@@ -79,5 +81,10 @@ class ClaudeAIConnector extends Connector implements Integration
             'x-api-key' => config('synapse.integrations.claude.key'),
             'anthropic-version' => '2023-06-01',
         ];
+    }
+
+    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
+    {
+        throw new NotImplementedException('Claude does not support embedding creation.');
     }
 }

@@ -11,8 +11,10 @@ use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Integrations\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
@@ -63,18 +65,19 @@ class OpenAIConnector extends Connector implements Integration
         return $this->send(new ValidateOutputRequest($prompt, $extraAgentArgs))->dto();
     }
 
-    /**
-     * The Base URL of the API
-     */
+
+    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
+    {
+        return $this->send(new EmbeddingsRequest($input, $extraAgentArgs))->dto();
+    }
+
     public function resolveBaseUrl(): string
     {
         return 'https://api.openai.com/v1';
 
     }
 
-    /**
-     * Default headers for every request
-     */
+
     protected function defaultHeaders(): array
     {
 
@@ -82,4 +85,5 @@ class OpenAIConnector extends Connector implements Integration
             'Authorization' => 'Bearer '.config('synapse.integrations.openai.key'),
         ];
     }
+
 }
