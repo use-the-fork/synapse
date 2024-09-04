@@ -23,20 +23,106 @@ use UseTheFork\Synapse\Attributes\Description;
 trait HasTools
 {
     protected array $registered_tools = [];
+
     protected array $tools = [];
 
-
     /**
-     * sets the memory type this agent will use.
+     * Calls a registered tool with the given name and arguments.
      *
-     * @return void
+     * @param  string  $tool_name  The name of the tool to call.
+     * @param  array|null  $arguments  The arguments to pass to the tool.
+     * @return mixed The result of calling the tool, or null if the tool is not registered.
+     *               If a required parameter is missing, a string error message is returned.
+     *               If the parameter type is an enum, it attempts to fetch a valid value,
+     *               using the provided argument or the parameter's default value.
+     *
+     * @throws ReflectionException
      */
-    protected function registerTools(): array
+    public function call(string $tool_name, ?array $arguments = []): mixed
     {
-      return [];
+        if (null === $tool_class = $this->registered_tools[$tool_name]) {
+            return null;
+        }
+        $tool = $tool_class['tool'];
+
+        $tool_class = new ReflectionClass($tool_class['tool']);
+        $handle_method = $tool_class->getMethod('handle');
+
+        $params = [];
+        foreach ($handle_method->getParameters() as $parameter) {
+            $parameter_description = $this->getParameterDescription($parameter);
+            if (! array_key_exists($parameter->name, $arguments) && ! $parameter->isOptional() && ! $parameter->isDefaultValueAvailable()) {
+                return sprintf('Parameter %s(%s) is required for the tool %s', $parameter->name, $parameter_description, $tool_name);
+            }
+
+            // check if parameter type is an Enum and add fetch a valid value
+            if (($parameter_type = $parameter->getType()) !== null && ! $parameter_type->isBuiltin()) {
+                if (enum_exists($parameter_type->getName())) {
+                    $params[$parameter->name] = $parameter_type->getName()::tryFrom($arguments[$parameter->name]) ?? $parameter->getDefaultValue();
+
+                    continue;
+                }
+            }
+
+            $params[$parameter->name] = $arguments[$parameter->name] ?? $parameter->getDefaultValue();
+        }
+
+        return $tool->handle(...$params);
     }
 
     /**
+     * Gets the description for a given ReflectionParameter.
+     *
+     * @param  ReflectionParameter  $parameter  The ReflectionParameter to get the description for.
+     * @return string The description of the parameter.
+     */
+    private function getParameterDescription(ReflectionParameter $parameter): string
+    {
+        $descriptions = $parameter->getAttributes(Description::class);
+        if (! empty($descriptions)) {
+            return implode("\n", array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions));
+        }
+
+        return $this->getToolParameterType($parameter);
+    }
+
+    /**
+     * Retrieves the type of the tool parameter.
+     *
+     * @param  ReflectionParameter  $parameter  The reflection parameter.
+     * @return string The type of the tool parameter.
+     */
+    private function getToolParameterType(ReflectionParameter $parameter): string
+    {
+        if (null === $parameter_type = $parameter->getType()) {
+            return 'string';
+        }
+
+        if (! $parameter_type->isBuiltin()) {
+            return $parameter_type->getName();
+        }
+
+        return match ($parameter_type->getName()) {
+            'bool' => 'boolean',
+            'int' => 'integer',
+            'float' => 'number',
+
+            default => 'string',
+        };
+    }
+
+    /**
+     * Initializes the tools registered in the application.
+     *
+     * This method loops through the registered tools and performs the following tasks:
+     * 1. Retrieves the reflection class of the tool.
+     * 2. Generates the tool name based on the class name.
+     * 3. Checks if the tool class has a "handle" method. If not, it logs a warning and continues to the next tool.
+     * 4. Defines the tool function with its type and name.
+     * 5. Sets the function description if available.
+     * 6. Parses tool parameters if the "handle" method has parameters.
+     * 7. Stores the registered tool with its definition and class.
+     *
      * @throws ReflectionException
      */
     public function initializeTools(): void
@@ -78,41 +164,21 @@ trait HasTools
     }
 
     /**
-     * @throws ReflectionException
+     * Registers the tools.
+     *
+     * @return array The registered tools.
      */
-    public function call(string $tool_name, ?array $arguments = []): mixed
+    protected function registerTools(): array
     {
-        if (null === $tool_class = $this->registered_tools[$tool_name]) {
-            return null;
-        }
-        $tool = $tool_class['tool'];
-
-        $tool_class = new ReflectionClass($tool_class['tool']);
-        $handle_method = $tool_class->getMethod('handle');
-
-        $params = [];
-        foreach ($handle_method->getParameters() as $parameter) {
-            $parameter_description = $this->getParameterDescription($parameter);
-            if (! array_key_exists($parameter->name, $arguments) && ! $parameter->isOptional() && ! $parameter->isDefaultValueAvailable()) {
-                return sprintf('Parameter %s(%s) is required for the tool %s', $parameter->name, $parameter_description, $tool_name);
-            }
-
-            // check if parameter type is an Enum and add fetch a valid value
-            if (($parameter_type = $parameter->getType()) !== null && ! $parameter_type->isBuiltin()) {
-                if (enum_exists($parameter_type->getName())) {
-                    $params[$parameter->name] = $parameter_type->getName()::tryFrom($arguments[$parameter->name]) ?? $parameter->getDefaultValue();
-
-                    continue;
-                }
-            }
-
-            $params[$parameter->name] = $arguments[$parameter->name] ?? $parameter->getDefaultValue();
-        }
-
-        return $tool->handle(...$params);
+        return [];
     }
 
     /**
+     * Parses the parameters of a tool.
+     *
+     * @param  ReflectionClass  $tool  The tool reflection class.
+     * @return array The parsed parameters of the tool.
+     *
      * @throws ReflectionException
      */
     private function parseToolParameters(ReflectionClass $tool): array
@@ -152,34 +218,5 @@ trait HasTools
         }
 
         return $parameters;
-    }
-
-    private function getToolParameterType(ReflectionParameter $parameter): string
-    {
-        if (null === $parameter_type = $parameter->getType()) {
-            return 'string';
-        }
-
-        if (! $parameter_type->isBuiltin()) {
-            return $parameter_type->getName();
-        }
-
-        return match ($parameter_type->getName()) {
-            'bool' => 'boolean',
-            'int' => 'integer',
-            'float' => 'number',
-
-            default => 'string',
-        };
-    }
-
-    private function getParameterDescription(ReflectionParameter $parameter): string
-    {
-        $descriptions = $parameter->getAttributes(Description::class);
-        if (! empty($descriptions)) {
-            return implode("\n", array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions));
-        }
-
-        return $this->getToolParameterType($parameter);
     }
 }
