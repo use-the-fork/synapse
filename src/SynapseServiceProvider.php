@@ -9,9 +9,9 @@ use Illuminate\Support\ServiceProvider;
 class SynapseServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application events.
+     * Bootstrap the application.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../config/synapse.php' => config_path('synapse.php'),
