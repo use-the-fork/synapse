@@ -22,11 +22,9 @@ trait HasIntegration
     /**
      * returns the memory type this Agent should use.
      */
-    protected function registerIntegration(): array
+    protected function registerIntegration(): Connector
     {
-        return [
-          'connector' => OpenAIConnector::class
-        ];
+		return new OpenAIConnector();
     }
 
     /**
@@ -34,9 +32,7 @@ trait HasIntegration
      */
     protected function initializeIntegration(): void
     {
-        $integration = $this->registerIntegration();
-        $this->integration = new $integration['connector']();
-        $this->chatRequestClass = $integration['chatRequest'];
+		$this->integration = $this->registerIntegration();
     }
 
 }

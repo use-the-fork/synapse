@@ -99,10 +99,9 @@ class Agent
                 if ($tool) {
                     $tool = json_decode(base64_decode($tool), true);
                     $messageData['tool_call_id'] = $tool['id'];
-                    if ($role == Role::ASSISTANT) {
-                        $messageData['tool_name'] = $tool['name'] ?? null;
-                        $messageData['tool_arguments'] = $tool['arguments'] ?? null;
-                    }
+                    $messageData['tool_name'] = $tool['name'] ?? null;
+                    $messageData['tool_arguments'] = $tool['arguments'] ?? null;
+                    $messageData['tool_content'] = $tool['content'] ?? null;
                 }
 
                 if ($image) {
@@ -178,9 +177,8 @@ class Agent
 
             $this->log('Call Integration');
 
-            # Create the Chat request we will be sending.
-            $chatRequest = $this->getChatRequest($prompt, $extraAgentArgs);
-            $chatResponse = $this->integration->send($chatRequest)->dto();
+            // Create the Chat request we will be sending.
+            $chatResponse = $this->integration->handleCompletion($prompt, $this->registered_tools, $extraAgentArgs);
             $this->log("Finished Integration with {$chatResponse->finishReason()}");
 
             switch ($chatResponse->finishReason()) {
@@ -198,39 +196,37 @@ class Agent
     private function handleTools(Response $responseMessage): void
     {
 
-        if (empty($responseMessage->toolCalls())) {
-            $messageData = [
-                'role' => $responseMessage->role(),
-                'content' => $responseMessage->content(),
-            ];
+        $messageData = [
+            'role' => $responseMessage->role(),
+            'content' => $responseMessage->content(),
+        ];
 
-            $this->memory->create(Message::make($messageData));
+        if (! empty($responseMessage->toolCall())) {
+            $toolCall = $responseMessage->toolCall();
+            $toolResult = $this->executeToolCall($toolCall);
+
+            // Append Message Data to Tool Call
+            $messageData['role'] = 'tool';
+            $messageData['tool_call_id'] = $toolCall['id'];
+            $messageData['tool_name'] = $toolCall['function']['name'];
+            $messageData['tool_arguments'] = $toolCall['function']['arguments'];
+            $messageData['tool_content'] = $toolResult;
         }
 
-        if (! empty($responseMessage->toolCalls()) && count($responseMessage->toolCalls()) > 0) {
-            foreach ($responseMessage->toolCalls() as $toolCall) {
-                $this->executeToolCall($toolCall);
-            }
-        }
+        $this->memory->create(Message::make($messageData));
+
     }
 
-    private function executeToolCall($toolCall): void
+    private function executeToolCall($toolCall): string
     {
         $this->log('Tool Call', $toolCall);
 
         try {
-            $toolResponse = $this->call(
+            return $this->call(
                 $toolCall['function']['name'],
                 json_decode($toolCall['function']['arguments'], true, 512, JSON_THROW_ON_ERROR)
             );
 
-            $this->memory->create(Message::make([
-                'role' => 'tool',
-                'tool_call_id' => $toolCall['id'],
-                'tool_name' => $toolCall['function']['name'],
-                'tool_arguments' => $toolCall['function']['arguments'],
-                'content' => $toolResponse,
-            ]));
         } catch (Exception $e) {
             throw new Exception("Error calling tool: {$e->getMessage()}");
         }

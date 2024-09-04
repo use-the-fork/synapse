@@ -18,7 +18,7 @@ class Response extends ArrayValueObject
             'role' => 'required',
             'finish_reason' => 'nullable|sometimes|string',
             'content' => 'nullable|sometimes|string',
-            'tool_calls' => 'nullable|sometimes',
+            'tool_call' => 'nullable|sometimes',
         ];
     }
 
@@ -28,8 +28,8 @@ class Response extends ArrayValueObject
     protected function sanitize(): void
     {
 
-        if (empty($this->value['tool_calls'])) {
-            $this->value['tool_calls'] = [];
+        if (empty($this->value['tool_call'])) {
+            $this->value['tool_call'] = [];
         }
     }
 
@@ -48,8 +48,8 @@ class Response extends ArrayValueObject
         return $this->value['role'];
     }
 
-    public function toolCalls(): array
+    public function toolCall(): array
     {
-        return $this->value['tool_calls'];
+        return $this->value['tool_call'];
     }
 }

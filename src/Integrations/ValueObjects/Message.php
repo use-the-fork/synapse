@@ -22,6 +22,7 @@ class Message extends ArrayValueObject
             'tool_call_id' => 'nullable|sometimes|string',
             'tool_name' => 'nullable|sometimes|string',
             'tool_arguments' => 'nullable|sometimes|string',
+            'tool_content' => 'nullable|sometimes',
 
             'image' => 'nullable|sometimes|array',
             'image.url' => 'nullable|sometimes|string',

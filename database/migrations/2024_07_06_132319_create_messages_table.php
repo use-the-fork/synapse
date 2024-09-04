@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('tool_name')->nullable();
             $table->text('tool_arguments')->nullable();
             $table->string('tool_call_id')->nullable();
-            $table->json('tool_calls')->nullable();
+            $table->text('tool_content')->nullable();
             $table->timestamps();
         });
     }

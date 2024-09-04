@@ -8,6 +8,10 @@ return [
           'key' => env('OPENAI_API_KEY'),
           'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo')
         ],
+        'claude' => [
+          'key' => env('ANTHROPIC_API_KEY'),
+          'model' => env('ANTHROPIC_API_MODEL', 'claude-3-5-sonnet-20240620')
+        ],
     ],
     'services' => [
         'serp_api' => [

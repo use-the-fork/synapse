@@ -61,6 +61,7 @@ trait HasOutputRules
 
     protected function doValidate(string $response)
     {
+
         if (! $this->hasOutputRules) {
             return $response;
         }
@@ -105,12 +106,11 @@ trait HasOutputRules
     {
         $prompt = Message::make([
             'role' => 'user',
-            'content' => "### Instruction\nRewrite user-generated content to adhere to the specified format.\n\n{$this->getOutputRules()}\n\n{$errors}### User Content\n{$result}",
+            'content' => "{$this->getOutputRules()}\n\n{$errors}### User Content\n{$result}",
         ]);
 
-        return $this->integration->handle(
-            [$prompt],
-            []
+        return $this->integration->handleValidationCompletion(
+            $prompt
         );
     }
 }

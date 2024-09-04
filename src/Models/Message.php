@@ -19,11 +19,7 @@ class Message extends Model
         'tool_name',
         'tool_arguments',
         'tool_call_id',
-        'tool_calls',
-    ];
-
-    protected $casts = [
-        'tool_calls' => 'array',
+        'tool_content',
     ];
 
     public function assistant()

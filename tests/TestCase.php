@@ -38,22 +38,15 @@ abstract class TestCase extends Orchestra
 
     protected function getEnvironmentSetUp($app): void
     {
+
         // make sure, our .env file is loaded
         $app->useEnvironmentPath(__DIR__.'/..');
         $app->bootstrapWith([LoadEnvironmentVariables::class]);
 
-        tap($app['config'], function (Repository $config) {
-            $config->set('synapse',
-                [
-                    'integrations' => [
-                        'openai' => [
-                            'key' => env('OPENAI_API_KEY'),
-                            'model' => env('OPENAI_API_MODEL', 'gpt-4-turbo'),
-                        ],
-                    ],
-                ]
-            );
-
+        # Loads our config instead of manually setting it.
+        $synapseConfig = require __DIR__.'/../config/synapse.php';
+        tap($app['config'], function (Repository $config) use ($synapseConfig) {
+            $config->set('synapse', $synapseConfig);
         });
 
         parent::getEnvironmentSetUp($app);

@@ -51,13 +51,13 @@ class DatabaseMemory implements Memory
                     'name' => $message['tool_name'],
                     'id' => $message['tool_call_id'],
                     'arguments' => $message['tool_arguments'],
+                    'content' => $message['tool_content'],
                 ]));
 
-              $payload['memoryWithMessages'][] = "<message type='".Role::ASSISTANT."' tool='{$tool}'>\n</message>";
               $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>\n{$message['content']}\n</message>";
 
               $payload['memory'][] = Role::ASSISTANT . ": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
-              $payload['memory'][] = "{$message['tool_name']} response: {$message['content']}";
+              $payload['memory'][] = "{$message['tool_name']} response: {$message['tool_content']}";
 
             } else {
               $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>\n{$message['content']}\n</message>";

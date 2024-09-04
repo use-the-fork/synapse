@@ -32,11 +32,11 @@ class ChatRequest extends Request implements HasBody
 
     public function defaultBody(): array
     {
-        $model = config('synapse.integrations.openai.model', 'gpt-4-turbo');
+        $model = config('synapse.integrations.openai.model');
 
         $payload = [
             'model' => $model,
-            'messages' => $this->formatMessages($this->prompt),
+            'messages' => $this->formatMessages(),
         ];
 
         if (! empty($this->tools)) {
@@ -48,14 +48,15 @@ class ChatRequest extends Request implements HasBody
         return [
             ...$payload,
             ...$this->extraAgentArgs,
+            # Always set parallel_tool_calls to false. True is more headache than its worth.
+            'parallel_tool_calls' => false,
         ];
     }
 
-    private function formatMessages($messages): array
+    private function formatMessages(): array
     {
-
         $payload = [];
-        foreach ($messages as $message) {
+        foreach ($this->prompt as $message) {
 
             $message = $message->toArray();
             $payloadMessage = [
@@ -81,7 +82,6 @@ class ChatRequest extends Request implements HasBody
 
             $payload[] = $payloadMessage;
         }
-
         return $payload;
     }
 
