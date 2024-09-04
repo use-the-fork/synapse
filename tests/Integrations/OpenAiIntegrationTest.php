@@ -6,7 +6,7 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Integrations\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;

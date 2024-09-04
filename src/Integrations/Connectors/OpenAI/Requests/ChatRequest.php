@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Integrations\OpenAI\Requests;
+ namespace UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;

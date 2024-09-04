@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Integrations\Concerns;
 
 use Saloon\Http\Connector;
-use UseTheFork\Synapse\Integrations\OpenAI\OpenAIConnector;
-use UseTheFork\Synapse\Integrations\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
 
 trait HasIntegration
 {
@@ -26,8 +25,7 @@ trait HasIntegration
     protected function registerIntegration(): array
     {
         return [
-          'connector' => OpenAIConnector::class,
-          'chatRequest' => ChatRequest::class,
+          'connector' => OpenAIConnector::class
         ];
     }
 
@@ -40,10 +38,5 @@ trait HasIntegration
         $this->integration = new $integration['connector']();
         $this->chatRequestClass = $integration['chatRequest'];
     }
-
-  private function getChatRequest(array $prompt, $extraAgentArgs): object
-  {
-    return new $this->chatRequestClass($prompt, $this->registered_tools, $extraAgentArgs);
-  }
 
 }
