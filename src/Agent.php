@@ -7,6 +7,7 @@ namespace UseTheFork\Synapse;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
+use Throwable;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
@@ -31,11 +32,24 @@ class Agent
      */
     protected string $promptView;
 
+    /**
+     * Initializes the agent.
+     *
+     * This method is called upon object creation to initialize the agent.
+     * It is responsible for performing any necessary setup tasks.
+     *
+     * @throws Throwable
+     */
     public function __construct()
     {
         $this->initializeAgent();
     }
 
+    /**
+     * Initialize the agent by calling initialization methods for integration, memory, tools, and output rules.
+     *
+     * @throws Throwable
+     */
     protected function initializeAgent(): void
     {
         $this->initializeIntegration();
@@ -51,7 +65,7 @@ class Agent
      * @param  array|null  $extraAgentArgs  The extra agent arguments array.
      * @return array The validated response array.
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(?array $input, ?array $extraAgentArgs = []): array
     {
@@ -63,7 +77,7 @@ class Agent
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function getAnswer(?array $input, ?array $extraAgentArgs = []): string
     {
@@ -92,6 +106,15 @@ class Agent
         }
     }
 
+    /**
+     * Parses a prompt and extracts message blocks.
+     *
+     * @param  string  $prompt  The prompt view to parse.
+     * @return array The extracted message blocks as an array of Message objects.
+     *
+     * @throws InvalidArgumentException If a message block does not define a type.
+     * @throws Throwable If an error occurs during parsing.
+     */
     protected function parsePrompt(string $prompt): array
     {
 
@@ -163,7 +186,7 @@ class Agent
      * @param  array  $inputs  The inputs for the prompt.
      * @return string The rendered prompt view.
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getPrompt(array $inputs): string
     {
@@ -186,12 +209,27 @@ class Agent
         ])->render();
     }
 
+    /**
+     * Log a debug event.
+     *
+     * @param  string  $event  The event to log.
+     * @param  array|null  $context  The optional context data.
+     *
+     * @throws Throwable
+     */
     protected function log(string $event, ?array $context = []): void
     {
         $class = get_class($this);
         Log::debug("{$event} in {$class}", $context);
     }
 
+    /**
+     * Handles the AI response tool calls.
+     *
+     * @param  Response  $responseMessage  The response message object.
+     *
+     * @throws Throwable
+     */
     private function handleTools(Response $responseMessage): void
     {
 
@@ -216,7 +254,19 @@ class Agent
 
     }
 
-    private function executeToolCall($toolCall): string
+    /**
+     * Executes a tool call.
+     *
+     * This method is responsible for calling a tool function with the given arguments
+     * and returning the result as a string.
+     *
+     * @param  array  $toolCall  The tool call data, containing the name of the function and its arguments.
+     * @return string The result of the tool call.
+     *
+     * @throws Exception If an error occurs while calling the tool function.
+     * @throws Throwable If JSON decoding of the arguments fails.
+     */
+    private function executeToolCall(array $toolCall): string
     {
         $this->log('Tool Call', $toolCall);
 
