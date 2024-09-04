@@ -9,8 +9,10 @@
 	@include('synapse::Parts.OutputRules')
 </message>
 
+<message type="user">
+    @include('synapse::Parts.Input')
+</message>
+
 @include('synapse::Parts.MemoryAsMessages')
 
-<message type="user">
-	@include('synapse::Parts.Input')
-</message>
+

@@ -4,8 +4,8 @@ Given the following conversation and a follow up question, rephrase the follow u
 
 @include('synapse::Parts.OutputRules')
 
-@include('synapse::Parts.Memory')
-
 @include('synapse::Parts.Input')
+
+@include('synapse::Parts.Memory')
 </message>
 

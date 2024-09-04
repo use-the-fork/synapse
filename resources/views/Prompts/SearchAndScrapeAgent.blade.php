@@ -5,6 +5,6 @@
 	@include('synapse::Parts.OutputRules')
 </message>
 
-
-@include('synapse::Parts.MemoryAsMessages')
 @include('synapse::Parts.Input')
+@include('synapse::Parts.MemoryAsMessages')
+
