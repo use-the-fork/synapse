@@ -9,8 +9,8 @@ use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-    use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
+use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 
@@ -54,7 +54,6 @@ test('uses tools', function () {
     {
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-
         protected function registerIntegration(): Connector
         {
             return new ClaudeAIConnector();
@@ -94,4 +93,4 @@ test('uses tools', function () {
 
     expect($agentResponse)->toBeArray()
         ->and($agentResponse)->toHaveKey('answer');
-})->only();
+});
