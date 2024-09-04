@@ -34,7 +34,7 @@ class ValidateOutputRequest extends Request implements HasBody
     {
         $model = config('synapse.integrations.openai.validate_model');
 
-        $userMessage = "### Instruction\nRewrite user-generated content to adhere to the specified format. DO NOT EXPLAIN.\n\n{$this->prompt->content()}";
+        $userMessage = $this->prompt->content();
 
         $payload = [
             'model' => $model,

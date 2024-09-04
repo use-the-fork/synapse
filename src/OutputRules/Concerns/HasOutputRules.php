@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\OutputRules\Concerns;
 
+use Throwable;
 use Illuminate\Support\Facades\Validator;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 
 /**
- * Trait HasOutputParser
+ * Indicates if the application has output rules.
+ *
  */
 trait HasOutputRules
 {
@@ -18,48 +20,26 @@ trait HasOutputRules
     protected array $outputRules = [];
 
     /**
-     * returns the memory type this Agent should use.
+     * Adds an output rule to the application.
      *
-     * @return []
+     * @param OutputRule $rule The output rule to be added.
+     *
+     * @return void
      */
-    protected function registerOutputRules(): array
-    {
-        return [];
-    }
-
-    /**
-     * sets the initial output rules type this agent will use.
-     */
-    protected function initializeOutputRules(): void
-    {
-        $this->outputRules = $this->registerOutputRules();
-    }
-
-    public function setOutputRules(array $rules = []): void
-    {
-        $this->outputRules = $rules;
-    }
-
     public function addOutputRule(OutputRule $rule): void
     {
         $this->outputRules[] = $rule;
     }
 
-    public function getOutputRules(): ?string
-    {
-        if (! $this->hasOutputRules) {
-            return null;
-        }
-
-        $outputParserPromptPart = [];
-        foreach ($this->outputRules as $rule) {
-            $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
-        }
-
-        return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
-    }
-
-    protected function doValidate(string $response)
+    /**
+     * Performs validation on the given response.
+     *
+     * @param string $response The response to validate.
+     *
+     * @return mixed If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
+     * @throws Throwable
+     */
+    protected function doValidate(string $response): mixed
     {
 
         if (! $this->hasOutputRules) {
@@ -92,7 +72,14 @@ trait HasOutputRules
         }
     }
 
-    protected function parseResponse($input)
+    /**
+     * Parses the input response and returns it as an associative array.
+     *
+     * @param string $input The input response to parse.
+     *
+     * @return array|null The parsed response as an associative array, or null if parsing fails.
+     */
+    protected function parseResponse(string $input): ?array
     {
         return json_decode(
             str($input)->replace([
@@ -102,15 +89,78 @@ trait HasOutputRules
         );
     }
 
-    protected function doRevalidate(string $result, string $errors = '')
+    /**
+     * Performs revalidation on the given result.
+     *
+     * @param string $result The result to revalidate.
+     * @param string $errors The validation errors.
+     *
+     * @return mixed The result of handling the validation completion.
+     * @throws Throwable
+     */
+    protected function doRevalidate(string $result, string $errors = ''): mixed
     {
+
+        $prompt = view("synapse::Prompts.ReValidateResponsePrompt", [
+            'outputRules' => $this->getOutputRules(),
+            'errors' => $errors,
+            'result' => $result,
+        ])->render();
+
         $prompt = Message::make([
             'role' => 'user',
-            'content' => "{$this->getOutputRules()}\n\n{$errors}### User Content\n{$result}",
+            'content' => $prompt,
         ]);
 
-        return $this->integration->handleValidationCompletion(
-            $prompt
-        );
+        return $this->integration->handleValidationCompletion($prompt);
+    }
+
+    /**
+     * Retrieves the output rules as a JSON string.
+     *
+     * @return string|null The output rules encoded as a JSON string. Returns null if there are no output rules.
+     */
+    public function getOutputRules(): ?string
+    {
+        if (! $this->hasOutputRules) {
+            return null;
+        }
+
+        $outputParserPromptPart = [];
+        foreach ($this->outputRules as $rule) {
+            $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
+        }
+
+        return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
+    }
+
+    /**
+     * Sets the output rules for validation.
+     *
+     * @param array $rules The output rules to be set.
+     *
+     * @return void
+     */
+    public function setOutputRules(array $rules = []): void
+    {
+        $this->outputRules = $rules;
+    }
+
+    /**
+     * sets the initial output rules type this agent will use.
+     */
+    protected function initializeOutputRules(): void
+    {
+        $this->outputRules = $this->registerOutputRules();
+    }
+
+    /**
+     * returns the memory type this Agent should use.
+     *
+     * @return array
+     */
+    protected function registerOutputRules(): array
+    {
+        return [];
     }
 }
