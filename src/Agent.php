@@ -6,6 +6,7 @@ namespace UseTheFork\Synapse;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
@@ -14,17 +15,11 @@ use UseTheFork\Synapse\OutputRules\Concerns\HasOutputRules;
 
 class Agent
 {
-    use Concerns\HasEvents,
-        HasOutputRules,
+    use HasOutputRules,
         Integrations\Concerns\HasIntegration,
         Memory\Concerns\HasMemory,
         OutputRules\Concerns\HasOutputRules,
         Tools\Concerns\HasTools;
-
-    /**
-     * The view to use when generating the prompt for this agent
-     */
-    protected string $promptView;
 
     /**
      * a keyed array of values to be used as extra inputs that are passed to the prompt when it is generated.
@@ -32,15 +27,13 @@ class Agent
     protected array $extraInputs = [];
 
     /**
-     * The array of booted agents.
+     * The view to use when generating the prompt for this agent
      */
-    protected static array $booted = [];
+    protected string $promptView;
 
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->fireAgentEvent('booting', false);
         $this->initializeAgent();
-        $this->fireAgentEvent('booted', false);
     }
 
     protected function initializeAgent(): void
@@ -51,28 +44,55 @@ class Agent
         $this->initializeOutputRules();
     }
 
-    public function getPrompt(array $inputs): string
+    /**
+     * Handles the user input and extra agent arguments to retrieve the response.
+     *
+     * @param  array|null  $input  The input array.
+     * @param  array|null  $extraAgentArgs  The extra agent arguments array.
+     * @return array The validated response array.
+     *
+     * @throws \Throwable
+     */
+    public function handle(?array $input, ?array $extraAgentArgs = []): array
     {
-        $toolNames = [];
-        foreach ($this->tools as $name => $tool) {
-            $toolNames[] = $name;
-        }
+        $response = $this->getAnswer($input, $extraAgentArgs);
 
-        if (isset($inputs['image'])) {
-            $inputs['image'] = base64_encode(json_encode($inputs['image']));
-        }
+        $this->log('Start validation', [$response]);
 
-        return view($this->promptView, [
-            ...$inputs,
-            ...$this->extraInputs,
-            // We return both Memory With Messages and without.
-            ...$this->memory->asInputs(),
-            'outputRules' => $this->getOutputRules(),
-            'tools' => $toolNames,
-        ])->render();
+        return $this->doValidate($response);
     }
 
-    public function parsePrompt(string $prompt): array
+    /**
+     * @throws \Throwable
+     */
+    protected function getAnswer(?array $input, ?array $extraAgentArgs = []): string
+    {
+        while (true) {
+            $this->memory->load();
+
+            $prompt = $this->parsePrompt(
+                $this->getPrompt($input)
+            );
+
+            $this->log('Call Integration');
+
+            // Create the Chat request we will be sending.
+            $chatResponse = $this->integration->handleCompletion($prompt, $this->registered_tools, $extraAgentArgs);
+            $this->log("Finished Integration with {$chatResponse->finishReason()}");
+
+            switch ($chatResponse->finishReason()) {
+                case ResponseType::TOOL_CALL:
+                    $this->handleTools($chatResponse);
+                    break;
+                case ResponseType::STOP:
+                    return $chatResponse->content();
+                default:
+                    dd($chatResponse);
+            }
+        }
+    }
+
+    protected function parsePrompt(string $prompt): array
     {
 
         $prompts = [];
@@ -89,7 +109,7 @@ class Agent
             $promptContent = trim($promptContent);
 
             if (! $role) {
-                throw new \InvalidArgumentException("Each message block must define a type.\nExample:\n<message type='assistant'>Foo {bar}</message>");
+                throw new InvalidArgumentException("Each message block must define a type.\nExample:\n<message type='assistant'>Foo {bar}</message>");
             } else {
                 $messageData = [
                     'role' => $role,
@@ -138,59 +158,38 @@ class Agent
     }
 
     /**
-     * Perform any actions required after the model boots.
+     * Retrieves the prompt view, based on the provided inputs.
      *
-     * @return void
-     */
-    protected static function booted()
-    {
-        //
-    }
-
-    /**
-     * Perform any actions required before the model boots.
+     * @param  array  $inputs  The inputs for the prompt.
+     * @return string The rendered prompt view.
      *
-     * @return void
+     * @throws \Throwable
      */
-    protected static function booting()
+    public function getPrompt(array $inputs): string
     {
-        //
-    }
-
-    public function handle(?array $input, ?array $extraAgentArgs = []): array
-    {
-        $response = $this->getAnswer($input, $extraAgentArgs);
-
-        $this->log('Start validation', [$response]);
-
-        return $this->doValidate($response);
-    }
-
-    public function getAnswer(?array $input, ?array $extraAgentArgs = []): string
-    {
-        while (true) {
-            $this->memory->load();
-
-            $prompt = $this->parsePrompt(
-                $this->getPrompt($input)
-            );
-
-            $this->log('Call Integration');
-
-            // Create the Chat request we will be sending.
-            $chatResponse = $this->integration->handleCompletion($prompt, $this->registered_tools, $extraAgentArgs);
-            $this->log("Finished Integration with {$chatResponse->finishReason()}");
-
-            switch ($chatResponse->finishReason()) {
-                case ResponseType::TOOL_CALL:
-                    $this->handleTools($chatResponse);
-                    break;
-                case ResponseType::STOP:
-                    return $chatResponse->content();
-                default:
-                    dd($chatResponse);
-            }
+        $toolNames = [];
+        foreach ($this->tools as $name => $tool) {
+            $toolNames[] = $name;
         }
+
+        if (isset($inputs['image'])) {
+            $inputs['image'] = base64_encode(json_encode($inputs['image']));
+        }
+
+        return view($this->promptView, [
+            ...$inputs,
+            ...$this->extraInputs,
+            // We return both Memory With Messages and without.
+            ...$this->memory->asInputs(),
+            'outputRules' => $this->getOutputRules(),
+            'tools' => $toolNames,
+        ])->render();
+    }
+
+    protected function log(string $event, ?array $context = []): void
+    {
+        $class = get_class($this);
+        Log::debug("{$event} in {$class}", $context);
     }
 
     private function handleTools(Response $responseMessage): void
@@ -230,11 +229,5 @@ class Agent
         } catch (Exception $e) {
             throw new Exception("Error calling tool: {$e->getMessage()}");
         }
-    }
-
-    protected function log(string $event, ?array $context = []): void
-    {
-        $class = get_class($this);
-        Log::debug("{$event} in {$class}", $context);
     }
 }
