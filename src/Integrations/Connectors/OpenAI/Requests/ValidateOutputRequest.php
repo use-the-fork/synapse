@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
- namespace UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests;
+namespace UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
+use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response as IntegrationResponse;
@@ -41,7 +42,7 @@ class ValidateOutputRequest extends Request implements HasBody
                 [
                     'role' => Role::USER,
                     'content' => $userMessage,
-                ]
+                ],
             ],
         ];
 
@@ -55,7 +56,7 @@ class ValidateOutputRequest extends Request implements HasBody
     {
         $data = $response->array();
         $message = $data['choices'][0]['message'] ?? [];
-        $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
+        $message['finish_reason'] = ResponseType::STOP;
 
         return IntegrationResponse::makeOrNull($message);
     }

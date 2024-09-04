@@ -55,33 +55,49 @@ class ChatRequest extends Request implements HasBody
 
     private function formatMessages(): array
     {
-        $payload = [];
+        $payload = collect();
         foreach ($this->prompt as $message) {
-
-            $message = $message->toArray();
-            $payloadMessage = [
-                'role' => $message['role'],
-                'content' => $message['content'],
-            ];
-
-            if (! empty($message['tool_call_id'])) {
-                if ($message['role'] == Role::ASSISTANT) {
-                    $payloadMessage['tool_calls'][] = [
-                        'id' => $message['tool_call_id'],
-                        'type' => 'function',
-                        'function' => [
-                            'name' => $message['tool_name'],
-                            'arguments' => $message['tool_arguments'],
-                        ],
-                    ];
-                } else {
-                    // we know this is a tool response
-                    $payloadMessage['tool_call_id'] = $message['tool_call_id'];
-                }
+            switch ($message->role()){
+                case Role::TOOL:
+                    $toolPayload = $this->formatToolMessage($message);
+                    $payload->push(...$toolPayload);
+                    break;
+                default:
+                    $payload->push([
+                                       'role' => $message->role(),
+                                       'content' => $message->content(),
+                                   ]);
+                    break;
             }
-
-            $payload[] = $payloadMessage;
         }
+
+        return $payload->values()->toArray();
+    }
+
+    private function formatToolMessage($message): array
+    {
+        $message = $message->toArray();
+
+        $payload = [];
+        $payload[] = [
+            'role' => 'assistant',
+            'tool_calls' => [
+                [
+                    'id' => $message['tool_call_id'],
+                    'type' => 'function',
+                    'function' => [
+                        'name' => $message['tool_name'],
+                        'arguments' => $message['tool_arguments'],
+                    ]
+                ]
+            ]
+        ];
+        $payload[] = [
+            'role' => 'tool',
+            'tool_call_id' => $message['tool_call_id'],
+            'content' => $message['tool_content']
+        ];
+
         return $payload;
     }
 
@@ -90,12 +106,12 @@ class ChatRequest extends Request implements HasBody
         $data = $response->array();
         $message = $data['choices'][0]['message'] ?? [];
         $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
-        $tools = collect([]);
         if (isset($message['tool_calls'])) {
-            foreach ($message['tool_calls'] as $toolCall) {
-                $tools->push(ToolCallValueObject::make($toolCall));
-            }
-            $message['tool_calls'] = $tools->toArray();
+            $message['tool_call'] = ToolCallValueObject::make($message['tool_calls'][0])->toArray();
+            unset($message['tool_calls']);
+
+            # Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
+            $message['role'] = Role::TOOL;
         }
 
         return IntegrationResponse::makeOrNull($message);
