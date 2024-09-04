@@ -15,24 +15,26 @@ trait HasIntegration
     protected Connector $integration;
 
     /**
-     * The chat request class this model uses. A new one is created every time.
-     */
-    protected string $chatRequestClass;
-
-    /**
-     * returns the memory type this Agent should use.
-     */
-    protected function registerIntegration(): Connector
-    {
-		return new OpenAIConnector();
-    }
-
-    /**
-     * Resolve the observe class names from the attributes.
+     * Initializes the integration by registering it.
+     *
+     * This method assigns the integration object returned by the `registerIntegration` method
+     * to the `$integration` property of the class.
      */
     protected function initializeIntegration(): void
     {
-		$this->integration = $this->registerIntegration();
+        $this->integration = $this->registerIntegration();
     }
 
+    /**
+     * Registers the integration and returns the integration object.
+     *
+     * This method creates a new instance of a `Integration` class and
+     * returns it as the integration object.
+     *
+     * @return Connector The integration object.
+     */
+    protected function registerIntegration(): Connector
+    {
+        return new OpenAIConnector();
+    }
 }
