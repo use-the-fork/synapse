@@ -10,28 +10,24 @@ use UseTheFork\Synapse\Memory\DatabaseMemory;
 trait HasMemory
 {
     /**
-     * The integration that this Model should use
+     * The memory that this Model should use
      */
     protected Memory $memory;
 
     /**
-     * returns the memory type this Agent should use.
+     * Clears the memory of the application.
+     *
+     * This method clears the memory that is currently stored in the application.
      */
-    protected function registerMemory(): Memory
+    public function clearMemory(): void
     {
-        return new DatabaseMemory();
+        $this->memory->clear();
     }
 
     /**
-     * sets the memory type this agent will use.
-     */
-    protected function initializeMemory(): void
-    {
-        $this->memory = $this->registerMemory();
-    }
-
-    /**
-     * returns the memory of the agent.
+     * Retrieves the memory of the agent
+     *
+     * @return Memory The memory object of the agent
      */
     public function getMemory(): Memory
     {
@@ -39,7 +35,9 @@ trait HasMemory
     }
 
     /**
-     * sets the memory of the agent
+     * Sets the memory with the given array of messages.
+     *
+     * @param  array  $messages  The array of messages to be set in the memory.
      */
     public function setMemory(array $messages): void
     {
@@ -47,10 +45,20 @@ trait HasMemory
     }
 
     /**
-     * clears the memory of the agent
+     * Initializes the memory by registering the memory object.
      */
-    public function clearMemory(): void
+    protected function initializeMemory(): void
     {
-        $this->memory->clear();
+        $this->memory = $this->registerMemory();
+    }
+
+    /**
+     * Registers the memory type.
+     *
+     * @return Memory The registered memory instance.
+     */
+    protected function registerMemory(): Memory
+    {
+        return new DatabaseMemory();
     }
 }
