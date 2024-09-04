@@ -10,6 +10,7 @@ use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
@@ -36,13 +37,30 @@ class OpenAIConnector extends Connector implements Integration
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handle(
+    public function handleCompletion(
       array $prompt,
       array $tools = [],
       array $extraAgentArgs = []
     ): Response
     {
         return $this->send(new ChatRequest($prompt, $tools, $extraAgentArgs))->dto();
+    }
+
+    /**
+     * Forces a model to output its response in a specific format.
+     *
+     * @param  Message  $prompt  The chat message that is used for validation.
+     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
+     * @return Response The response from the chat request.
+     *
+     * @throws FatalRequestException
+     * @throws RequestException
+     */
+    public function handleValidationCompletion(
+        Message $prompt,
+        array $extraAgentArgs = []
+    ): Response {
+        return $this->send(new ValidateOutputRequest($prompt, $extraAgentArgs))->dto();
     }
 
     /**
