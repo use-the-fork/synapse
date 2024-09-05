@@ -18,7 +18,7 @@ final class FirecrawlTool extends BaseTool implements Tool
     public function __construct(?string $apiKey = null)
     {
 
-        if (! empty($apiKey)) {
+        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
             $this->apiKey = $apiKey;
         }
 
@@ -27,11 +27,11 @@ final class FirecrawlTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (! empty($this->apiKey)) {
+        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
             return;
         }
 
-        if (empty($this->apiKey) && ! empty(config('synapse.services.firecrawl.key'))) {
+        if ((!isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.firecrawl.key'))) {
             $this->apiKey = config('synapse.services.firecrawl.key');
 
             return;
@@ -55,7 +55,7 @@ final class FirecrawlTool extends BaseTool implements Tool
         return $this->parseResults($results);
     }
 
-    private function parseResults($results): string
+    private function parseResults(array $results): string
     {
         $snippets = collect();
 

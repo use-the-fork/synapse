@@ -7,6 +7,7 @@ namespace UseTheFork\Synapse\Memory\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AgentMemory extends Model
 {
@@ -16,7 +17,7 @@ class AgentMemory extends Model
         'type',
     ];
 
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany(Message::class)->orderBy('created_at', 'asc');
     }

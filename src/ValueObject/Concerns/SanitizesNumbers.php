@@ -45,6 +45,6 @@ trait SanitizesNumbers
 
         $roundedNumber = round($number, $precisionPosition);
 
-        return (bool) ($roundedNumber === $number && $numberAsString->length() <= PHP_FLOAT_DIG);
+        return $roundedNumber === $number && $numberAsString->length() <= PHP_FLOAT_DIG;
     }
 }

@@ -56,12 +56,9 @@ trait HasTools
             }
 
             // check if parameter type is an Enum and add fetch a valid value
-            if (($parameter_type = $parameter->getType()) !== null && ! $parameter_type->isBuiltin()) {
-                if (enum_exists($parameter_type->getName())) {
-                    $params[$parameter->name] = $parameter_type->getName()::tryFrom($arguments[$parameter->name]) ?? $parameter->getDefaultValue();
-
-                    continue;
-                }
+            if (($parameter_type = $parameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
+                $params[$parameter->name] = $parameter_type->getName()::tryFrom($arguments[$parameter->name]) ?? $parameter->getDefaultValue();
+                continue;
             }
 
             $params[$parameter->name] = $arguments[$parameter->name] ?? $parameter->getDefaultValue();
@@ -79,7 +76,7 @@ trait HasTools
     private function getParameterDescription(ReflectionParameter $parameter): string
     {
         $descriptions = $parameter->getAttributes(Description::class);
-        if (! empty($descriptions)) {
+        if ($descriptions !== []) {
             return implode("\n", array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions));
         }
 
@@ -145,7 +142,7 @@ trait HasTools
             ];
 
             // set function description, if it has one
-            if (! empty($descriptions = $reflection->getAttributes(Description::class))) {
+            if (($descriptions = $reflection->getAttributes(Description::class)) !== []) {
                 $tool_definition['function']['description'] = implode(
                     separator: "\n",
                     array: array_map(static fn ($td) => $td->newInstance()->value, $descriptions),
@@ -207,11 +204,9 @@ trait HasTools
             }
 
             // check if parameter type is an Enum and add it's valid values to the property
-            if (($parameter_type = $method_parameter->getType()) !== null && ! $parameter_type->isBuiltin()) {
-                if (enum_exists($parameter_type->getName())) {
-                    $property['type'] = 'string';
-                    $property['enum'] = array_column((new ReflectionEnum($parameter_type->getName()))->getConstants(), 'value');
-                }
+            if (($parameter_type = $method_parameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
+                $property['type'] = 'string';
+                $property['enum'] = array_column((new ReflectionEnum($parameter_type->getName()))->getConstants(), 'value');
             }
 
             $parameters['properties'][$method_parameter->getName()] = $property;

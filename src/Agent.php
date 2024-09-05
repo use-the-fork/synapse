@@ -137,31 +137,27 @@ class Agent
 
             if (! $role) {
                 throw new InvalidArgumentException("Each message block must define a type.\nExample:\n<message type='assistant'>Foo {bar}</message>");
-            } else {
-                $messageData = [
-                    'role' => $role,
-                    'content' => $promptContent,
-                ];
-
-                if ($tool) {
-                    $tool = json_decode(base64_decode($tool), true);
-                    $messageData['tool_call_id'] = $tool['id'];
-                    $messageData['tool_name'] = $tool['name'] ?? null;
-                    $messageData['tool_arguments'] = $tool['arguments'] ?? null;
-                    $messageData['tool_content'] = $tool['content'] ?? null;
-                }
-
-                if ($image) {
-                    $image = json_decode(base64_decode($image), true);
-                    // attach the image data to the message.
-                    $messageData['image'] = $image;
-                }
-
-                $prompts[] = Message::make($messageData);
             }
+            $messageData = [
+                'role' => $role,
+                'content' => $promptContent,
+            ];
+            if ($tool) {
+                $tool = json_decode(base64_decode($tool), true);
+                $messageData['tool_call_id'] = $tool['id'];
+                $messageData['tool_name'] = $tool['name'] ?? null;
+                $messageData['tool_arguments'] = $tool['arguments'] ?? null;
+                $messageData['tool_content'] = $tool['content'] ?? null;
+            }
+            if ($image) {
+                $image = json_decode(base64_decode($image), true);
+                // attach the image data to the message.
+                $messageData['image'] = $image;
+            }
+            $prompts[] = Message::make($messageData);
         }
 
-        if (empty($prompts)) {
+        if ($prompts === []) {
             // The whole document is a prompt
             $prompts[] = Message::make([
                 'role' => Role::USER,
@@ -182,10 +178,7 @@ class Agent
      */
     public function getPrompt(array $inputs): string
     {
-        $toolNames = [];
-        foreach ($this->tools as $name => $tool) {
-            $toolNames[] = $name;
-        }
+        $toolNames = array_keys($this->tools);
 
         if (isset($inputs['image'])) {
             $inputs['image'] = base64_encode(json_encode($inputs['image']));
@@ -216,7 +209,7 @@ class Agent
             'content' => $responseMessage->content(),
         ];
 
-        if (! empty($responseMessage->toolCall())) {
+        if ($responseMessage->toolCall() !== []) {
             $toolCall = $responseMessage->toolCall();
             $toolResult = $this->executeToolCall($toolCall);
 
@@ -255,7 +248,7 @@ class Agent
             );
 
         } catch (Exception $e) {
-            throw new Exception("Error calling tool: {$e->getMessage()}");
+            throw new Exception("Error calling tool: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
 }

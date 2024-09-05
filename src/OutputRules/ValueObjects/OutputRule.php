@@ -48,7 +48,7 @@ class OutputRule extends ValueObject
      */
     protected function validate(): void
     {
-        if (empty($this->value())) {
+        if ($this->value() === []) {
             throw new InvalidArgumentException('a output rule cannot be empty.');
         }
 
@@ -75,7 +75,7 @@ class OutputRule extends ValueObject
     /**
      * {@inheritdoc}
      */
-    public function value()
+    public function value(): array
     {
         return $this->toArray();
     }
