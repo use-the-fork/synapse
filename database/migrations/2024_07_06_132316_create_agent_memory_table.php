@@ -14,10 +14,6 @@ return new class extends Migration
 
             $table->uuid('id');
             $table->string('type')->nullable();
-//            $table->string('model')->default('gpt-4-turbo');
-//            $table->text('prompt');
-//            $table->text('description')->nullable();
-//            $table->json('tools')->nullable();
             $table->timestamps();
         });
     }

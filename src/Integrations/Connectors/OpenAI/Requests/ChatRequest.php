@@ -53,7 +53,7 @@ class ChatRequest extends Request implements HasBody
             ...$payload,
             ...$this->extraAgentArgs,
             // Always set parallel_tool_calls to false. True is more headache than its worth.
-            ...$toolCalls
+            ...$toolCalls,
         ];
     }
 
@@ -64,6 +64,10 @@ class ChatRequest extends Request implements HasBody
             switch ($message->role()) {
                 case Role::TOOL:
                     $toolPayload = $this->formatToolMessage($message);
+                    $payload->push(...$toolPayload);
+                    break;
+                case Role::IMAGE_URL:
+                    $toolPayload = $this->formatImageMessage($message);
                     $payload->push(...$toolPayload);
                     break;
                 default:
@@ -100,6 +104,28 @@ class ChatRequest extends Request implements HasBody
             'role' => 'tool',
             'tool_call_id' => $message['tool_call_id'],
             'content' => $message['tool_content'],
+        ];
+
+        return $payload;
+    }
+
+    private function formatImageMessage($message): array
+    {
+        $message = $message->toArray();
+
+        $payload = [];
+        $payload[] = [
+            'role' => 'user',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => $message['content'],
+                ],
+                [
+                    'type' => 'image_url',
+                    'image_url' => [...$message['image']],
+                ],
+            ],
         ];
 
         return $payload;

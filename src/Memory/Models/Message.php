@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Memory\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
@@ -19,6 +18,11 @@ class Message extends Model
         'tool_arguments',
         'tool_call_id',
         'tool_content',
+        'image',
+    ];
+
+    protected $attributes = [
+        'image' => 'array'
     ];
 
     public function assistant()

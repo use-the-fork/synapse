@@ -152,20 +152,8 @@ class Agent
 
                 if ($image) {
                     $image = json_decode(base64_decode($image), true);
-                    if ($role == Role::USER) {
-                        //since this is an image we convert the content to have both text and image URL.
-                        $messageData['content'] = [
-                            [
-                                'type' => 'text',
-                                'text' => $messageData['content'],
-                            ],
-                            [
-                                'type' => 'image_url',
-                                'image_url' => $image,
-                            ],
-                        ];
-
-                    }
+                    // attach the image data to the message.
+                    $messageData['image'] = $image;
                 }
 
                 $prompts[] = Message::make($messageData);

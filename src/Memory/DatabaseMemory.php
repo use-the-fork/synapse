@@ -32,6 +32,7 @@ class DatabaseMemory implements Memory
 
         foreach ($messages as $message) {
             if ($message['role'] == Role::IMAGE_URL) {
+                # TODO: Fix this it should put the content in to the message and encode the image info.
                 $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."'>\n{$message['image']['url']}}\n</message>";
             } elseif ($message['role'] == Role::TOOL) {
 
