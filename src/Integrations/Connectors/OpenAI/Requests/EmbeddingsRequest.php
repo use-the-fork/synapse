@@ -41,8 +41,8 @@ class EmbeddingsRequest extends Request implements HasBody
     public function createDtoFromResponse(Response $response): EmbeddingResponse
     {
         $data = $response->array();
-        dd($data);
+        //        dd($data);
 
-        return EmbeddingResponse::makeOrNull($message);
+        return EmbeddingResponse::makeOrNull($data);
     }
 }
