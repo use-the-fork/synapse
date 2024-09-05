@@ -58,7 +58,7 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
         return $this->parseResults($results);
     }
 
-    private function parseResults($results): string
+    private function parseResults(array $results): string
     {
 
         $snippets = collect();
@@ -66,21 +66,21 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
         if (! empty($results['news_results'])) {
             $newsResults = Arr::get($results, 'news_results');
 
-            foreach ($newsResults as $value) {
+            foreach ($newsResults as $newResult) {
                 $result = collect();
-                $result->push("```text\n### Title: {$value['title']}");
+                $result->push("```text\n### Title: {$newResult['title']}");
 
-                if (! empty($value['stories'])) {
-                    foreach (Arr::get($value, 'stories', []) as $story) {
+                if (! empty($newResult['stories'])) {
+                    foreach (Arr::get($newResult, 'stories', []) as $story) {
 
                         $result->push("#### Story: {$story['title']}");
                         $result->push("- Date: {$story['date']}");
                         $result->push("- Link: {$story['link']}");
                     }
                 }
-                if (! empty($value['source'])) {
-                    $result->push("- Date: {$value['date']}");
-                    $result->push("- Link: {$value['link']}");
+                if (! empty($newResult['source'])) {
+                    $result->push("- Date: {$newResult['date']}");
+                    $result->push("- Link: {$newResult['link']}");
                 }
                 $result->push("```\n");
 

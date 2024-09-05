@@ -64,7 +64,7 @@ final class SerperTool extends BaseTool implements Tool
         return $this->parseResults($results);
     }
 
-    private function parseResults($results): string
+    private function parseResults(array $results): string
     {
 
         $snippets = collect();

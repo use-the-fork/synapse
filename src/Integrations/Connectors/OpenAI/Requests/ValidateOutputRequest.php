@@ -21,7 +21,7 @@ class ValidateOutputRequest extends Request implements HasBody
     protected Method $method = Method::POST;
 
     public function __construct(
-        public readonly Message $prompt,
+        public readonly Message $message,
         public readonly array $extraAgentArgs = []
     ) {}
 
@@ -34,7 +34,7 @@ class ValidateOutputRequest extends Request implements HasBody
     {
         $model = config('synapse.integrations.openai.validate_model');
 
-        $userMessage = $this->prompt->content();
+        $userMessage = $this->message->content();
 
         $payload = [
             'model' => $model,

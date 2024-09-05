@@ -102,7 +102,7 @@ class ChatRequest extends Request implements HasBody
         return $payload->values()->toArray();
     }
 
-    private function formatAssistantMessage($message): array
+    private function formatAssistantMessage(array $message): array
     {
         $message = $message->toArray();
 

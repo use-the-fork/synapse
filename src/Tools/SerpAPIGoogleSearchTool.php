@@ -62,7 +62,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
         return $this->parseResults($results);
     }
 
-    private function parseResults($results): string
+    private function parseResults(array $results): string
     {
 
         $snippets = collect();
@@ -91,8 +91,8 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
         if (! empty($results['organic_results'])) {
             $organicResults = Arr::get($results, 'organic_results');
 
-            foreach ($organicResults as $value) {
-                $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
+            foreach ($organicResults as $organicResult) {
+                $snippets->push("```text\nTitle: {$organicResult['title']}\nLink: {$organicResult['link']}\nSnippet: {$organicResult['snippet']}\n```");
             }
         }
 

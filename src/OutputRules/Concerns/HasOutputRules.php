@@ -21,11 +21,11 @@ trait HasOutputRules
     /**
      * Adds an output rule to the application.
      *
-     * @param  OutputRule  $rule  The output rule to be added.
+     * @param OutputRule $outputRule The output rule to be added.
      */
-    public function addOutputRule(OutputRule $rule): void
+    public function addOutputRule(OutputRule $outputRule): void
     {
-        $this->outputRules[] = $rule;
+        $this->outputRules[] = $outputRule;
     }
 
     /**
@@ -123,8 +123,8 @@ trait HasOutputRules
         }
 
         $outputParserPromptPart = [];
-        foreach ($this->outputRules as $rule) {
-            $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
+        foreach ($this->outputRules as $outputRule) {
+            $outputParserPromptPart[$outputRule->getName()] = "({$outputRule->getRules()}) {$outputRule->getDescription()}";
         }
 
         return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";

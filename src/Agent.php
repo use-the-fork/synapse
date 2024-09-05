@@ -127,11 +127,11 @@ class Agent
         $pattern = '/<message\s+type=[\'"](?P<role>\w+)[\'"](?:\s+tool=[\'"](?P<tool>[\w\-+=\/]+)[\'"])?(?:\s+image=[\'"](?P<image>[\w\-+=\/]+)[\'"])?\s*>\s*(?P<message>.*?)\s*<\/message>/s';
         preg_match_all($pattern, $prompt, $matches, PREG_SET_ORDER);
 
-        foreach ($matches as $promptBlock) {
-            $role = $promptBlock['role'] ?? null;
-            $tool = $promptBlock['tool'] ?? null;
-            $image = $promptBlock['image'] ?? null;
-            $promptContent = $promptBlock['message'] ?? '';
+        foreach ($matches as $match) {
+            $role = $match['role'] ?? null;
+            $tool = $match['tool'] ?? null;
+            $image = $match['image'] ?? null;
+            $promptContent = $match['message'] ?? '';
 
             $promptContent = trim($promptContent);
 
@@ -197,20 +197,20 @@ class Agent
     /**
      * Handles the AI response tool calls.
      *
-     * @param  Response  $responseMessage  The response message object.
+     * @param  Response  $response  The response message object.
      *
      * @throws Throwable
      */
-    private function handleTools(Response $responseMessage): void
+    private function handleTools(Response $response): void
     {
 
         $messageData = [
-            'role' => $responseMessage->role(),
-            'content' => $responseMessage->content(),
+            'role' => $response->role(),
+            'content' => $response->content(),
         ];
 
-        if ($responseMessage->toolCall() !== []) {
-            $toolCall = $responseMessage->toolCall();
+        if ($response->toolCall() !== []) {
+            $toolCall = $response->toolCall();
             $toolResult = $this->executeToolCall($toolCall);
 
             // Append Message Data to Tool Call
