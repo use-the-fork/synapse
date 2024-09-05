@@ -3,7 +3,7 @@
 declare(strict_types=1);
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\Models;
+namespace UseTheFork\Synapse\Memory\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;

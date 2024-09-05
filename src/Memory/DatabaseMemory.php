@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse\Memory;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
-use UseTheFork\Synapse\Models\AgentMemory;
+use UseTheFork\Synapse\Memory\Models\AgentMemory;
 
 class DatabaseMemory implements Memory
 {
@@ -20,21 +20,20 @@ class DatabaseMemory implements Memory
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function asInputs(): array
     {
         $payload = [
             'memory' => [],
             'memoryWithMessages' => [],
-          ];
+        ];
         $messages = $this->agentMemory->messages->toArray();
 
         foreach ($messages as $message) {
             if ($message['role'] == Role::IMAGE_URL) {
-              $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."'>\n{$message['image']['url']}}\n</message>";
-            } else if ($message['role'] == Role::TOOL) {
+                $payload['memoryWithMessages'][] = "<message type='".Role::IMAGE_URL."'>\n{$message['image']['url']}}\n</message>";
+            } elseif ($message['role'] == Role::TOOL) {
 
                 $tool = base64_encode(json_encode([
                     'name' => $message['tool_name'],
@@ -43,38 +42,36 @@ class DatabaseMemory implements Memory
                     'content' => $message['tool_content'],
                 ]));
 
-              $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>\n{$message['content']}\n</message>";
+                $payload['memoryWithMessages'][] = "<message type='".Role::TOOL."' tool='{$tool}'>\n{$message['content']}\n</message>";
 
-              $payload['memory'][] = Role::ASSISTANT . ": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
-              $payload['memory'][] = "{$message['tool_name']} response: {$message['tool_content']}";
+                $payload['memory'][] = Role::ASSISTANT.": Call Tool `{$message['tool_name']}` with input `{$message['tool_arguments']}`";
+                $payload['memory'][] = "{$message['tool_name']} response: {$message['tool_content']}";
 
             } else {
-              $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>\n{$message['content']}\n</message>";
-              $payload['memory'][] = "{$message['role']}: {$message['content']}";
+                $payload['memoryWithMessages'][] = "<message type='{$message['role']}'>\n{$message['content']}\n</message>";
+                $payload['memory'][] = "{$message['role']}: {$message['content']}";
             }
         }
 
-      return [
-        'memoryWithMessages' => implode("\n", $payload['memoryWithMessages']),
-        'memory' => implode("\n", $payload['memory'])
-      ];
+        return [
+            'memoryWithMessages' => implode("\n", $payload['memoryWithMessages']),
+            'memory' => implode("\n", $payload['memory']),
+        ];
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
-  public function clear(): void
-  {
-    $this->agentMemory->delete();
+    public function clear(): void
+    {
+        $this->agentMemory->delete();
 
-    $this->agentMemory = new AgentMemory();
-    $this->agentMemory->save();
-  }
+        $this->agentMemory = new AgentMemory();
+        $this->agentMemory->save();
+    }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function get(): array
     {
@@ -82,8 +79,7 @@ class DatabaseMemory implements Memory
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function load(): void
     {
@@ -91,25 +87,23 @@ class DatabaseMemory implements Memory
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
-  public function set(array $messages): void
-  {
-    //First we delete all the agents memory
-    $this->agentMemory->messages()->delete();
+    public function set(array $messages): void
+    {
+        //First we delete all the agents memory
+        $this->agentMemory->messages()->delete();
 
-    //Iterate over the messages and insert them in to memory
-    foreach ($messages as $message){
-      $message = Message::make($message);
-      $this->agentMemory->messages()->create($message->toArray());
+        //Iterate over the messages and insert them in to memory
+        foreach ($messages as $message) {
+            $message = Message::make($message);
+            $this->agentMemory->messages()->create($message->toArray());
+        }
+
     }
 
-  }
-
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function create(Message $message): void
     {

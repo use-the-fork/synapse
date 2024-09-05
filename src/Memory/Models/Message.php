@@ -3,14 +3,13 @@
 declare(strict_types=1);
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\Models;
+namespace UseTheFork\Synapse\Memory\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'assistant_id',
