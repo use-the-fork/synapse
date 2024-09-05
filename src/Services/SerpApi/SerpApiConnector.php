@@ -15,8 +15,11 @@ class SerpApiConnector extends Connector
 
     protected int $connectTimeout = 60;
 
-    protected int $requestTimeout = 120;
-
+    /**
+     * Initializes a new instance of the SerpApiConnector class.
+     *
+     * @param  string  $apiKey  The API key.
+     */
     public function __construct(
         public readonly string $apiKey
     ) {
@@ -24,17 +27,20 @@ class SerpApiConnector extends Connector
     }
 
     /**
-     * The Base URL of the API
+     * {@inheritdoc}
      */
     public function resolveBaseUrl(): string
     {
         return 'https://serpapi.com';
     }
 
-  protected function defaultQuery(): array
-  {
-    return [
-      'api_key' => $this->apiKey
-    ];
-  }
+    /**
+     * {@inheritdoc}
+     */
+    protected function defaultQuery(): array
+    {
+        return [
+            'api_key' => $this->apiKey,
+        ];
+    }
 }

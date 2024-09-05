@@ -15,8 +15,12 @@ class ClearbitConnector extends Connector
 
     protected int $connectTimeout = 60;
 
-    protected int $requestTimeout = 120;
-
+    /**
+     * Initializes a new instance of the ClearbitConnector class.
+     *
+     * @param string $apiKey The API key.
+     * @param string $type The type of call this Connector can make either `company` or `person`.
+     */
     public function __construct(
         public readonly string $apiKey,
         public readonly string $type
@@ -25,7 +29,8 @@ class ClearbitConnector extends Connector
     }
 
     /**
-     * The Base URL of the API
+     * @inheritdoc
+     *
      */
     public function resolveBaseUrl(): string
     {
@@ -36,7 +41,8 @@ class ClearbitConnector extends Connector
     }
 
     /**
-     * Default headers for every request
+     * @inheritdoc
+     *
      */
     protected function defaultHeaders(): array
     {

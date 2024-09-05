@@ -11,15 +11,26 @@ class CrunchbaseRequest extends Request
 {
     protected Method $method = Method::GET;
 
+    /**
+     * Class constructor.
+     *
+     * @param  string  $entityId  The Crunchbase company ID to retrieve.
+     */
     public function __construct(
         public readonly string $entityId,
     ) {}
 
+    /**
+     * {@inheritdoc}
+     */
     public function resolveEndpoint(): string
     {
         return "/api/v4/entities/organizations/{$this->entityId}";
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function defaultQuery(): array
     {
         return [

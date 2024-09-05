@@ -12,15 +12,28 @@
 
     protected Method $method = Method::GET;
 
-    public function __construct(
+      /**
+       * Constructor for the class.
+       *
+       * @param string $email The email address to lookup.
+       */
+      public function __construct(
       public readonly string $email,
     ) {}
 
+      /**
+       * @inheritdoc
+       *
+       */
     public function resolveEndpoint(): string
     {
       return '/v2/combined/find';
     }
 
+      /**
+       * @inheritdoc
+       *
+       */
     protected function defaultQuery(): array
     {
       return [

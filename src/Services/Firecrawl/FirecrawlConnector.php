@@ -15,8 +15,11 @@ class FirecrawlConnector extends Connector
 
     protected int $connectTimeout = 60;
 
-    protected int $requestTimeout = 120;
-
+    /**
+     * Initializes a new instance of the FirecrawlConnector class.
+     *
+     * @param string $apiKey The API key.
+     */
     public function __construct(
         public readonly string $apiKey
     ) {
@@ -24,7 +27,8 @@ class FirecrawlConnector extends Connector
     }
 
     /**
-     * The Base URL of the API
+     * @inheritdoc
+     *
      */
     public function resolveBaseUrl(): string
     {
@@ -32,7 +36,8 @@ class FirecrawlConnector extends Connector
     }
 
     /**
-     * Default headers for every request
+     * @inheritdoc
+     *
      */
     protected function defaultHeaders(): array
     {

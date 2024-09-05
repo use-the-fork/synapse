@@ -15,8 +15,11 @@ class CrunchbaseConnector extends Connector
 
     protected int $connectTimeout = 60;
 
-    protected int $requestTimeout = 120;
-
+    /**
+     * Initializes a new instance of the CrunchbaseConnector class.
+     *
+     * @param  string  $apiKey  The API key.
+     */
     public function __construct(
         public readonly string $apiKey
     ) {
@@ -24,17 +27,20 @@ class CrunchbaseConnector extends Connector
     }
 
     /**
-     * The Base URL of the API
+     * {@inheritdoc}
      */
     public function resolveBaseUrl(): string
     {
         return 'https://api.crunchbase.com';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function defaultQuery(): array
     {
-      return [
-        'user_key' => $this->apiKey
-      ];
+        return [
+            'user_key' => $this->apiKey,
+        ];
     }
 }

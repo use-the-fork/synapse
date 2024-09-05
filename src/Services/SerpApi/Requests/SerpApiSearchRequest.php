@@ -15,17 +15,32 @@ class SerpApiSearchRequest extends Request implements HasBody
 
     protected Method $method = Method::GET;
 
+    /**
+     * Initializes a new instance of the class.
+     *
+     * @param string $searchQuery     The search query.
+     * @param int    $numberOfResults The number of results to retrieve. Defaults to 20.
+     * @param string $engine          The search engine to use. Defaults to 'google'.
+     */
     public function __construct(
         public readonly string $searchQuery,
         public readonly int $numberOfResults = 20,
         public readonly string $engine = 'google',
     ) {}
 
+    /**
+     * @inheritdoc
+     *
+     */
     public function resolveEndpoint(): string
     {
         return '/search';
     }
 
+    /**
+     * @inheritdoc
+     *
+     */
     public function defaultQuery(): array
     {
 
