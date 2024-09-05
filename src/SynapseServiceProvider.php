@@ -9,7 +9,10 @@ use Illuminate\Support\ServiceProvider;
 class SynapseServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application.
+     * Boot the service provider.
+     *
+     * In this method, we publish the Synapse configuration file to the application's config directory,
+     * load Synapse's database migrations, and register Synapse's views.
      */
     public function boot(): void
     {
@@ -23,9 +26,4 @@ class SynapseServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'synapse');
     }
-
-    /**
-     * Register the service provider.
-     */
-    public function register() {}
 }
