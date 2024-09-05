@@ -5,22 +5,25 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use Throwable;
+use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
+use UseTheFork\Synapse\Memory\Concerns\HasMemory;
 use UseTheFork\Synapse\OutputRules\Concerns\HasOutputRules;
+use UseTheFork\Synapse\Tools\Concerns\HasTools;
+use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 
 class Agent
 {
-    use HasOutputRules,
-        Integrations\Concerns\HasIntegration,
-        Memory\Concerns\HasMemory,
-        OutputRules\Concerns\HasOutputRules,
-        Tools\Concerns\HasTools;
+    use HasIntegration,
+        HasLogging,
+        HasMemory,
+        HasOutputRules,
+        HasTools;
 
     /**
      * a keyed array of values to be used as extra inputs that are passed to the prompt when it is generated.
@@ -207,20 +210,6 @@ class Agent
             'outputRules' => $this->getOutputRules(),
             'tools' => $toolNames,
         ])->render();
-    }
-
-    /**
-     * Log a debug event.
-     *
-     * @param  string  $event  The event to log.
-     * @param  array|null  $context  The optional context data.
-     *
-     * @throws Throwable
-     */
-    protected function log(string $event, ?array $context = []): void
-    {
-        $class = get_class($this);
-        Log::debug("{$event} in {$class}", $context);
     }
 
     /**
