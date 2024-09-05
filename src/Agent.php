@@ -7,6 +7,7 @@ namespace UseTheFork\Synapse;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
+use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
@@ -104,7 +105,7 @@ class Agent
                 case ResponseType::STOP:
                     return $chatResponse->content();
                 default:
-                    dd($chatResponse);
+                    throw new UnknownFinishReasonException("{$chatResponse->finishReason()} is not a valid finish reason.");
             }
         }
     }
