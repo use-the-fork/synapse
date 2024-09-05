@@ -18,7 +18,7 @@ class SerperConnector extends Connector
     /**
      * Initializes a new instance of the SerperConnector class.
      *
-     * @param string $apiKey The API key.
+     * @param  string  $apiKey  The API key.
      */
     public function __construct(
         public readonly string $apiKey
@@ -27,8 +27,7 @@ class SerperConnector extends Connector
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function resolveBaseUrl(): string
     {
@@ -36,8 +35,7 @@ class SerperConnector extends Connector
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     protected function defaultHeaders(): array
     {

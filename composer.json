@@ -11,8 +11,11 @@
   },
   "require-dev": {
     "orchestra/testbench": "^9.2",
-    "friendsofphp/php-cs-fixer": "^3.62",
-    "pestphp/pest": "^2.35"
+    "pestphp/pest": "^2.35",
+    "laravel/pint": "^1.17",
+    "pestphp/pest-plugin-arch": "^2.7",
+    "phpstan/phpstan": "^1.12",
+    "rector/rector": "^1.2"
   },
   "autoload-dev": {
     "psr-4": {
@@ -36,6 +39,19 @@
     }
   },
   "scripts": {
+    "lint": "@php vendor/bin/pint -v",
+    "refactor": "@php vendor/bin/rector --debug",
+    "test:refactor": "@php vendor/bin/rector --dry-run",
+    "test:types": "@php vendor/bin/phpstan analyse --ansi",
+    "test:type-coverage": "@php vendor/bin/pint --type-coverage --min=100",
+    "test:unit": "@php vendor/bin/pest --colors=always",
+    "test": [
+      "@test:lint",
+      "@test:refactor",
+      "@test:types",
+      "@test:type-coverage",
+      "@test:unit"
+    ],
     "post-autoload-dump": [
       "@clear",
       "@prepare"
@@ -47,12 +63,11 @@
       "Composer\\Config::disableProcessTimeout",
       "@build",
       "@php vendor/bin/testbench serve"
-    ],
-    "lint": [
-      "@php vendor/bin/phpstan analyse --verbose --ansi"
     ]
   },
   "config": {
+    "sort-packages": true,
+    "preferred-install": "dist",
     "allow-plugins": {
       "pestphp/pest-plugin": true,
       "php-http/discovery": true

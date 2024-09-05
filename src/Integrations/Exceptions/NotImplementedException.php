@@ -1,10 +1,7 @@
 <?php
 
-  namespace UseTheFork\Synapse\Integrations\Exceptions;
+namespace UseTheFork\Synapse\Integrations\Exceptions;
 
-  use Exception;
+use Exception;
 
-  class NotImplementedException extends Exception
-  {
-
-  }
+class NotImplementedException extends Exception {}

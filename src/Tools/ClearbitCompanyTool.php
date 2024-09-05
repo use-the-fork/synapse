@@ -20,8 +20,7 @@ final class ClearbitCompanyTool extends BaseTool implements Tool
     /**
      * Constructor for the Laravel application.
      *
-     * @param string|null $apiKey The API key to be used for Clearbit (optional if synapse.services.clearbit.key is set).
-     *
+     * @param  string|null  $apiKey  The API key to be used for Clearbit (optional if synapse.services.clearbit.key is set).
      * @return void
      */
     public function __construct(?string $apiKey = null)
@@ -37,9 +36,9 @@ final class ClearbitCompanyTool extends BaseTool implements Tool
     /**
      * Handle method for the Laravel application.
      *
-     * @param string $domain The Top Level domain name to lookup (e.g., 'clearbit.com').
-     *
+     * @param  string  $domain  The Top Level domain name to lookup (e.g., 'clearbit.com').
      * @return string The parsed results of the Clearbit lookup.
+     *
      * @throws FatalRequestException
      * @throws RequestException
      */
@@ -58,8 +57,7 @@ final class ClearbitCompanyTool extends BaseTool implements Tool
     /**
      * Parses the results of a query and returns a formatted string.
      *
-     * @param array $result The result of a query.
-     *
+     * @param  array  $result  The result of a query.
      * @return string The formatted string containing the parsed results. If an error is present in the result, the error message is returned.
      */
     public function parseResults(array $result): string
@@ -102,7 +100,6 @@ final class ClearbitCompanyTool extends BaseTool implements Tool
     /**
      * Initializes the tool by setting the API key.
      *
-     * @return void
      * @throws MissingApiKeyException Thrown when the API key is missing.
      */
     protected function initializeTool(): void

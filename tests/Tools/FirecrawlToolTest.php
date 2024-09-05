@@ -11,7 +11,7 @@ use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Tools\FirecrawlTool;
 
 test('Requires API Key', function () {
-    $tool = new FirecrawlTool();
+    $tool = new FirecrawlTool;
     $tool->handle('https://www.firecrawl.dev/', 'what is this page about?');
 })->throws(MissingApiKeyException::class);
 

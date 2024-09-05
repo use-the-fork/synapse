@@ -26,10 +26,7 @@ class ToolCallValueObject extends ArrayValueObject
     /**
      * Apply sanitization rules
      */
-    protected function sanitize(): void
-    {
-
-    }
+    protected function sanitize(): void {}
 
     public function content(): string
     {

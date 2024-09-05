@@ -21,9 +21,7 @@ class EmbeddingResponse extends ArrayValueObject
     /**
      * Apply sanitization rules
      */
-    protected function sanitize(): void
-    {
-    }
+    protected function sanitize(): void {}
 
     public function embedding(): array
     {

@@ -18,8 +18,8 @@ class FirecrawlRequest extends Request implements HasBody
     /**
      * Creates a new instance of the class.
      *
-     * @param string $url              The URL to be used for extraction.
-     * @param string $extractionPrompt The extraction prompt to be used.
+     * @param  string  $url  The URL to be used for extraction.
+     * @param  string  $extractionPrompt  The extraction prompt to be used.
      */
     public function __construct(
         public readonly string $url,
@@ -27,8 +27,7 @@ class FirecrawlRequest extends Request implements HasBody
     ) {}
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function resolveEndpoint(): string
     {
@@ -36,8 +35,7 @@ class FirecrawlRequest extends Request implements HasBody
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function defaultBody(): array
     {

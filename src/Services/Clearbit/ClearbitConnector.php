@@ -18,8 +18,8 @@ class ClearbitConnector extends Connector
     /**
      * Initializes a new instance of the ClearbitConnector class.
      *
-     * @param string $apiKey The API key.
-     * @param string $type The type of call this Connector can make either `company` or `person`.
+     * @param  string  $apiKey  The API key.
+     * @param  string  $type  The type of call this Connector can make either `company` or `person`.
      */
     public function __construct(
         public readonly string $apiKey,
@@ -29,8 +29,7 @@ class ClearbitConnector extends Connector
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function resolveBaseUrl(): string
     {
@@ -41,8 +40,7 @@ class ClearbitConnector extends Connector
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     protected function defaultHeaders(): array
     {

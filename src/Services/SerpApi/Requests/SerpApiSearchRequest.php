@@ -18,9 +18,9 @@ class SerpApiSearchRequest extends Request implements HasBody
     /**
      * Initializes a new instance of the class.
      *
-     * @param string $searchQuery     The search query.
-     * @param int    $numberOfResults The number of results to retrieve. Defaults to 20.
-     * @param string $engine          The search engine to use. Defaults to 'google'.
+     * @param  string  $searchQuery  The search query.
+     * @param  int  $numberOfResults  The number of results to retrieve. Defaults to 20.
+     * @param  string  $engine  The search engine to use. Defaults to 'google'.
      */
     public function __construct(
         public readonly string $searchQuery,
@@ -29,8 +29,7 @@ class SerpApiSearchRequest extends Request implements HasBody
     ) {}
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function resolveEndpoint(): string
     {
@@ -38,8 +37,7 @@ class SerpApiSearchRequest extends Request implements HasBody
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function defaultQuery(): array
     {

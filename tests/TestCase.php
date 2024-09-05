@@ -43,7 +43,7 @@ abstract class TestCase extends Orchestra
         $app->useEnvironmentPath(__DIR__.'/..');
         $app->bootstrapWith([LoadEnvironmentVariables::class]);
 
-        # Loads our config instead of manually setting it.
+        // Loads our config instead of manually setting it.
         $synapseConfig = require __DIR__.'/../config/synapse.php';
         tap($app['config'], function (Repository $config) use ($synapseConfig) {
             $config->set('synapse', $synapseConfig);

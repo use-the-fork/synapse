@@ -89,15 +89,21 @@
             git-cliff.enable = true;
 
             treefmt = {
+              settings.formatter = {
+                "pint" = {
+                  command = "${composer}";
+                  options = [
+                    "lint"
+                  ];
+                  includes = ["*.php"];
+                };
+              };
               programs = {
                 #Nix Formater
                 alejandra.enable = true;
 
                 #Format Markdown files.
                 mdformat.enable = true;
-
-                #PHP CS Fixer setup with Laravel Pint Standerds
-                php-cs-fixer.enable = true;
 
                 #JS / CSS Formatting.
                 prettier = {

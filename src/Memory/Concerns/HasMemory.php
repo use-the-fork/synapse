@@ -70,6 +70,6 @@ trait HasMemory
      */
     protected function registerMemory(): Memory
     {
-        return new DatabaseMemory();
+        return new DatabaseMemory;
     }
 }

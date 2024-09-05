@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-
     protected $fillable = [
         'assistant_id',
         'role',
@@ -22,7 +21,7 @@ class Message extends Model
     ];
 
     protected $attributes = [
-        'image' => 'array'
+        'image' => 'array',
     ];
 
     public function assistant()

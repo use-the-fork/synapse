@@ -35,6 +35,6 @@ trait HasIntegration
      */
     protected function registerIntegration(): Connector
     {
-        return new OpenAIConnector();
+        return new OpenAIConnector;
     }
 }

@@ -27,17 +27,16 @@ final class FirecrawlTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-      if(!empty($this->apiKey)){
-        return;
-      }
+        if (! empty($this->apiKey)) {
+            return;
+        }
 
-
-      if (empty($this->apiKey) && ! empty(config('synapse.services.firecrawl.key'))) {
+        if (empty($this->apiKey) && ! empty(config('synapse.services.firecrawl.key'))) {
             $this->apiKey = config('synapse.services.firecrawl.key');
 
             return;
         }
-      throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
+        throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
     }
 
     public function handle(
@@ -47,7 +46,7 @@ final class FirecrawlTool extends BaseTool implements Tool
         string $extractionPrompt,
     ): string {
 
-        $this->log("Entered", ['url' => $url, 'extractionPrompt' => $extractionPrompt]);
+        $this->log('Entered', ['url' => $url, 'extractionPrompt' => $extractionPrompt]);
         $firecrawlConnector = new FirecrawlConnector($this->apiKey);
         $firecrawlRequest = new FirecrawlRequest($url, $extractionPrompt);
         $results = $firecrawlConnector->send($firecrawlRequest)->array();

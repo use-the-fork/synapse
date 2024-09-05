@@ -28,11 +28,11 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-      if(!empty($this->apiKey)){
-        return;
-      }
+        if (! empty($this->apiKey)) {
+            return;
+        }
 
-      if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
+        if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
             $this->apiKey = config('synapse.services.serp_api.key');
 
             return;
@@ -49,10 +49,10 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
             'query' => $query,
         ]);
 
-      $serpApiConnector = new SerpApiConnector($this->apiKey);
-      $serpApiSearchRequest = new SerpApiSearchRequest($query, 0, 'google_news');
+        $serpApiConnector = new SerpApiConnector($this->apiKey);
+        $serpApiSearchRequest = new SerpApiSearchRequest($query, 0, 'google_news');
 
-      $results = $serpApiConnector->send($serpApiSearchRequest)->array();
+        $results = $serpApiConnector->send($serpApiSearchRequest)->array();
         $this->log('Finished');
 
         return $this->parseResults($results);

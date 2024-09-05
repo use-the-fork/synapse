@@ -31,20 +31,19 @@ class OpenAIConnector extends Connector implements Integration
     /**
      * Handles the request to generate a chat response.
      *
-     * @param Message[] $prompt         The chat prompt.
-     * @param Tool[] $tools          Tools the agent has access to.
-     * @param array $extraAgentArgs Extra arguments to be passed to the agent.
-     *
+     * @param  Message[]  $prompt  The chat prompt.
+     * @param  Tool[]  $tools  Tools the agent has access to.
+     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Response The response from the chat request.
+     *
      * @throws FatalRequestException
      * @throws RequestException
      */
     public function handleCompletion(
-      array $prompt,
-      array $tools = [],
-      array $extraAgentArgs = []
-    ): Response
-    {
+        array $prompt,
+        array $tools = [],
+        array $extraAgentArgs = []
+    ): Response {
         return $this->send(new ChatRequest($prompt, $tools, $extraAgentArgs))->dto();
     }
 
@@ -65,7 +64,6 @@ class OpenAIConnector extends Connector implements Integration
         return $this->send(new ValidateOutputRequest($prompt, $extraAgentArgs))->dto();
     }
 
-
     public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
     {
         return $this->send(new EmbeddingsRequest($input, $extraAgentArgs))->dto();
@@ -77,7 +75,6 @@ class OpenAIConnector extends Connector implements Integration
 
     }
 
-
     protected function defaultHeaders(): array
     {
 
@@ -85,5 +82,4 @@ class OpenAIConnector extends Connector implements Integration
             'Authorization' => 'Bearer '.config('synapse.integrations.openai.key'),
         ];
     }
-
 }

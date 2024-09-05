@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\OutputRules\Concerns;
 
-use Throwable;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
 
 /**
  * Indicates if the application has output rules.
- *
  */
 trait HasOutputRules
 {
@@ -22,9 +21,7 @@ trait HasOutputRules
     /**
      * Adds an output rule to the application.
      *
-     * @param OutputRule $rule The output rule to be added.
-     *
-     * @return void
+     * @param  OutputRule  $rule  The output rule to be added.
      */
     public function addOutputRule(OutputRule $rule): void
     {
@@ -34,9 +31,9 @@ trait HasOutputRules
     /**
      * Performs validation on the given response.
      *
-     * @param string $response The response to validate.
-     *
+     * @param  string  $response  The response to validate.
      * @return mixed If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
+     *
      * @throws Throwable
      */
     protected function doValidate(string $response): mixed
@@ -75,8 +72,7 @@ trait HasOutputRules
     /**
      * Parses the input response and returns it as an associative array.
      *
-     * @param string $input The input response to parse.
-     *
+     * @param  string  $input  The input response to parse.
      * @return array|null The parsed response as an associative array, or null if parsing fails.
      */
     protected function parseResponse(string $input): ?array
@@ -92,16 +88,16 @@ trait HasOutputRules
     /**
      * Performs revalidation on the given result.
      *
-     * @param string $result The result to revalidate.
-     * @param string $errors The validation errors.
-     *
+     * @param  string  $result  The result to revalidate.
+     * @param  string  $errors  The validation errors.
      * @return mixed The result of handling the validation completion.
+     *
      * @throws Throwable
      */
     protected function doRevalidate(string $result, string $errors = ''): mixed
     {
 
-        $prompt = view("synapse::Prompts.ReValidateResponsePrompt", [
+        $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
             'outputRules' => $this->getOutputRules(),
             'errors' => $errors,
             'result' => $result,
@@ -137,9 +133,7 @@ trait HasOutputRules
     /**
      * Sets the output rules for validation.
      *
-     * @param array $rules The output rules to be set.
-     *
-     * @return void
+     * @param  array  $rules  The output rules to be set.
      */
     public function setOutputRules(array $rules = []): void
     {
@@ -156,8 +150,6 @@ trait HasOutputRules
 
     /**
      * returns the memory type this Agent should use.
-     *
-     * @return array
      */
     protected function registerOutputRules(): array
     {

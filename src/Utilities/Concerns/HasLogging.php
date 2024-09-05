@@ -6,7 +6,6 @@ namespace UseTheFork\Synapse\Utilities\Concerns;
 
 use Illuminate\Support\Facades\Log;
 
-
 trait HasLogging
 {
     /**

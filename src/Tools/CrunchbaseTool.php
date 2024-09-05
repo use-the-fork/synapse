@@ -28,8 +28,8 @@ final class CrunchbaseTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if(!empty($this->apiKey)){
-          return;
+        if (! empty($this->apiKey)) {
+            return;
         }
 
         if (empty($this->apiKey) && ! empty(config('synapse.services.crunchbase.key'))) {

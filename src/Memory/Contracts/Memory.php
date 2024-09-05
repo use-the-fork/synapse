@@ -8,29 +8,24 @@ use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 
 interface Memory
 {
-
     /**
      * Retrieves the agent's memory as an array of inputs with messages.
      *
      * @return array An array containing the agent's memory as messages and plain text.
-     *     The 'memoryWithMessages' key contains the memory with messages.
-     *     The 'memory' key contains the memory without messages.
+     *               The 'memoryWithMessages' key contains the memory with messages.
+     *               The 'memory' key contains the memory without messages.
      */
     public function asInputs(): array;
 
     /**
      * Clears the agent's memory.
-     *
-     * @return void
      */
     public function clear(): void;
 
     /**
      * Adds a new message to agent Memory.
      *
-     * @param Message $message The message to be created.
-     *
-     * @return void
+     * @param  Message  $message  The message to be created.
      */
     public function create(Message $message): void;
 
@@ -45,17 +40,13 @@ interface Memory
      * Loads the 'messages' from the agent's memory.
      *
      * This method is called before at the top of the Agents `getAnswer` loop.
-     *
-     * @return void
      */
     public function load(): void;
 
     /**
      * Sets the agent's memory with the given array of messages.
      *
-     * @param array $messages The array of messages.
-     *
-     * @return void
+     * @param  array  $messages  The array of messages.
      */
     public function set(array $messages): void;
 }

@@ -22,7 +22,7 @@ test('Connects', function () {
 
         protected function registerIntegration(): Connector
         {
-            return new ClaudeAIConnector();
+            return new ClaudeAIConnector;
         }
 
         protected function registerOutputRules(): array
@@ -41,7 +41,7 @@ test('Connects', function () {
         ChatRequest::class => MockResponse::fixture('claude/simple'),
     ]);
 
-    $agent = new ClaudeTestAgent();
+    $agent = new ClaudeTestAgent;
     $agentResponse = $agent->handle(['input' => 'hello!']);
 
     expect($agentResponse)->toBeArray()
@@ -56,7 +56,7 @@ test('uses tools', function () {
 
         protected function registerIntegration(): Connector
         {
-            return new ClaudeAIConnector();
+            return new ClaudeAIConnector;
         }
 
         protected function registerOutputRules(): array
@@ -73,7 +73,7 @@ test('uses tools', function () {
         protected function registerTools(): array
         {
             return [
-                new SerperTool(),
+                new SerperTool,
             ];
         }
     }
@@ -88,7 +88,7 @@ test('uses tools', function () {
         SerperSearchRequest::class => MockResponse::fixture('claude/uses-tools/serper'),
     ]);
 
-    $agent = new ClaudeToolTestAgent();
+    $agent = new ClaudeToolTestAgent;
     $agentResponse = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
     expect($agentResponse)->toBeArray()

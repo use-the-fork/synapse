@@ -33,7 +33,7 @@ test('Connects', function () {
         ChatRequest::class => MockResponse::fixture('openai/simple'),
     ]);
 
-    $agent = new OpenAiTestAgent();
+    $agent = new OpenAiTestAgent;
     $agentResponse = $agent->handle(['input' => 'hello!']);
 
     expect($agentResponse)->toBeArray()
@@ -60,7 +60,7 @@ test('uses tools', function () {
         protected function registerTools(): array
         {
             return [
-                new SerperTool(),
+                new SerperTool,
             ];
         }
     }
@@ -74,7 +74,7 @@ test('uses tools', function () {
         SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),
     ]);
 
-    $agent = new OpenAiToolTestAgent();
+    $agent = new OpenAiToolTestAgent;
     $agentResponse = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
     expect($agentResponse)->toBeArray()

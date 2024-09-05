@@ -11,7 +11,7 @@ use UseTheFork\Synapse\Tools\CrunchbaseTool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 test('Requires API Key', function () {
-    $tool = new CrunchbaseTool();
+    $tool = new CrunchbaseTool;
     $tool->handle('siteimprove');
 })->throws(MissingApiKeyException::class);
 

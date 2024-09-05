@@ -18,9 +18,9 @@ class SerperSearchRequest extends Request implements HasBody
     /**
      * Constructor for the SerperSearch Request.
      *
-     * @param string $searchQuery The search query.
-     * @param string $searchType  The search type.
-     * @param int    $num         The number of search results to return (optional, defaults to 20).
+     * @param  string  $searchQuery  The search query.
+     * @param  string  $searchType  The search type.
+     * @param  int  $num  The number of search results to return (optional, defaults to 20).
      */
     public function __construct(
         public readonly string $searchQuery,
@@ -29,27 +29,25 @@ class SerperSearchRequest extends Request implements HasBody
     ) {}
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function resolveEndpoint(): string
     {
-      return match ($this->searchType) {
-        'search' => '/search',
-        'places' => '/places',
-        'news' => '/news',
-      };
+        return match ($this->searchType) {
+            'search' => '/search',
+            'places' => '/places',
+            'news' => '/news',
+        };
     }
 
     /**
-     * @inheritdoc
-     *
+     * {@inheritdoc}
      */
     public function defaultBody(): array
     {
         return [
-          'q' => $this->searchQuery,
-          'num' => $this->num,
+            'q' => $this->searchQuery,
+            'num' => $this->num,
         ];
     }
 }

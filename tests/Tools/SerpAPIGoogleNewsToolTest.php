@@ -1,36 +1,35 @@
 <?php
 
-  declare(strict_types=1);
+declare(strict_types=1);
 
-  use Saloon\Http\Faking\MockClient;
-  use Saloon\Http\Faking\MockResponse;
-  use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
-  use UseTheFork\Synapse\Tools\BaseTool;
-  use UseTheFork\Synapse\Tools\Contracts\Tool;
-  use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
-  use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
-  use UseTheFork\Synapse\Tools\SerpAPIGoogleSearchTool;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
+use UseTheFork\Synapse\Tools\BaseTool;
+use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
+use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
 
-  test('Requires API Key', function () {
-    $tool = new SerpAPIGoogleNewsTool();
+test('Requires API Key', function () {
+    $tool = new SerpAPIGoogleNewsTool;
     $tool->handle('current President of the United States');
-  })->throws(MissingApiKeyException::class);
+})->throws(MissingApiKeyException::class);
 
-  test('Send Request', function () {
+test('Send Request', function () {
 
     MockClient::global([
-                         SerpApiSearchRequest::class => MockResponse::fixture('tools/serpapi-google-news'),
-                       ]);
+        SerpApiSearchRequest::class => MockResponse::fixture('tools/serpapi-google-news'),
+    ]);
 
     $tool = new SerpAPIGoogleNewsTool('abc');
     $result = $tool->handle('apple stock');
-    expect(!empty($result))->toBeTrue();
-  });
+    expect(! empty($result))->toBeTrue();
+});
 
-  test('Architecture', function () {
+test('Architecture', function () {
 
     expect(SerpAPIGoogleNewsTool::class)
-      ->toExtend(BaseTool::class)
-      ->toImplement(Tool::class);
+        ->toExtend(BaseTool::class)
+        ->toImplement(Tool::class);
 
-  });
+});
