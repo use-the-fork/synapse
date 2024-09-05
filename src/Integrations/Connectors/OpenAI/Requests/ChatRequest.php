@@ -39,17 +39,21 @@ class ChatRequest extends Request implements HasBody
             'messages' => $this->formatMessages(),
         ];
 
+        $toolCalls = [];
         if (! empty($this->tools)) {
             foreach ($this->tools as $tool) {
                 $payload['tools'][] = $tool['definition'];
             }
+            $toolCalls = [
+                'parallel_tool_calls' => false,
+            ];
         }
 
         return [
             ...$payload,
             ...$this->extraAgentArgs,
             // Always set parallel_tool_calls to false. True is more headache than its worth.
-            'parallel_tool_calls' => false,
+            ...$toolCalls
         ];
     }
 

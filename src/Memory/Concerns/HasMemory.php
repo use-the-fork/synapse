@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Memory\Concerns;
 
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
 use UseTheFork\Synapse\Memory\DatabaseMemory;
 
@@ -32,6 +33,16 @@ trait HasMemory
     public function getMemory(): Memory
     {
         return $this->memory;
+    }
+
+    /**
+     * Adds a message to the current memory
+     *
+     * @param  Message  $message  The message to add to the memory.
+     */
+    public function addMessageToMemory(Message $message): void
+    {
+        $this->memory->create($message);
     }
 
     /**
