@@ -18,16 +18,9 @@ class CollectionMemory implements Memory
         $this->agentMemory = collect();
     }
 
-    public function create(Message $message): void
-    {
-        $this->agentMemory->push($message->toArray());
-    }
-
-    public function get(): array
-    {
-        return $this->agentMemory->toArray();
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function asInputs(): array
     {
 
@@ -67,15 +60,40 @@ class CollectionMemory implements Memory
         ];
     }
 
-    public function load(): void {}
-
-    public function set(array $messages): void
-    {
-        $this->agentMemory = collect($messages);
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function clear(): void
     {
         $this->agentMemory = collect();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function create(Message $message): void
+    {
+        $this->agentMemory->push($message->toArray());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(): array
+    {
+        return $this->agentMemory->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load(): void {}
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(array $messages): void
+    {
+        $this->agentMemory = collect($messages);
     }
 }

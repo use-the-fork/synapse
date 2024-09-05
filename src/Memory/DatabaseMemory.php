@@ -19,21 +19,10 @@ class DatabaseMemory implements Memory
         $this->agentMemory->save();
     }
 
-    public function create(Message $message): void
-    {
-        $this->agentMemory->messages()->create($message->toArray());
-    }
-
-    public function get(): array
-    {
-        return $this->agentMemory->messages->toArray();
-    }
-
-    public function load(): void
-    {
-        $this->agentMemory->load('messages');
-    }
-
+    /**
+     * @inheritdoc
+     *
+     */
     public function asInputs(): array
     {
         $payload = [
@@ -71,6 +60,40 @@ class DatabaseMemory implements Memory
       ];
     }
 
+    /**
+     * @inheritdoc
+     *
+     */
+  public function clear(): void
+  {
+    $this->agentMemory->delete();
+
+    $this->agentMemory = new AgentMemory();
+    $this->agentMemory->save();
+  }
+
+    /**
+     * @inheritdoc
+     *
+     */
+    public function get(): array
+    {
+        return $this->agentMemory->messages->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     */
+    public function load(): void
+    {
+        $this->agentMemory->load('messages');
+    }
+
+    /**
+     * @inheritdoc
+     *
+     */
   public function set(array $messages): void
   {
     //First we delete all the agents memory
@@ -84,11 +107,12 @@ class DatabaseMemory implements Memory
 
   }
 
-  public function clear(): void
-  {
-    $this->agentMemory->delete();
-
-    $this->agentMemory = new AgentMemory();
-    $this->agentMemory->save();
-  }
+    /**
+     * @inheritdoc
+     *
+     */
+    public function create(Message $message): void
+    {
+        $this->agentMemory->messages()->create($message->toArray());
+    }
 }
