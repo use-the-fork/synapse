@@ -11,6 +11,13 @@ class OutputRule extends ValueObject
 {
     protected array $value;
 
+    /**
+     * Constructs a new instance of the class.
+     *
+     * @param  array  $value  The value array to be assigned.
+     *
+     * @throws InvalidArgumentException If the value has already been set.
+     */
     public function __construct(array $value)
     {
 
@@ -28,6 +35,17 @@ class OutputRule extends ValueObject
         $this->sanitize();
     }
 
+    /**
+     * Validates the output rule.
+     *
+     * This method is used to validate the output rule by checking if the required fields are not empty.
+     * It throws an InvalidArgumentException if any of the fields are empty.
+     *
+     * @throws InvalidArgumentException When the output rule is empty.
+     * @throws InvalidArgumentException When the name field is empty.
+     * @throws InvalidArgumentException When the rules field is empty.
+     * @throws InvalidArgumentException When the description field is empty.
+     */
     protected function validate(): void
     {
         if (empty($this->value())) {
@@ -35,55 +53,73 @@ class OutputRule extends ValueObject
         }
 
         if (
-          empty($this->value['name'])
+            empty($this->value['name'])
         ) {
-          throw new InvalidArgumentException('a name is required.');
+            throw new InvalidArgumentException('a name is required.');
         }
 
         if (
-          empty($this->value['rules'])
+            empty($this->value['rules'])
         ) {
-          throw new InvalidArgumentException('rules are required.');
+            throw new InvalidArgumentException('rules are required.');
         }
 
         if (
-          empty($this->value['description'])
+            empty($this->value['description'])
         ) {
-          throw new InvalidArgumentException('a description is required.');
+            throw new InvalidArgumentException('a description is required.');
         }
 
     }
 
     /**
-     * Apply sanitization rules
+     * {@inheritdoc}
      */
-    protected function sanitize(): void {}
+    public function value()
+    {
+        return $this->toArray();
+    }
 
     /**
-     * Get an array representation of the value object.
+     * {@inheritdoc}
      */
     public function toArray(): array
     {
         return $this->value;
     }
 
-    public function value()
-    {
-        return $this->toArray();
-    }
+    /**
+     * Sanitizes the data in the OutputRule.
+     */
+    protected function sanitize(): void {}
 
-    public function getName() : string
-    {
-        return $this->value['name'];
-    }
-    public function getDescription() : string
+    /**
+     * Retrieves the description from the value array.
+     *
+     * @return string The description from the value array.
+     */
+    public function getDescription(): string
     {
         return $this->value['description'];
     }
-    public function getRules() : string
+
+    /**
+     * Retrieves the name from the value array.
+     *
+     * @return string The name from the value array.
+     */
+    public function getName(): string
+    {
+        return $this->value['name'];
+    }
+
+    /**
+     * Retrieves the rules from the value array.
+     *
+     * @return string The rules from the value array.
+     */
+    public function getRules(): string
     {
         return $this->value['rules'];
     }
-
-
 }
