@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
+use Saloon\Http\Connector;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
@@ -12,6 +13,11 @@ use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 abstract class BaseTool implements Tool
 {
     use HasLogging;
+
+    /**
+     * The AI integration that this Tool should use when needed.
+     */
+    protected Connector $integration;
 
     public function __construct()
     {
@@ -23,4 +29,11 @@ abstract class BaseTool implements Tool
      */
     protected function initializeTool(): void {}
 
+    /**
+     * Sets the AI integration that this Tool should use when needed.
+     */
+    public function setIntegration(Connector $agentIntegration): void
+    {
+        $this->integration = $agentIntegration;
+    }
 }
