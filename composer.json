@@ -41,6 +41,7 @@
   "scripts": {
     "lint": "@php vendor/bin/pint -v",
     "refactor": "@php vendor/bin/rector --debug",
+    "refactor-file": "@php vendor/bin/rector",
     "test:refactor": "@php vendor/bin/rector --dry-run",
     "test:types": "@php vendor/bin/phpstan analyse --ansi",
     "test:type-coverage": "@php vendor/bin/pint --type-coverage --min=100",

@@ -97,6 +97,16 @@
                   ];
                   includes = ["*.php"];
                 };
+                "refactor-file" = {
+                  command = "${composer}";
+                  options = [
+                    "refactor-file"
+                    "--"
+                    "--debug"
+                    "process"
+                  ];
+                  includes = ["*.php"];
+                };
               };
               programs = {
                 #Nix Formater
