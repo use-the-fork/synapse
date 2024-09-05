@@ -19,7 +19,7 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
     public function __construct(?string $apiKey = null)
     {
 
-        if (! empty($apiKey)) {
+        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
             $this->apiKey = $apiKey;
         }
 
@@ -28,11 +28,11 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (! empty($this->apiKey)) {
+        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
             return;
         }
 
-        if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
+        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.serp_api.key'))) {
             $this->apiKey = config('synapse.services.serp_api.key');
 
             return;

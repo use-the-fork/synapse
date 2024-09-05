@@ -48,7 +48,7 @@ class SerpApiSearchRequest extends Request implements HasBody
             'engine' => $this->engine,
         ];
 
-        if ($this->engine == 'google_news') {
+        if ($this->engine === 'google_news') {
             unset($payload['num']);
         }
 

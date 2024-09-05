@@ -31,7 +31,7 @@ class ArrayValueObject extends ValueObject
 
     protected function validate(): void
     {
-        if (empty($this->value())) {
+        if ($this->value() === []) {
             throw new InvalidArgumentException('Request Payload cannot be empty.');
         }
 
@@ -69,7 +69,7 @@ class ArrayValueObject extends ValueObject
         return $this->value;
     }
 
-    public function value()
+    public function value(): array
     {
         return $this->toArray();
     }

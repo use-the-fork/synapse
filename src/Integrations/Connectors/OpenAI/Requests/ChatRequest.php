@@ -10,6 +10,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Integrations\Enums\Role;
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response as IntegrationResponse;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 
@@ -40,7 +41,7 @@ class ChatRequest extends Request implements HasBody
         ];
 
         $toolCalls = [];
-        if (! empty($this->tools)) {
+        if ($this->tools !== []) {
             foreach ($this->tools as $tool) {
                 $payload['tools'][] = $tool['definition'];
             }
@@ -82,7 +83,7 @@ class ChatRequest extends Request implements HasBody
         return $payload->values()->toArray();
     }
 
-    private function formatToolMessage($message): array
+    private function formatToolMessage(Message $message): array
     {
         $message = $message->toArray();
 
@@ -109,7 +110,7 @@ class ChatRequest extends Request implements HasBody
         return $payload;
     }
 
-    private function formatImageMessage($message): array
+    private function formatImageMessage(Message $message): array
     {
         $message = $message->toArray();
 

@@ -44,7 +44,7 @@ trait HasOutputRules
         }
 
         $outputRules = [];
-        collect($this->outputRules)->each(function ($rule) use (&$outputRules) {
+        collect($this->outputRules)->each(function ($rule) use (&$outputRules): void {
             $outputRules[$rule->getName()] = $rule->getRules();
         });
 
@@ -58,7 +58,7 @@ trait HasOutputRules
                 }
 
                 $errors = $validator->errors()->toArray();
-                $errorsFlat = array_reduce($errors, function ($carry, $item) {
+                $errorsFlat = array_reduce($errors, function ($carry, $item): array {
                     return array_merge($carry, is_array($item) ? $item : [$item]);
                 }, []);
                 $errorsAsString = "### Here are the errors that Failed validation \n".implode("\n", $errorsFlat)."\n\n";

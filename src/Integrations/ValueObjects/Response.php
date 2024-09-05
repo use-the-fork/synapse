@@ -40,7 +40,7 @@ class Response extends ArrayValueObject
 
     public function content(): ?string
     {
-        return ! empty($this->value['content']) ? $this->value['content'] : null;
+        return empty($this->value['content']) ? null : $this->value['content'];
     }
 
     public function role(): string

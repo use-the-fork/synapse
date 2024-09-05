@@ -19,7 +19,7 @@ final class CrunchbaseTool extends BaseTool implements Tool
     public function __construct(?string $apiKey = null)
     {
 
-        if (! empty($apiKey)) {
+        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
             $this->apiKey = $apiKey;
         }
 
@@ -28,11 +28,11 @@ final class CrunchbaseTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (! empty($this->apiKey)) {
+        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
             return;
         }
 
-        if (empty($this->apiKey) && ! empty(config('synapse.services.crunchbase.key'))) {
+        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.crunchbase.key'))) {
             $this->apiKey = config('synapse.services.crunchbase.key');
 
             return;
@@ -57,7 +57,7 @@ final class CrunchbaseTool extends BaseTool implements Tool
 
         $result = Arr::dot($result);
 
-        return collect($result)->map(function ($value, $key) {
+        return collect($result)->map(function (string $value, string $key): string {
             return $key.': '.$value;
         })->implode("\n");
     }

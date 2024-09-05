@@ -20,7 +20,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
     public function __construct(?string $apiKey = null)
     {
 
-        if (! empty($apiKey)) {
+        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
             $this->apiKey = $apiKey;
         }
 
@@ -29,11 +29,11 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
 
     protected function initializeTool(): void
     {
-        if (! empty($this->apiKey)) {
+        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
             return;
         }
 
-        if (empty($this->apiKey) && ! empty(config('synapse.services.serp_api.key'))) {
+        if ((!isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.serp_api.key'))) {
             $this->apiKey = config('synapse.services.serp_api.key');
 
             return;
@@ -78,7 +78,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
                 if (
                     is_string($key) &&
                     is_string($value) &&
-                    ($key != 'title' && $key != 'description') &&
+                    ($key !== 'title' && $key !== 'description') &&
                     ! Str::endsWith($key, '_stick') &&
                     ! Str::endsWith($key, '_link') &&
                     ! Str::startsWith($value, 'http')
@@ -91,7 +91,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
         if (! empty($results['organic_results'])) {
             $organicResults = Arr::get($results, 'organic_results');
 
-            foreach ($organicResults as $key => $value) {
+            foreach ($organicResults as $value) {
                 $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
             }
         }

@@ -19,7 +19,7 @@ final class SerperTool extends BaseTool implements Tool
     public function __construct(?string $apiKey = null)
     {
 
-        if (! empty($apiKey)) {
+        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
             $this->apiKey = $apiKey;
         }
 
@@ -29,11 +29,11 @@ final class SerperTool extends BaseTool implements Tool
     protected function initializeTool(): void
     {
 
-        if (! empty($this->apiKey)) {
+        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
             return;
         }
 
-        if (empty($this->apiKey) && ! empty(config('synapse.services.serper.key'))) {
+        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.serper.key'))) {
             $this->apiKey = config('synapse.services.serper.key');
 
             return;
@@ -85,7 +85,7 @@ final class SerperTool extends BaseTool implements Tool
         }
 
         if (! empty($results['organic'])) {
-            foreach ($results['organic'] as $key => $value) {
+            foreach ($results['organic'] as $value) {
                 $snippets->push("```text\nTitle: {$value['title']}\nLink: {$value['link']}\nSnippet: {$value['snippet']}\n```");
             }
         }
