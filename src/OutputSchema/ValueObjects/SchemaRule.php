@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\OutputRules\ValueObjects;
+namespace UseTheFork\Synapse\OutputSchema\ValueObjects;
 
 use InvalidArgumentException;
 use UseTheFork\Synapse\ValueObject\ValueObject;
 
-class OutputRule extends ValueObject
+class SchemaRule extends ValueObject
 {
     protected array $value;
 
@@ -89,7 +89,7 @@ class OutputRule extends ValueObject
     }
 
     /**
-     * Sanitizes the data in the OutputRule.
+     * Sanitizes the data in the SchemaRule.
      */
     protected function sanitize(): void {}
 

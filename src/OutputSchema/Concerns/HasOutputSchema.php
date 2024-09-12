@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\OutputRules\Concerns;
+namespace UseTheFork\Synapse\OutputSchema\Concerns;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 
 /**
- * Indicates if the application has output rules.
+ * Indicates if the agent has an output schema.
  */
-trait HasOutputRules
+trait HasOutputSchema
 {
-    protected bool $hasOutputRules = true;
+    protected bool $hasOutputSchema = true;
 
-    protected array $outputRules = [];
+    protected array $outputSchema = [];
 
     /**
      * Adds an output rule to the application.
      *
-     * @param  OutputRule  $rule  The output rule to be added.
+     * @param  SchemaRule  $rule  The output rule to be added.
      */
-    public function addOutputRule(OutputRule $rule): void
+    public function addOutputRule(SchemaRule $rule): void
     {
-        $this->outputRules[] = $rule;
+        $this->outputSchema[] = $rule;
     }
 
     /**
@@ -39,20 +39,20 @@ trait HasOutputRules
     protected function doValidate(string $response): mixed
     {
 
-        if (! $this->hasOutputRules) {
+        if (! $this->hasOutputSchema) {
             return $response;
         }
 
-        $outputRules = [];
-        collect($this->outputRules)->each(function ($rule) use (&$outputRules): void {
-            $outputRules[$rule->getName()] = $rule->getRules();
+        $outputSchema = [];
+        collect($this->outputSchema)->each(function ($rule) use (&$outputSchema): void {
+            $outputSchema[$rule->getName()] = $rule->getRules();
         });
 
         while (true) {
             $result = $this->parseResponse($response);
             $errorsAsString = '';
             if (! empty($result)) {
-                $validator = Validator::make($result, $outputRules);
+                $validator = Validator::make($result, $outputSchema);
                 if (! $validator->fails()) {
                     return $validator->validated();
                 }
@@ -98,7 +98,7 @@ trait HasOutputRules
     {
 
         $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
-            'outputRules' => $this->getOutputRules(),
+            'outputRules' => $this->getOutputSchema(),
             'errors' => $errors,
             'result' => $result,
         ])->render();
@@ -116,14 +116,14 @@ trait HasOutputRules
      *
      * @return string|null The output rules encoded as a JSON string. Returns null if there are no output rules.
      */
-    public function getOutputRules(): ?string
+    public function getOutputSchema(): ?string
     {
-        if (! $this->hasOutputRules) {
+        if (! $this->hasOutputSchema) {
             return null;
         }
 
         $outputParserPromptPart = [];
-        foreach ($this->outputRules as $rule) {
+        foreach ($this->outputSchema as $rule) {
             $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
         }
 
@@ -135,23 +135,20 @@ trait HasOutputRules
      *
      * @param  array  $rules  The output rules to be set.
      */
-    public function setOutputRules(array $rules = []): void
+    public function setOutputSchema(array $rules = []): void
     {
-        $this->outputRules = $rules;
+        $this->outputSchema = $rules;
     }
 
     /**
-     * sets the initial output rules type this agent will use.
+     * sets the initial output schema type this agent will use.
      */
-    protected function initializeOutputRules(): void
+    protected function initializeOutputSchema(): void
     {
-        $this->outputRules = $this->registerOutputRules();
+        $this->outputSchema = $this->registerOutputSchema();
     }
 
-    /**
-     * returns the memory type this Agent should use.
-     */
-    protected function registerOutputRules(): array
+    protected function registerOutputSchema(): array
     {
         return [];
     }

@@ -14,7 +14,7 @@ use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Memory\Concerns\HasMemory;
-use UseTheFork\Synapse\OutputRules\Concerns\HasOutputRules;
+use UseTheFork\Synapse\OutputSchema\Concerns\HasOutputSchema;
 use UseTheFork\Synapse\Tools\Concerns\HasTools;
 use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 
@@ -23,7 +23,7 @@ class Agent
     use HasIntegration,
         HasLogging,
         HasMemory,
-        HasOutputRules,
+        HasOutputSchema,
         HasTools;
 
     /**
@@ -59,7 +59,7 @@ class Agent
         $this->initializeIntegration();
         $this->initializeMemory();
         $this->initializeTools();
-        $this->initializeOutputRules();
+        $this->initializeOutputSchema();
     }
 
     /**
@@ -189,7 +189,7 @@ class Agent
             ...$this->extraInputs,
             // We return both Memory With Messages and without.
             ...$this->memory->asInputs(),
-            'outputRules' => $this->getOutputRules(),
+            'outputSchema' => $this->getOutputSchema(),
             'tools' => $toolNames,
         ])->render();
     }

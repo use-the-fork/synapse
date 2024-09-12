@@ -1,10 +1,10 @@
 <message type="system">
-  ### Instruction
-  you are a helpful assistant.
+	### Instruction
+	you are a helpful assistant.
 
-  @include('synapse::Parts.OutputRules')
+	@include('synapse::Parts.OutputSchema')
 </message>
- @include('synapse::Parts.Input')
+@include('synapse::Parts.Input')
 @include('synapse::Parts.MemoryAsMessages')
 
 

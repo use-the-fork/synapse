@@ -7,7 +7,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 
@@ -17,10 +17,10 @@ test('Connects', function () {
     {
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function registerOutputRules(): array
+        protected function registerOutputSchema(): array
         {
             return [
-                OutputRule::make([
+                SchemaRule::make([
                     'name' => 'answer',
                     'rules' => 'required|string',
                     'description' => 'your final answer to the query.',
@@ -46,10 +46,10 @@ test('uses tools', function () {
     {
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function registerOutputRules(): array
+        protected function registerOutputSchema(): array
         {
             return [
-                OutputRule::make([
+                SchemaRule::make([
                     'name' => 'answer',
                     'rules' => 'required|string',
                     'description' => 'your final answer to the query.',
