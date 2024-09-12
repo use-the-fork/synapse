@@ -46,22 +46,23 @@ trait HasTools
         $tool = $tool_class['tool'];
 
         $tool_class = new ReflectionClass($tool_class['tool']);
-        $handle_method = $tool_class->getMethod('handle');
+        $reflectionMethod = $tool_class->getMethod('handle');
 
         $params = [];
-        foreach ($handle_method->getParameters() as $parameter) {
-            $parameter_description = $this->getParameterDescription($parameter);
-            if (! array_key_exists($parameter->name, $arguments) && ! $parameter->isOptional() && ! $parameter->isDefaultValueAvailable()) {
-                return sprintf('Parameter %s(%s) is required for the tool %s', $parameter->name, $parameter_description, $tool_name);
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            $parameter_description = $this->getParameterDescription($reflectionParameter);
+            if (! array_key_exists($reflectionParameter->name, $arguments) && ! $reflectionParameter->isOptional() && ! $reflectionParameter->isDefaultValueAvailable()) {
+                return sprintf('Parameter %s(%s) is required for the tool %s', $reflectionParameter->name, $parameter_description, $tool_name);
             }
 
             // check if parameter type is an Enum and add fetch a valid value
-            if (($parameter_type = $parameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
-                $params[$parameter->name] = $parameter_type->getName()::tryFrom($arguments[$parameter->name]) ?? $parameter->getDefaultValue();
+            if (($parameter_type = $reflectionParameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
+                $params[$reflectionParameter->name] = $parameter_type->getName()::tryFrom($arguments[$reflectionParameter->name]) ?? $reflectionParameter->getDefaultValue();
+
                 continue;
             }
 
-            $params[$parameter->name] = $arguments[$parameter->name] ?? $parameter->getDefaultValue();
+            $params[$reflectionParameter->name] = $arguments[$reflectionParameter->name] ?? $reflectionParameter->getDefaultValue();
         }
 
         return $tool->handle(...$params);
@@ -70,28 +71,28 @@ trait HasTools
     /**
      * Gets the description for a given ReflectionParameter.
      *
-     * @param  ReflectionParameter  $parameter  The ReflectionParameter to get the description for.
+     * @param  ReflectionParameter  $reflectionParameter  The ReflectionParameter to get the description for.
      * @return string The description of the parameter.
      */
-    private function getParameterDescription(ReflectionParameter $parameter): string
+    private function getParameterDescription(ReflectionParameter $reflectionParameter): string
     {
-        $descriptions = $parameter->getAttributes(Description::class);
+        $descriptions = $reflectionParameter->getAttributes(Description::class);
         if ($descriptions !== []) {
             return implode("\n", array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions));
         }
 
-        return $this->getToolParameterType($parameter);
+        return $this->getToolParameterType($reflectionParameter);
     }
 
     /**
      * Retrieves the type of the tool parameter.
      *
-     * @param  ReflectionParameter  $parameter  The reflection parameter.
+     * @param  ReflectionParameter  $reflectionParameter  The reflection parameter.
      * @return string The type of the tool parameter.
      */
-    private function getToolParameterType(ReflectionParameter $parameter): string
+    private function getToolParameterType(ReflectionParameter $reflectionParameter): string
     {
-        if (null === $parameter_type = $parameter->getType()) {
+        if (null === $parameter_type = $reflectionParameter->getType()) {
             return 'string';
         }
 
@@ -173,16 +174,16 @@ trait HasTools
     /**
      * Parses the parameters of a tool.
      *
-     * @param  ReflectionClass  $tool  The tool reflection class.
+     * @param  ReflectionClass  $reflectionClass  The tool reflection class.
      * @return array The parsed parameters of the tool.
      *
      * @throws ReflectionException
      */
-    private function parseToolParameters(ReflectionClass $tool): array
+    private function parseToolParameters(ReflectionClass $reflectionClass): array
     {
         $parameters = ['type' => 'object'];
 
-        if (count($method_parameters = $tool->getMethod('handle')->getParameters()) > 0) {
+        if (count($method_parameters = $reflectionClass->getMethod('handle')->getParameters()) > 0) {
             $parameters['properties'] = [];
         }
 

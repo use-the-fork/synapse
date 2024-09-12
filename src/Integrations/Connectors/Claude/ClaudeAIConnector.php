@@ -50,7 +50,7 @@ class ClaudeAIConnector extends Connector implements Integration
     /**
      * Handles the request to generate a chat response.
      *
-     * @param  Message  $prompt  The chat message that is used for validation.
+     * @param  Message  $message  The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Response The response from the chat request.
      *
@@ -58,10 +58,10 @@ class ClaudeAIConnector extends Connector implements Integration
      * @throws RequestException
      */
     public function handleValidationCompletion(
-        Message $prompt,
+        Message $message,
         array $extraAgentArgs = []
     ): Response {
-        return $this->send(new ValidateOutputRequest($prompt, $extraAgentArgs))->dto();
+        return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }
 
     /**

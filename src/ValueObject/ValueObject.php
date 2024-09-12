@@ -91,21 +91,21 @@ abstract class ValueObject implements Arrayable, Immutable
      * Check if objects are instances of same class
      * and share the same properties and values.
      *
-     * @param  ValueObject<int|string, mixed>  $object
+     * @param ValueObject<(int | string), mixed> $valueObject
      */
-    public function equals(ValueObject $object): bool
+    public function equals(ValueObject $valueObject): bool
     {
-        return $this == $object;
+        return $this == $valueObject;
     }
 
     /**
      * Inversion for `equals` method.
      *
-     * @param  ValueObject<int|string, mixed>  $object
+     * @param ValueObject<(int | string), mixed> $valueObject
      */
-    public function notEquals(ValueObject $object): bool
+    public function notEquals(ValueObject $valueObject): bool
     {
-        return ! $this->equals($object);
+        return ! $this->equals($valueObject);
     }
 
     /**

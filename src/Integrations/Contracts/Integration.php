@@ -23,11 +23,11 @@ interface Integration
     /**
      * Forces a model to output its response in a specific format.
      *
-     * @param  Message  $prompt  The chat message that is used for validation.
+     * @param Message $message The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Response The response from the chat request.
      */
-    public function handleValidationCompletion(Message $prompt, array $extraAgentArgs = []): Response;
+    public function handleValidationCompletion(Message $message, array $extraAgentArgs = []): Response;
 
     /**
      * Creates an embedding vector representing the input text.

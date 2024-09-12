@@ -25,7 +25,7 @@ class ValidateOutputRequest extends Request implements HasBody
     protected Method $method = Method::POST;
 
     public function __construct(
-        public readonly Message $prompt,
+        public readonly Message $message,
         public readonly array $extraAgentArgs = []
     ) {}
 
@@ -49,7 +49,7 @@ class ValidateOutputRequest extends Request implements HasBody
             'messages' => [
                 [
                     'role' => 'user',
-                    'content' => $this->prompt->content(),
+                    'content' => $this->message->content(),
                 ],
             ],
             'system' => "### Instruction\nRewrite user-generated content to adhere to the specified format. DO NOT EXPLAIN.",

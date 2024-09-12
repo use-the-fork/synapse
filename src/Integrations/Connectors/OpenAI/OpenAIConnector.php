@@ -50,7 +50,7 @@ class OpenAIConnector extends Connector implements Integration
     /**
      * Forces a model to output its response in a specific format.
      *
-     * @param  Message  $prompt  The chat message that is used for validation.
+     * @param Message $message The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Response The response from the chat request.
      *
@@ -58,10 +58,10 @@ class OpenAIConnector extends Connector implements Integration
      * @throws RequestException
      */
     public function handleValidationCompletion(
-        Message $prompt,
+        Message $message,
         array $extraAgentArgs = []
     ): Response {
-        return $this->send(new ValidateOutputRequest($prompt, $extraAgentArgs))->dto();
+        return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }
 
     public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse

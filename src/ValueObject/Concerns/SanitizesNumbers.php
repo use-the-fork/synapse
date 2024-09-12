@@ -35,9 +35,9 @@ trait SanitizesNumbers
      */
     protected function isPrecise(float $number): bool
     {
-        $numberAsString = str($number);
+        $stringable = str($number);
 
-        $afterFloatingPoint = $numberAsString
+        $afterFloatingPoint = $stringable
             ->explode('.')
             ->get(1, '');
 
@@ -45,6 +45,6 @@ trait SanitizesNumbers
 
         $roundedNumber = round($number, $precisionPosition);
 
-        return $roundedNumber === $number && $numberAsString->length() <= PHP_FLOAT_DIG;
+        return $roundedNumber === $number && $stringable->length() <= PHP_FLOAT_DIG;
     }
 }
