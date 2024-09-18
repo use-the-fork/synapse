@@ -1,3 +1,4 @@
----
+# Laravel Synapse
 
-## template: home.html title: Fast, Declarative, Reproducible, and Composable Developer Environments
+## Langchain like agents for laravel applications!
+

@@ -16,3 +16,5 @@ secrets.nix
 .direnv
 
 .phpunit*
+
+docs/.vitepress/cache/*

@@ -5,12 +5,25 @@
     snow-blower.url = "github:use-the-fork/snow-blower";
   };
 
-  outputs = inputs:
+  outputs = inputs: let
+    pkgs = import inputs.nixpkgs {
+      # Add overlay here to inject the mkdocs-material and extensions plugin
+      nixpkgs.overlays = self: super: {
+        mkdocs = super.mkdocs.override {
+          propogatedBuildInputs =
+            [super.mkdocs.propogatedBuildInputs]
+            ++ pkgs.python312Packages.mkdocs-material
+            ++ pkgs.python312Packages.mkdocs-material-extensions;
+        };
+      };
+    };
+  in
     inputs.snow-blower.mkSnowBlower {
       inherit inputs;
       perSystem = {
         config,
         lib,
+        pkgs,
         ...
       }: let
         serv = config.snow-blower.services;
@@ -60,6 +73,9 @@
             '';
           };
 
+          processes = {
+          };
+
           languages = {
             # the required version of PHP for this project.
             php = {
@@ -71,6 +87,9 @@
                 max_execution_time = 90
               '';
             };
+
+            javascript.enable = true;
+            javascript.npm.enable = true;
           };
 
           services = {
