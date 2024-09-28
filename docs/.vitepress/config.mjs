@@ -1,46 +1,56 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Laravel Synapse",
-  description: "🦜🔗 Langchain like agents for laravel applications!",
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-      nav: [
-          { text: 'Home', link: '/' },
-          { text: 'Features', link: '/features' }
-      ],
+    title: 'Laravel-Synapse',
+    description: "AI agents for all!",
+    lastUpdated: true,
+    themeConfig: {
+        // https://vitepress.dev/reference/default-theme-config
+        nav: [
+            { text: 'Home', link: '/' },
+            {
+                text: '4.1.1',
+                items: [
+                    {
+                        text: 'Changelog',
+                        link: 'https://github.com/pdphilip/laravel-elasticsearch/compare/v4.1.0...v4.1.1',
+                    },
+                ],
+            },
+        ],
 
-      sidebar: [
-          {
-              text: 'Introduction',
-              items: [
-                  { text: 'Who am I', link: '/who-am-i' },
-                  { text: 'Getting Started', link: '/getting-started' },
-                  { text: 'Onboarding', link: '/onboarding' },
-                  { text: 'Features', link: '/features' },
-                  { text: 'Models', link: '/models' }
-              ]
-          },
-          {
-              text: 'Core Concepts',
-              items: [
-                  { text: 'Tools', link: '/tools' },
-                  { text: 'Build', link: '/build' }
-              ]
-          },
-          {
-              text: 'Contributing',
-              items: [
-                  { text: 'How to contribute', link: '/how-to-contribute' },
-                  { text: 'License', link: '/license' },
-                  { text: 'Donation', link: '/donation' }
-              ]
-          }
-      ],
+        sidebar: [
+            {
+                text: 'Introduction',
+                items: [{ text: 'Getting Started', link: '/' }],
+            },
+            {
+                text: 'Eloquent',
+                items: [
+                    { text: 'The Base model', link: '/eloquent/the-base-model' },
+                    { text: 'Querying Models', link: '/eloquent/querying-models' },
+                    { text: 'Saving Models', link: '/eloquent/saving-models' },
+                    { text: 'Deleting Models', link: '/eloquent/deleting-models' },
+                    {
+                        text: 'Ordering & Pagination',
+                        link: '/eloquent/ordering-and-pagination',
+                    },
+                    { text: 'Distinct & GroupBy', link: '/eloquent/distinct' },
+                    { text: 'Aggregation', link: '/eloquent/aggregation' },
+                    { text: 'ES Specific Queries', link: '/eloquent/es-specific' },
+                    { text: 'Nested Queries', link: '/eloquent/nested-queries' },
+                    { text: 'Full-Text Search', link: '/eloquent/full-text-search' },
+                    { text: 'Dynamic Indices', link: '/eloquent/dynamic-indices' },
+                ],
+            }
+        ],
 
-      socialLinks: [
-          { icon: 'github', link: 'https://github.com/bootstrapguru/dexor' }
-      ]
-  }
-})
+        socialLinks: [
+            {
+                icon: 'github',
+                link: 'https://github.com/use-the-fork/laravel-synapse',
+            },
+        ],
+    },
+});

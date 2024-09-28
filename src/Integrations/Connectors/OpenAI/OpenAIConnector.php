@@ -77,7 +77,6 @@ class OpenAIConnector extends Connector implements Integration
 
     protected function defaultHeaders(): array
     {
-
         return [
             'Authorization' => 'Bearer '.config('synapse.integrations.openai.key'),
         ];

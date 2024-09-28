@@ -6,9 +6,9 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+    use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 
-test('can handle image input', function () {
+    test('can handle image input', function () {
 
     MockClient::global([
         ChatRequest::class => MockResponse::fixture('agents/image-agent/message-1'),
@@ -21,7 +21,7 @@ test('can handle image input', function () {
         protected function registerOutputRules(): array
         {
             return [
-                OutputRule::make([
+                SchemaRule::make([
                     'name' => 'answer',
                     'rules' => 'required|string',
                     'description' => 'your final answer to the query.',

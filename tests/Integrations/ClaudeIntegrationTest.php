@@ -10,7 +10,7 @@ use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 
@@ -25,10 +25,10 @@ test('Connects', function () {
             return new ClaudeAIConnector;
         }
 
-        protected function registerOutputRules(): array
+        protected function registerOutputSchema(): array
         {
             return [
-                OutputRule::make([
+                SchemaRule::make([
                     'name' => 'answer',
                     'rules' => 'required|string',
                     'description' => 'your final answer to the query.',
@@ -59,10 +59,10 @@ test('uses tools', function () {
             return new ClaudeAIConnector;
         }
 
-        protected function registerOutputRules(): array
+        protected function registerOutputSchema(): array
         {
             return [
-                OutputRule::make([
+                SchemaRule::make([
                     'name' => 'answer',
                     'rules' => 'required|string',
                     'description' => 'your final answer to the query.',
