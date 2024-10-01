@@ -6,45 +6,34 @@ namespace UseTheFork\Synapse\OutputSchema\Concerns;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;
+use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Enums\PipeOrder;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
+use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 
 /**
  * Indicates if the agent has an output schema.
  */
 trait HasOutputSchema
 {
-    protected bool $hasOutputSchema = true;
-
-    protected array $outputSchema = [];
-
-    /**
-     * Adds an output rule to the application.
-     *
-     * @param  SchemaRule  $rule  The output rule to be added.
-     */
-    public function addOutputRule(SchemaRule $rule): void
-    {
-        $this->outputSchema[] = $rule;
-    }
+    use HasMiddleware;
 
     /**
      * Performs validation on the given response.
      *
-     * @param  string  $response  The response to validate.
+     * @param  PendingAgentTask  $pendingAgentTask  The response to validate.
      * @return mixed If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
      *
      * @throws Throwable
      */
-    protected function doValidate(string $response): mixed
+    protected function doValidateOutputSchema(PendingAgentTask $pendingAgentTask): mixed
     {
 
-        if (! $this->hasOutputSchema) {
-            return $response;
-        }
+        $response = $pendingAgentTask->currentIteration()->getResponse()->content();
 
         $outputSchema = [];
-        collect($this->outputSchema)->each(function ($rule) use (&$outputSchema): void {
+        collect($this->defaultOutputSchema())->each(function ($rule) use (&$outputSchema): void {
             $outputSchema[$rule->getName()] = $rule->getRules();
         });
 
@@ -54,7 +43,15 @@ trait HasOutputSchema
             if (! empty($result)) {
                 $validator = Validator::make($result, $outputSchema);
                 if (! $validator->fails()) {
-                    return $validator->validated();
+
+                    $currentResponse = $pendingAgentTask->currentIteration()->getResponse();
+                    $updatedResponse = Message::make([
+                                                         ...$currentResponse->toArray(),
+                                                         'content' => $validator->validated()
+                                                     ]);
+                    $pendingAgentTask->currentIteration()->setResponse($updatedResponse);
+
+                    return $pendingAgentTask;
                 }
 
                 $errors = $validator->errors()->toArray();
@@ -63,7 +60,7 @@ trait HasOutputSchema
                 }, []);
                 $errorsAsString = "### Here are the errors that Failed validation \n".implode("\n", $errorsFlat)."\n\n";
             }
-            $response = $this->doRevalidate($response, $errorsAsString);
+            $response = $this->doRevalidate($response, $pendingAgentTask, $errorsAsString);
             //since all integrations return a Message value object we need to grab the content
             $response = $response->content();
         }
@@ -94,8 +91,11 @@ trait HasOutputSchema
      *
      * @throws Throwable
      */
-    protected function doRevalidate(string $result, string $errors = ''): mixed
+    protected function doRevalidate(string $result, PendingAgentTask $pendingAgentTask, string $errors = ''): mixed
     {
+
+        $agent = $pendingAgentTask->getAgent();
+        $agent->
 
         $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
             'outputRules' => $this->getOutputSchema(),
@@ -118,37 +118,36 @@ trait HasOutputSchema
      */
     public function getOutputSchema(): ?string
     {
-        if (! $this->hasOutputSchema) {
-            return null;
-        }
-
         $outputParserPromptPart = [];
-        foreach ($this->outputSchema as $rule) {
+        foreach ($this->defaultOutputSchema() as $rule) {
             $outputParserPromptPart[$rule->getName()] = "({$rule->getRules()}) {$rule->getDescription()}";
         }
 
         return "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
     }
 
-    /**
-     * Sets the output rules for validation.
-     *
-     * @param  array  $rules  The output rules to be set.
-     */
-    public function setOutputSchema(array $rules = []): void
+    public function addOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        $this->outputSchema = $rules;
+        $pendingAgentTask->addInput('outputSchema', $this->getOutputSchema());
+
+        return $pendingAgentTask;
     }
 
     /**
      * sets the initial output schema type this agent will use.
      */
-    protected function initializeOutputSchema(): void
+    public function bootHasOutputSchema(PendingAgentTask $pendingAgentTask): void
     {
-        $this->outputSchema = $this->registerOutputSchema();
+        $this->middleware()->onStartThread(fn(PendingAgentTask $pendingAgentTask) => $this->addOutputSchema($pendingAgentTask), 'addOutputSchema');
+        $this->middleware()->onEndThread(fn(PendingAgentTask $pendingAgentTask) => $this->doValidateOutputSchema($pendingAgentTask), 'doValidateOutputSchema', PipeOrder::LAST);
     }
 
-    protected function registerOutputSchema(): array
+    /**
+     * Sets the output rules for validation.
+     *
+     * @param  array<SchemaRule>  $rules  The output rules to be set.
+     */
+    protected function defaultOutputSchema(): array
     {
         return [];
     }

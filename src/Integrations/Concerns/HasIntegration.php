@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Integrations\Concerns;
 
 use Saloon\Http\Connector;
-use UseTheFork\Synapse\Agents\Agent;
+use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 
 trait HasIntegration
@@ -24,9 +25,14 @@ trait HasIntegration
      * This method assigns the integration object returned by the `registerIntegration` method
      * to the `$integration` property of the class.
      */
-    protected function initializeIntegration(): void
+    public function initializeIntegration(): void
     {
         $this->integration = $this->registerIntegration();
+    }
+
+    public function handleValidationCompletion(Message $message, array $extraAgentArgs): Message
+    {
+        return $this->integration->handleValidationCompletion($message, $extraAgentArgs);
     }
 
     /**
@@ -42,10 +48,8 @@ trait HasIntegration
         return new OpenAIConnector;
     }
 
-    public function bootHasIntegration(): void
+    public function bootHasIntegration(PendingAgentTask $pendingAgent): void
     {
-//        $this->middleware()->onStartThread(fn() => {}, 'initializeIntegration');
-
-        dd(1);
+        $this->middleware()->onStartThread(fn () => $this->initializeIntegration(), 'initializeIntegration');
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Integrations\Contracts;
 
+use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
@@ -18,16 +19,16 @@ interface Integration
      * @param  Tool[]  $tools  Tools the agent has access to.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      */
-    public function handleCompletion(array $prompt, array $tools = [], array $extraAgentArgs = []): Response;
+    public function handleCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 
     /**
      * Forces a model to output its response in a specific format.
      *
-     * @param Message $message The chat message that is used for validation.
+     * @param  Message  $message  The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
+     * @return Message The response from the chat request.
      */
-    public function handleValidationCompletion(Message $message, array $extraAgentArgs = []): Response;
+    public function handleValidationCompletion(Message $message, array $extraAgentArgs = []): Message;
 
     /**
      * Creates an embedding vector representing the input text.

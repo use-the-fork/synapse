@@ -132,19 +132,22 @@ class ChatRequest extends Request implements HasBody
         return $payload;
     }
 
-    public function createDtoFromResponse(Response $response): IntegrationResponse
+    public function createDtoFromResponse(Response $response): Message
     {
         $data = $response->array();
         $message = $data['choices'][0]['message'] ?? [];
         $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
         if (isset($message['tool_calls'])) {
-            $message['tool_call'] = ToolCallValueObject::make($message['tool_calls'][0])->toArray();
+
+            $message['tool_call_id'] = $message['tool_calls'][0]['id'];
+            $message['tool_name'] = $message['tool_calls'][0]['function']['name'];
+            $message['tool_arguments'] = $message['tool_calls'][0]['function']['arguments'];
             unset($message['tool_calls']);
 
             // Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
             $message['role'] = Role::TOOL;
         }
 
-        return IntegrationResponse::makeOrNull($message);
+        return Message::make($message);
     }
 }

@@ -7,8 +7,7 @@ namespace UseTheFork\Synapse\Agents;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
-use UseTheFork\Synapse\Agents\StartTasks\BootTraits;
-use UseTheFork\Synapse\Agents\StartTasks\MergeProperties;
+use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
@@ -16,7 +15,6 @@ use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Memory\Concerns\HasMemory;
-use UseTheFork\Synapse\OutputSchema\Concerns\HasOutputSchema;
 use UseTheFork\Synapse\Tools\Concerns\HasTools;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
@@ -26,7 +24,6 @@ class Agent
     use HasIntegration,
         HasLogging,
         HasMemory,
-        HasOutputSchema,
         HasTools;
     use HasMiddleware;
 
@@ -50,17 +47,15 @@ class Agent
      */
     public function __construct()
     {
-
         $this->initializeAgent();
-
     }
 
     /**
      * Create a new PendingAgentTask
      */
-    public function createPendingAgentTask($input): PendingAgentTask
+    public function createPendingAgentTask(array $input, array $extraAgentArgs): PendingAgentTask
     {
-        return new PendingAgentTask($this, $input);
+        return new PendingAgentTask($this, $input, $extraAgentArgs);
     }
 
     /**
@@ -73,7 +68,6 @@ class Agent
         $this->initializeIntegration();
         $this->initializeMemory();
         $this->initializeTools();
-        $this->initializeOutputSchema();
     }
 
     /**
@@ -85,46 +79,52 @@ class Agent
      *
      * @throws Throwable
      */
-    public function handle(?array $input, ?array $extraAgentArgs = []): array
+    public function handle(?array $input, ?array $extraAgentArgs = []): Message
     {
-        $response = $this->getAnswer($input, $extraAgentArgs);
+        $pendingAgentTask = $this->getAnswer($input, $extraAgentArgs);
 
-        $this->log('Start validation', [$response]);
+        $pendingAgentTask = $pendingAgentTask->middleware()->executeEndThreadPipeline($pendingAgentTask);
 
-        return $this->doValidate($response);
+        return $pendingAgentTask->currentIteration()->getResponse();
     }
 
     /**
      * @throws Throwable
      */
-    protected function getAnswer(?array $input, ?array $extraAgentArgs = []): string
+    protected function getAnswer(?array $input, ?array $extraAgentArgs = []): PendingAgentTask
     {
-        $pendingAgentTask = $this->createPendingAgentTask($input);
+        $pendingAgentTask = $this->createPendingAgentTask($input, $extraAgentArgs);
 
         while (true) {
 
-            $pendingAgentTask->middleware()->executeStartTaskPipeline($pendingAgentTask);
+            $pendingAgentTask->middleware()->executeStartIterationPipeline($pendingAgentTask);
             $this->memory->load();
 
-            $prompt = $this->parsePrompt(
-                $this->getPrompt($input)
+            $promptChain = $this->parsePrompt(
+                $this->getPrompt($pendingAgentTask)
             );
+            $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
             $this->log('Call Integration');
 
             // Create the Chat request we will be sending.
-            $chatResponse = $this->integration->handleCompletion($prompt, $this->registered_tools, $extraAgentArgs);
-            $this->log("Finished Integration with {$chatResponse->finishReason()}");
+            $this->integration->handleCompletion($pendingAgentTask);
+//            $this->log("Finished Integration with {$chatResponse->finishReason()}");
 
-            switch ($chatResponse->finishReason()) {
-                case ResponseType::TOOL_CALL:
-                    $this->handleTools($chatResponse);
+            switch ($pendingAgentTask->currentIteration()->finishReason()) {
+                case FinishReason::TOOL_CALL:
+                    $pendingAgentTask->middleware()->executeStartToolCallPipeline($pendingAgentTask);
+                    $this->handleTools($pendingAgentTask);
+                    $pendingAgentTask->middleware()->executeEndToolCallPipeline($pendingAgentTask);
                     break;
-                case ResponseType::STOP:
-                    return $chatResponse->content();
+                case FinishReason::STOP:
+                    $pendingAgentTask->middleware()->executeAgentFinishPipeline($pendingAgentTask);
+
+                    return $pendingAgentTask;
                 default:
-                    throw new UnknownFinishReasonException("{$chatResponse->finishReason()} is not a valid finish reason.");
+                    throw new UnknownFinishReasonException("{$pendingAgentTask->currentIteration()->finishReason()} is not a valid finish reason.");
             }
+            $pendingAgentTask->middleware()->executeEndIterationPipeline($pendingAgentTask);
         }
     }
 
@@ -189,13 +189,16 @@ class Agent
     /**
      * Retrieves the prompt view, based on the provided inputs.
      *
-     * @param  array  $inputs  The inputs for the prompt.
+     * @param  PendingAgentTask  $pendingAgentTask  The inputs for the prompt.
      * @return string The rendered prompt view.
      *
      * @throws Throwable
      */
-    public function getPrompt(array $inputs): string
+    public function getPrompt(PendingAgentTask $pendingAgentTask): string
     {
+
+        $inputs = $pendingAgentTask->inputs();
+
         $toolNames = array_keys($this->tools);
 
         if (isset($inputs['image'])) {
@@ -215,31 +218,23 @@ class Agent
     /**
      * Handles the AI response tool calls.
      *
-     * @param  Response  $response  The response message object.
+     * @param  PendingAgentTask  $pendingAgentTask
      *
      * @throws Throwable
      */
-    private function handleTools(Response $response): void
+    private function handleTools(PendingAgentTask $pendingAgentTask): void
     {
 
-        $messageData = [
-            'role' => $response->role(),
-            'content' => $response->content(),
-        ];
+        $response = $pendingAgentTask->currentIteration()->getResponse()->toArray();
 
-        if ($response->toolCall() !== []) {
-            $toolCall = $response->toolCall();
-            $toolResult = $this->executeToolCall($toolCall);
 
-            // Append Message Data to Tool Call
-            $messageData['role'] = 'tool';
-            $messageData['tool_call_id'] = $toolCall['id'];
-            $messageData['tool_name'] = $toolCall['function']['name'];
-            $messageData['tool_arguments'] = $toolCall['function']['arguments'];
-            $messageData['tool_content'] = $toolResult;
+        if (!empty($response['tool_call_id'])) {
+            $toolResult = $this->executeToolCall($response);
+
+            $response['tool_content'] = $toolResult;
         }
 
-        $this->memory->create(Message::make($messageData));
+        $this->memory->create(Message::make($response));
 
     }
 
@@ -261,8 +256,8 @@ class Agent
 
         try {
             return $this->call(
-                $toolCall['function']['name'],
-                json_decode($toolCall['function']['arguments'], true, 512, JSON_THROW_ON_ERROR)
+                $toolCall['tool_name'],
+                json_decode($toolCall['tool_arguments'], true, 512, JSON_THROW_ON_ERROR)
             );
 
         } catch (Exception $e) {

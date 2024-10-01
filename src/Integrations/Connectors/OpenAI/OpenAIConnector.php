@@ -10,6 +10,7 @@ use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
+use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ValidateOutputRequest;
@@ -28,23 +29,20 @@ class OpenAIConnector extends Connector implements Integration
 
     protected int $requestTimeout = 120;
 
-    /**
-     * Handles the request to generate a chat response.
-     *
-     * @param  Message[]  $prompt  The chat prompt.
-     * @param  Tool[]  $tools  Tools the agent has access to.
-     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
-     *
-     * @throws FatalRequestException
-     * @throws RequestException
-     */
+
     public function handleCompletion(
-        array $prompt,
-        array $tools = [],
-        array $extraAgentArgs = []
-    ): Response {
-        return $this->send(new ChatRequest($prompt, $tools, $extraAgentArgs))->dto();
+        PendingAgentTask $pendingAgentTask
+    ): PendingAgentTask {
+
+        $agentResponse = $this->send(new ChatRequest(
+            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
+            tools: $pendingAgentTask->tools(),
+            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
+                           ))->dto();
+
+        $pendingAgentTask->currentIteration()->setResponse($agentResponse);
+
+        return $pendingAgentTask;
     }
 
     /**
@@ -52,7 +50,7 @@ class OpenAIConnector extends Connector implements Integration
      *
      * @param Message $message The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
+     * @return Message The response from the chat request.
      *
      * @throws FatalRequestException
      * @throws RequestException
@@ -60,8 +58,14 @@ class OpenAIConnector extends Connector implements Integration
     public function handleValidationCompletion(
         Message $message,
         array $extraAgentArgs = []
-    ): Response {
-        return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
+    ): Message {
+        $response = $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
+
+        dd(
+            $response
+        );
+
+        return Message::make();
     }
 
     public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse

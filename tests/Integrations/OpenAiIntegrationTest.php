@@ -7,6 +7,7 @@ declare(strict_types=1);
     use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agents\Agent;
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\OutputSchema\Concerns\HasOutputSchema;
     use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
@@ -15,9 +16,11 @@ declare(strict_types=1);
 
     class OpenAiTestAgent extends Agent
     {
+        use HasOutputSchema;
+
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function registerOutputSchema(): array
+        protected function defaultOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -36,17 +39,21 @@ declare(strict_types=1);
     $agent = new OpenAiTestAgent;
     $agentResponse = $agent->handle(['input' => 'hello!']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    $agentResponseArray = $agentResponse->toArray();
+
+    expect($agentResponseArray['content'])->toBeArray()
+                                          ->and($agentResponseArray['content'])->toHaveKey('answer');
 });
 
 test('uses tools', function () {
 
     class OpenAiToolTestAgent extends Agent
     {
+        use HasOutputSchema;
+
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function registerOutputSchema(): array
+        protected function defaultOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -77,6 +84,8 @@ test('uses tools', function () {
     $agent = new OpenAiToolTestAgent;
     $agentResponse = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    $agentResponseArray = $agentResponse->toArray();
+
+    expect($agentResponseArray['content'])->toBeArray()
+        ->and($agentResponseArray['content'])->toHaveKey('answer');
 });

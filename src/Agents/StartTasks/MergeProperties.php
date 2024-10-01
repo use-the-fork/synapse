@@ -16,7 +16,7 @@
 
             $agent = $pendingAgentTask->getAgent();
 
-            $agent->middleware()
+            $pendingAgentTask->middleware()
                   ->merge($agent->middleware());
 
             return $pendingAgentTask;
