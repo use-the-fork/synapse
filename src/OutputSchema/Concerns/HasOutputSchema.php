@@ -7,10 +7,10 @@ namespace UseTheFork\Synapse\OutputSchema\Concerns;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 use UseTheFork\Synapse\Enums\PipeOrder;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
-use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 
 /**
  * Indicates if the agent has an output schema.

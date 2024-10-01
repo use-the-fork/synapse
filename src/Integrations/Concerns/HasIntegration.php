@@ -6,9 +6,9 @@ namespace UseTheFork\Synapse\Integrations\Concerns;
 
 use Saloon\Http\Connector;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 
 trait HasIntegration
 {

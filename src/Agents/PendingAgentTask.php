@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse\Agents;
 use Illuminate\Support\Collection;
 use UseTheFork\Synapse\Agents\StartTasks\BootTraits;
 use UseTheFork\Synapse\Agents\StartTasks\MergeProperties;
-use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
+use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 
 class PendingAgentTask
 {

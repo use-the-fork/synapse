@@ -2,7 +2,7 @@
 
     declare(strict_types=1);
 
-    namespace UseTheFork\Synapse\Traits\Agent;
+    namespace UseTheFork\Synapse\Agents\Traits;
 
     use UseTheFork\Synapse\Helpers\MiddlewarePipeline;
 

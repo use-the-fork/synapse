@@ -7,16 +7,15 @@ namespace UseTheFork\Synapse\Agents;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
+use UseTheFork\Synapse\Agents\Traits\HasLogging;
+use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Memory\Concerns\HasMemory;
 use UseTheFork\Synapse\Tools\Concerns\HasTools;
-use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
-use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 
 class Agent
 {
@@ -103,8 +102,6 @@ class Agent
                 $this->getPrompt($pendingAgentTask)
             );
             $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
-
-            $this->log('Call Integration');
 
             // Create the Chat request we will be sending.
             $this->integration->handleCompletion($pendingAgentTask);
