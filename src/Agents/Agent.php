@@ -10,7 +10,6 @@ use Throwable;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
-use UseTheFork\Synapse\Integrations\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
@@ -109,7 +108,7 @@ class Agent
 
             // Create the Chat request we will be sending.
             $this->integration->handleCompletion($pendingAgentTask);
-//            $this->log("Finished Integration with {$chatResponse->finishReason()}");
+            //            $this->log("Finished Integration with {$chatResponse->finishReason()}");
 
             switch ($pendingAgentTask->currentIteration()->finishReason()) {
                 case FinishReason::TOOL_CALL:
@@ -210,7 +209,6 @@ class Agent
             ...$this->extraInputs,
             // We return both Memory With Messages and without.
             ...$this->memory->asInputs(),
-            'outputSchema' => $this->getOutputSchema(),
             'tools' => $toolNames,
         ])->render();
     }
@@ -218,7 +216,6 @@ class Agent
     /**
      * Handles the AI response tool calls.
      *
-     * @param  PendingAgentTask  $pendingAgentTask
      *
      * @throws Throwable
      */
@@ -227,8 +224,7 @@ class Agent
 
         $response = $pendingAgentTask->currentIteration()->getResponse()->toArray();
 
-
-        if (!empty($response['tool_call_id'])) {
+        if (! empty($response['tool_call_id'])) {
             $toolResult = $this->executeToolCall($response);
 
             $response['tool_content'] = $toolResult;

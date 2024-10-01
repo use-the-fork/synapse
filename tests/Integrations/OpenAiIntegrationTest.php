@@ -12,7 +12,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
 
-    test('Connects', function () {
+test('Connects', function () {
 
     class OpenAiTestAgent extends Agent
     {
@@ -43,6 +43,26 @@ declare(strict_types=1);
 
     expect($agentResponseArray['content'])->toBeArray()
                                           ->and($agentResponseArray['content'])->toHaveKey('answer');
+});
+
+test('Connects With OutputSchema', function () {
+
+    class OpenAiTestAgent extends Agent
+    {
+
+        protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+    }
+
+    MockClient::global([
+        ChatRequest::class => MockResponse::fixture('openai/simple'),
+    ]);
+
+    $agent = new OpenAiTestAgent;
+    $agentResponse = $agent->handle(['input' => 'hello!']);
+
+    $agentResponseArray = $agentResponse->toArray();
+    expect($agentResponseArray['content'])->not->toBeArray();
 });
 
 test('uses tools', function () {
