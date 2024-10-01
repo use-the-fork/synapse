@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\OutputSchema\Concerns;
+namespace UseTheFork\Synapse\OutputSchema\Traits;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;

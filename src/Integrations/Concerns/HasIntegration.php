@@ -8,7 +8,6 @@ use Saloon\Http\Connector;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 
 trait HasIntegration
 {
@@ -28,11 +27,6 @@ trait HasIntegration
     public function initializeIntegration(): void
     {
         $this->integration = $this->registerIntegration();
-    }
-
-    public function handleValidationCompletion(Message $message, array $extraAgentArgs): Message
-    {
-        return $this->integration->handleValidationCompletion($message, $extraAgentArgs);
     }
 
     /**

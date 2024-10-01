@@ -7,7 +7,7 @@ declare(strict_types=1);
     use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agents\Agent;
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\OutputSchema\Concerns\HasOutputSchema;
+    use UseTheFork\Synapse\OutputSchema\Traits\HasOutputSchema;
     use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
