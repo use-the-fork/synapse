@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agents;
+namespace UseTheFork\Synapse;
 
 use Exception;
 use InvalidArgumentException;
 use Throwable;
+use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Agents\Traits\HasLogging;
 use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
 use UseTheFork\Synapse\Enums\FinishReason;

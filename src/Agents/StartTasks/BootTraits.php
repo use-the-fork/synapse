@@ -5,7 +5,6 @@
     namespace UseTheFork\Synapse\Agents\StartTasks;
 
 
-    use UseTheFork\Synapse\Agents\Agent;
     use UseTheFork\Synapse\Agents\PendingAgentTask;
     use UseTheFork\Synapse\Helpers\Helpers;
 

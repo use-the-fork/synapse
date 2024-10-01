@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Agents;
 
 use Illuminate\Support\Collection;
+use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Agents\StartTasks\BootTraits;
 use UseTheFork\Synapse\Agents\StartTasks\MergeProperties;
 use UseTheFork\Synapse\Agents\Traits\HasMiddleware;

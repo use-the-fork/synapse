@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use UseTheFork\Synapse\Agents\Agent;
-use UseTheFork\Synapse\Memory\CollectionMemory;
-use UseTheFork\Synapse\Memory\Contracts\Memory;
-use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Memory\Contracts\Memory;
+    use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 
-it('can do a simple query', function (): void {
+    it('can do a simple query', function (): void {
 
     class CollectionMemoryAgent extends Agent
     {
