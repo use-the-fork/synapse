@@ -7,10 +7,10 @@ declare(strict_types=1);
     use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agent;
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\OutputSchema\Traits\HasOutputSchema;
-    use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
     test('Connects', function () {
 

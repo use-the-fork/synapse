@@ -10,15 +10,13 @@ use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
-use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Integrations\ValueObjects\Response;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/OpenAI/OpenAIConnector.php
 class OpenAIConnector extends Connector implements Integration

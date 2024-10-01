@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\Helpers;
 
 use Closure;
 use ReflectionClass;
-use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 
 /**
  * @internal

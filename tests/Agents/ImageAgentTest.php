@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
+	use Saloon\Http\Faking\MockClient;
+	use Saloon\Http\Faking\MockResponse;
+	use UseTheFork\Synapse\Agent;
+	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+	use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('can handle image input', function (): void {
+	test('can handle image input', function (): void {
 
     MockClient::global([
         ChatRequest::class => MockResponse::fixture('agents/image-agent/message-1'),

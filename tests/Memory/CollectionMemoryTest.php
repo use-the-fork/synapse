@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Memory\CollectionMemory;
-    use UseTheFork\Synapse\Memory\Contracts\Memory;
-    use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Memory\Contracts\Memory;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    it('can do a simple query', function (): void {
+it('can do a simple query', function (): void {
 
     class CollectionMemoryAgent extends Agent
     {
@@ -31,8 +31,8 @@ declare(strict_types=1);
     }
 
     $agent = new CollectionMemoryAgent;
-    $agentResponse = $agent->handle(['query' => 'hello this a test']);
+    $message = $agent->handle(['query' => 'hello this a test']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    expect($message)->toBeArray()
+        ->and($message)->toHaveKey('answer');
 });

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\OutputSchema\ValueObjects;
+namespace UseTheFork\Synapse\ValueObject;
 
 use InvalidArgumentException;
-use UseTheFork\Synapse\ValueObject\ValueObject;
 
 class SchemaRule extends ValueObject
 {

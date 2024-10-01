@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Helpers;
 
-use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Enums\PipeOrder;
 
 class MiddlewarePipeline

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Saloon\Http\Connector;
-use UseTheFork\Synapse\Agents\Traits\HasLogging;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Traits\Agent\UseLogging;
 
 #[Description('Useful for getting the contents of a webpage.')]
 abstract class BaseTool implements Tool
 {
-    use HasLogging;
+    use UseLogging;
 
     /**
      * The AI integration that this Tool should use when needed.

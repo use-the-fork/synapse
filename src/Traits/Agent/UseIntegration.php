@@ -2,21 +2,24 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Integrations\Concerns;
+namespace UseTheFork\Synapse\Traits\Agent;
 
-use Saloon\Http\Connector;
-use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
+
+use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Traits\hasIntegration;
+use UseTheFork\Synapse\Traits\HasMiddleware;
 
-trait HasIntegration
+trait UseIntegration
 {
     use HasMiddleware;
+    use HasIntegration;
 
     /**
      * The integration that this Model should use
      */
-    protected Connector $integration;
+    protected Integration $integration;
 
     /**
      * Initializes the integration by registering it.
@@ -35,9 +38,9 @@ trait HasIntegration
      * This method creates a new instance of a `Integration` class and
      * returns it as the integration object.
      *
-     * @return Connector The integration object.
+     * @return Integration The integration object.
      */
-    protected function registerIntegration(): Connector
+    protected function registerIntegration(): Integration
     {
         return new OpenAIConnector;
     }

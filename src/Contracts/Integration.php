@@ -2,22 +2,18 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Integrations\Contracts;
+namespace UseTheFork\Synapse\Contracts;
 
-use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Integrations\ValueObjects\Response;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 interface Integration
 {
     /**
      * Handles the request to generate a chat response.
      *
-     * @param  Message[]  $prompt  The chat prompt.
-     * @param  Tool[]  $tools  Tools the agent has access to.
-     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
+     * @param  PendingAgentTask  $pendingAgentTask  The chat prompt.
      */
     public function handleCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 

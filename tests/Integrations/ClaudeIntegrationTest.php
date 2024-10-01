@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Connector;
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-    use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
+use Saloon\Http\Connector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
+use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Connects', function (): void {
+test('Connects', function (): void {
 
     class ClaudeTestAgent extends Agent
     {
@@ -42,10 +42,10 @@ declare(strict_types=1);
     ]);
 
     $agent = new ClaudeTestAgent;
-    $agentResponse = $agent->handle(['input' => 'hello!']);
+    $message = $agent->handle(['input' => 'hello!']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    expect($message)->toBeArray()
+        ->and($message)->toHaveKey('answer');
 });
 
 test('uses tools', function (): void {
@@ -89,8 +89,8 @@ test('uses tools', function (): void {
     ]);
 
     $agent = new ClaudeToolTestAgent;
-    $agentResponse = $agent->handle(['input' => 'search google for the current president of the united states.']);
+    $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    expect($message)->toBeArray()
+        ->and($message)->toHaveKey('answer');
 });

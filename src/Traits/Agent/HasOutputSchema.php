@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\OutputSchema\Traits;
+namespace UseTheFork\Synapse\Traits\Agent;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;
-use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Traits\HasMiddleware;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Enums\PipeOrder;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
+use UseTheFork\Synapse\Traits\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 /**
  * Indicates if the agent has an output schema.
@@ -46,9 +46,9 @@ trait HasOutputSchema
 
                     $currentResponse = $pendingAgentTask->currentIteration()->getResponse();
                     $updatedResponse = Message::make([
-                                                         ...$currentResponse->toArray(),
-                                                         'content' => $validator->validated()
-                                                     ]);
+                        ...$currentResponse->toArray(),
+                        'content' => $validator->validated(),
+                    ]);
                     $pendingAgentTask->currentIteration()->setResponse($updatedResponse);
 
                     return $pendingAgentTask;
@@ -95,7 +95,6 @@ trait HasOutputSchema
     {
 
         $agent = $pendingAgentTask->getAgent();
-        $agent->
 
         $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
             'outputRules' => $this->getOutputSchema(),
@@ -108,7 +107,7 @@ trait HasOutputSchema
             'content' => $prompt,
         ]);
 
-        return $this->integration->handleValidationCompletion($prompt);
+        return $agent->integration()->handleValidationCompletion($prompt);
     }
 
     /**
@@ -138,8 +137,8 @@ trait HasOutputSchema
      */
     public function bootHasOutputSchema(PendingAgentTask $pendingAgentTask): void
     {
-        $this->middleware()->onStartThread(fn(PendingAgentTask $pendingAgentTask) => $this->addOutputSchema($pendingAgentTask), 'addOutputSchema');
-        $this->middleware()->onEndThread(fn(PendingAgentTask $pendingAgentTask) => $this->doValidateOutputSchema($pendingAgentTask), 'doValidateOutputSchema', PipeOrder::LAST);
+        $this->middleware()->onStartThread(fn (PendingAgentTask $pendingAgentTask) => $this->addOutputSchema($pendingAgentTask), 'addOutputSchema');
+        $this->middleware()->onEndThread(fn (PendingAgentTask $pendingAgentTask) => $this->doValidateOutputSchema($pendingAgentTask), 'doValidateOutputSchema', PipeOrder::LAST);
     }
 
     /**

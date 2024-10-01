@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agents\Traits;
+namespace UseTheFork\Synapse\Traits\Agent;
 
 use Illuminate\Support\Facades\Log;
-use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Enums\PipeOrder;
+use UseTheFork\Synapse\Traits\HasMiddleware;
 
-trait HasLogging
+trait UseLogging
 {
     use HasMiddleware;
 
