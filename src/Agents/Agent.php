@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse;
+namespace UseTheFork\Synapse\Agents;
 
 use Exception;
 use InvalidArgumentException;
 use Throwable;
+use UseTheFork\Synapse\Agents\StartTasks\BootTraits;
+use UseTheFork\Synapse\Agents\StartTasks\MergeProperties;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Integrations\Concerns\HasIntegration;
 use UseTheFork\Synapse\Integrations\Enums\ResponseType;
@@ -16,6 +18,7 @@ use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Memory\Concerns\HasMemory;
 use UseTheFork\Synapse\OutputSchema\Concerns\HasOutputSchema;
 use UseTheFork\Synapse\Tools\Concerns\HasTools;
+use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 
 class Agent
@@ -25,6 +28,7 @@ class Agent
         HasMemory,
         HasOutputSchema,
         HasTools;
+    use HasMiddleware;
 
     /**
      * a keyed array of values to be used as extra inputs that are passed to the prompt when it is generated.
@@ -46,7 +50,17 @@ class Agent
      */
     public function __construct()
     {
+
         $this->initializeAgent();
+
+    }
+
+    /**
+     * Create a new PendingAgentTask
+     */
+    public function createPendingAgentTask($input): PendingAgentTask
+    {
+        return new PendingAgentTask($this, $input);
     }
 
     /**
@@ -85,7 +99,11 @@ class Agent
      */
     protected function getAnswer(?array $input, ?array $extraAgentArgs = []): string
     {
+        $pendingAgentTask = $this->createPendingAgentTask($input);
+
         while (true) {
+
+            $pendingAgentTask->middleware()->executeStartTaskPipeline($pendingAgentTask);
             $this->memory->load();
 
             $prompt = $this->parsePrompt(

@@ -6,7 +6,7 @@ use Saloon\Http\Connector;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Agents\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
@@ -14,7 +14,7 @@ use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 
-test('Connects', function () {
+test('Connects', function (): void {
 
     class ClaudeTestAgent extends Agent
     {
@@ -48,7 +48,7 @@ test('Connects', function () {
         ->and($agentResponse)->toHaveKey('answer');
 });
 
-test('uses tools', function () {
+test('uses tools', function (): void {
 
     class ClaudeToolTestAgent extends Agent
     {
@@ -79,7 +79,7 @@ test('uses tools', function () {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest) {
+        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $count = count($pendingRequest->body()->get('messages'));
 
             return MockResponse::fixture("claude/uses-tools/message-{$count}");

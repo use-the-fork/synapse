@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agents;
+namespace UseTheFork\Synapse\Templates;
 
-use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Agents\Agent;
 use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
-use UseTheFork\Synapse\Tools\FirecrawlTool;
 
 class KnowledgeGraphExtractionAgent extends Agent
 {

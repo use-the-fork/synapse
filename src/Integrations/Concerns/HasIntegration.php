@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Integrations\Concerns;
 
 use Saloon\Http\Connector;
+use UseTheFork\Synapse\Agents\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 
 trait HasIntegration
 {
+    use HasMiddleware;
+
     /**
      * The integration that this Model should use
      */
@@ -36,5 +40,12 @@ trait HasIntegration
     protected function registerIntegration(): Connector
     {
         return new OpenAIConnector;
+    }
+
+    public function bootHasIntegration(): void
+    {
+//        $this->middleware()->onStartThread(fn() => {}, 'initializeIntegration');
+
+        dd(1);
     }
 }
