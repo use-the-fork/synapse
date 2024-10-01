@@ -15,12 +15,14 @@ class CurrentIteration
 
     protected ?Message $agentResponseMessage = null;
 
+    protected int $iterationCount = 1;
+
     public function finishReason(): FinishReason
 	{
 		return FinishReason::from($this->agentResponseMessage->finishReason());
 	}
 
-    public function getResponse(): Message
+    public function getResponse(): Message|null
 	{
 		return $this->agentResponseMessage;
 	}
@@ -48,5 +50,15 @@ class CurrentIteration
     public function getExtraAgentArgs(): array
 	{
 		return $this->extraAgentArgs;
+	}
+
+    public function getIterationCount(): int
+	{
+		return $this->iterationCount;
+	}
+
+    public function incrementIterationCount(): void
+	{
+		$this->iterationCount++;
 	}
 }

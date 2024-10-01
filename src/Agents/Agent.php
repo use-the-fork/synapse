@@ -73,7 +73,7 @@ class Agent
      *
      * @param  array|null  $input  The input array.
      * @param  array|null  $extraAgentArgs  The extra agent arguments array.
-     * @return array The validated response array.
+     * @return Message The final message from the agent.
      *
      * @throws Throwable
      */
@@ -105,7 +105,7 @@ class Agent
 
             // Create the Chat request we will be sending.
             $this->integration->handleCompletion($pendingAgentTask);
-            //            $this->log("Finished Integration with {$chatResponse->finishReason()}");
+            $pendingAgentTask->middleware()->executeIntegrationResponsePipeline($pendingAgentTask);
 
             switch ($pendingAgentTask->currentIteration()->finishReason()) {
                 case FinishReason::TOOL_CALL:
@@ -245,8 +245,6 @@ class Agent
      */
     private function executeToolCall(array $toolCall): string
     {
-        $this->log('Tool Call', $toolCall);
-
         try {
             return $this->call(
                 $toolCall['tool_name'],

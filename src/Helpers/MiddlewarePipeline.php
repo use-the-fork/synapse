@@ -19,6 +19,8 @@ class MiddlewarePipeline
      */
     protected Pipeline $startIterationPipeline;
 
+    protected Pipeline $integrationResponsePipeline;
+
     /**
      * Firers before a tool call is made
      */
@@ -51,6 +53,8 @@ class MiddlewarePipeline
 
         $this->startIterationPipeline = new Pipeline;
 
+        $this->integrationResponsePipeline = new Pipeline;
+
         // Tool call hooks here
         $this->startToolCallPipeline = new Pipeline;
         $this->endToolCallPipeline = new Pipeline;
@@ -66,6 +70,21 @@ class MiddlewarePipeline
     public function onStartThread(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         $this->startThreadPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
+            $result = $callable($pendingAgentTask);
+
+            if ($result instanceof PendingAgentTask) {
+                return $result;
+            }
+
+            return $pendingAgentTask;
+        }, $name, $order);
+
+        return $this;
+    }
+
+    public function onIntegrationResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    {
+        $this->integrationResponsePipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
 
             if ($result instanceof PendingAgentTask) {
@@ -173,6 +192,11 @@ class MiddlewarePipeline
         return $this->startThreadPipeline->process($pendingAgent);
     }
 
+    public function executeIntegrationResponsePipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    {
+        return $this->integrationResponsePipeline->process($pendingAgent);
+    }
+
     public function executeStartToolCallPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
     {
         return $this->startToolCallPipeline->process($pendingAgent);
@@ -206,6 +230,11 @@ class MiddlewarePipeline
     public function getStartThreadPipeline(): Pipeline
     {
         return $this->startThreadPipeline;
+    }
+
+    public function getIntegrationResponsePipeline(): Pipeline
+    {
+        return $this->integrationResponsePipeline;
     }
 
     public function getStartToolCallPipeline(): Pipeline
@@ -250,6 +279,11 @@ class MiddlewarePipeline
             $middlewarePipeline->getStartThreadPipeline()->getPipes()
         );
 
+        $integrationResponsePipes = array_merge(
+            $this->getIntegrationResponsePipeline()->getPipes(),
+            $middlewarePipeline->getIntegrationResponsePipeline()->getPipes()
+        );
+
         $startIterationPipes = array_merge(
             $this->getStartIterationPipeline()->getPipes(),
             $middlewarePipeline->getStartIterationPipeline()->getPipes()
@@ -281,6 +315,8 @@ class MiddlewarePipeline
         );
 
         $this->startThreadPipeline->setPipes($starThreadPipes);
+
+        $this->integrationResponsePipeline->setPipes($integrationResponsePipes);
 
         $this->startIterationPipeline->setPipes($startIterationPipes);
 

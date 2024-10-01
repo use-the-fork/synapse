@@ -50,16 +50,9 @@ final class SerperTool extends BaseTool implements Tool
         int $numberOfResults = 10,
     ): string {
 
-        $this->log('Entered', [
-            'query' => $query,
-            'searchType' => $searchType,
-            'numberOfResults' => $numberOfResults,
-        ]);
-
         $serperConnector = new SerperConnector($this->apiKey);
         $serperSearchRequest = new SerperSearchRequest($query, $searchType, $numberOfResults);
         $results = $serperConnector->send($serperSearchRequest)->array();
-        $this->log('Finished', ['results' => $results]);
 
         return $this->parseResults($results);
     }

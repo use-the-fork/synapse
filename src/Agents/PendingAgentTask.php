@@ -44,7 +44,7 @@ class PendingAgentTask
         return $this->agent;
     }
 
-    public function currentIteration(): CurrentIteration
+    public function currentIteration(): CurrentIteration|null
     {
         return $this->currentIteration;
     }
