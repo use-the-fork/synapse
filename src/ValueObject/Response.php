@@ -3,9 +3,7 @@
 declare(strict_types=1);
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\Integrations\ValueObjects;
-
-use UseTheFork\Synapse\ValueObject\ArrayValueObject;
+namespace UseTheFork\Synapse\ValueObject;
 
 class Response extends ArrayValueObject
 {

@@ -15,9 +15,9 @@ use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
 use UseTheFork\Synapse\ValueObject\Message;
+use UseTheFork\Synapse\ValueObject\Response;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/Claude/ClaudeAIConnector.php
 class ClaudeAIConnector extends Connector implements Integration
