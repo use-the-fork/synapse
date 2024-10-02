@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\Memory;
 
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\Models\AgentMemory;
+use UseTheFork\Synapse\Models\AgentMemory;
 use UseTheFork\Synapse\ValueObject\Message;
 
 class DatabaseMemory implements Memory
