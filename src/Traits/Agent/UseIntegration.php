@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Agent;
 
-
 use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Traits\HasIntegration;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
 trait UseIntegration
 {
-    use HasMiddleware;
     use HasIntegration;
+    use HasMiddleware;
 
     /**
      * The integration that this Model should use
@@ -42,10 +41,10 @@ trait UseIntegration
      */
     protected function registerIntegration(): Integration
     {
-        return new OpenAIConnector;
+        return new OpenAIIntegration;
     }
 
-    public function bootHasIntegration(PendingAgentTask $pendingAgent): void
+    public function bootHasIntegration(PendingAgentTask $pendingAgentTask): void
     {
         $this->middleware()->onStartThread(fn () => $this->initializeIntegration(), 'initializeIntegration');
     }

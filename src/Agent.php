@@ -105,7 +105,7 @@ class Agent
             $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
             // Create the Chat request we will be sending.
-            $this->integration->handleCompletion($pendingAgentTask);
+            $this->integration->handlePendingAgentTaskCompletion($pendingAgentTask);
             $pendingAgentTask->middleware()->executeIntegrationResponsePipeline($pendingAgentTask);
 
             switch ($pendingAgentTask->currentIteration()->finishReason()) {

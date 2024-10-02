@@ -15,7 +15,7 @@ interface Integration
      *
      * @param  PendingAgentTask  $pendingAgentTask  The chat prompt.
      */
-    public function handleCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask;
+    public function handlePendingAgentTaskCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 
     /**
      * Forces a model to output its response in a specific format.
@@ -24,7 +24,7 @@ interface Integration
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Message The response from the chat request.
      */
-    public function handleValidationCompletion(Message $message, array $extraAgentArgs = []): Message;
+    public function handleCompletion(Message $message, array $extraAgentArgs = []): Message;
 
     /**
      * Creates an embedding vector representing the input text.
