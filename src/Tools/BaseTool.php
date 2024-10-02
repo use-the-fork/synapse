@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use Saloon\Http\Connector;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 
@@ -12,15 +12,7 @@ abstract class BaseTool implements Tool
 {
     use LogsAgentActivity;
 
-    /**
-     * The AI integration that this Tool should use when needed.
-     */
-    protected Connector $integration;
-
-    public function __construct()
-    {
-        $this->initializeTool();
-    }
+    protected PendingAgentTask $pendingAgentTask;
 
     /**
      * Initializes the tool.
@@ -28,10 +20,11 @@ abstract class BaseTool implements Tool
     protected function initializeTool(): void {}
 
     /**
-     * Sets the AI integration that this Tool should use when needed.
+     * Handle the boot lifecycle hook
      */
-    public function setIntegration(Connector $connector): void
+    public function boot(PendingAgentTask $pendingAgentTask): void
     {
-        $this->integration = $connector;
+        $this->pendingAgentTask = $pendingAgentTask;
+        $this->initializeTool();
     }
 }
