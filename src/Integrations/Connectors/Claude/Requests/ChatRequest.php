@@ -9,9 +9,9 @@ use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\ResponseType;
-use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 use UseTheFork\Synapse\ValueObject\Message;
 use UseTheFork\Synapse\ValueObject\Response as IntegrationResponse;
+use UseTheFork\Synapse\ValueObject\ToolCall;
 
 class ChatRequest extends Request implements HasBody
 {
@@ -177,7 +177,7 @@ class ChatRequest extends Request implements HasBody
             if ($choice['type'] === 'text') {
                 $message['content'] = $choice['text'];
             } else {
-                $message['tool_call'] = ToolCallValueObject::make([
+                $message['tool_call'] = ToolCall::make([
                     'id' => $choice['id'],
                     'type' => 'function',
                     'function' => [

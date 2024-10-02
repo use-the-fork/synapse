@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Saloon\Http\Connector;
-use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 
-#[Description('Useful for getting the contents of a webpage.')]
 abstract class BaseTool implements Tool
 {
     use LogsAgentActivity;
