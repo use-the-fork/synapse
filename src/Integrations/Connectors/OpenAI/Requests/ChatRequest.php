@@ -10,7 +10,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Constants\Role;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\Message;
 
 class ChatRequest extends Request implements HasBody
 {

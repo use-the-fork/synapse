@@ -15,8 +15,8 @@ use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
+use UseTheFork\Synapse\ValueObject\Message;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/OpenAI/OpenAIConnector.php
 class OpenAIConnector extends Connector implements Integration
@@ -27,7 +27,6 @@ class OpenAIConnector extends Connector implements Integration
 
     protected int $requestTimeout = 120;
 
-
     public function handleCompletion(
         PendingAgentTask $pendingAgentTask
     ): PendingAgentTask {
@@ -36,7 +35,7 @@ class OpenAIConnector extends Connector implements Integration
             prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
             tools: $pendingAgentTask->tools(),
             extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
-                           ))->dto();
+        ))->dto();
 
         $pendingAgentTask->currentIteration()->setResponse($agentResponse);
 
@@ -46,7 +45,7 @@ class OpenAIConnector extends Connector implements Integration
     /**
      * Forces a model to output its response in a specific format.
      *
-     * @param Message $message The chat message that is used for validation.
+     * @param  Message  $message  The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Message The response from the chat request.
      *

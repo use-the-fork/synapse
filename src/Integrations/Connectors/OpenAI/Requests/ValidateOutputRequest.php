@@ -11,8 +11,8 @@ use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response as IntegrationResponse;
+use UseTheFork\Synapse\ValueObject\Message;
 
 class ValidateOutputRequest extends Request implements HasBody
 {

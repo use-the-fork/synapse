@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Contracts;
 
 use UseTheFork\Synapse\Agent\PendingAgentTask;
-use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
+use UseTheFork\Synapse\ValueObject\Message;
 
 interface Integration
 {

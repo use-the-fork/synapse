@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\Agent;
 
 
 use UseTheFork\Synapse\Enums\FinishReason;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\Message;
 
 class CurrentIteration
 {

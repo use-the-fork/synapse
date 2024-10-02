@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Integrations\ValueObjects;
-
-use UseTheFork\Synapse\ValueObject\ArrayValueObject;
+namespace UseTheFork\Synapse\ValueObject;
 
 class EmbeddingResponse extends ArrayValueObject
 {
