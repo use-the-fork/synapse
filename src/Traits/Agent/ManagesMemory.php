@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Agent;
 
-use UseTheFork\Synapse\Memory\Contracts\Memory;
+use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Memory\DatabaseMemory;
 use UseTheFork\Synapse\ValueObject\Message;
 

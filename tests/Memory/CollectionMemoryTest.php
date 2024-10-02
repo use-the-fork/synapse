@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Memory\CollectionMemory;
-use UseTheFork\Synapse\Memory\Contracts\Memory;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 it('can do a simple query', function (): void {
