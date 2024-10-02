@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Memory;
 
 use Illuminate\Support\Collection;
-use UseTheFork\Synapse\Integrations\Enums\Role;
+use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Memory\Contracts\Memory;
 

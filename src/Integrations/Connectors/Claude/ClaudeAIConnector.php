@@ -11,13 +11,13 @@ use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
 use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Integrations\ValueObjects\EmbeddingResponse;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/Claude/ClaudeAIConnector.php
 class ClaudeAIConnector extends Connector implements Integration

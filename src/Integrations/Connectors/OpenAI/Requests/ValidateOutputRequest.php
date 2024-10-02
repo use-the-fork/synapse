@@ -9,8 +9,8 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
-use UseTheFork\Synapse\Integrations\Enums\ResponseType;
-use UseTheFork\Synapse\Integrations\Enums\Role;
+use UseTheFork\Synapse\Constants\Role;
+use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response as IntegrationResponse;
 
@@ -56,7 +56,7 @@ class ValidateOutputRequest extends Request implements HasBody
     {
         $data = $response->array();
         $message = $data['choices'][0]['message'] ?? [];
-        $message['finish_reason'] = ResponseType::STOP;
+        $message['finish_reason'] = FinishReason::STOP;
 
         return IntegrationResponse::makeOrNull($message);
     }

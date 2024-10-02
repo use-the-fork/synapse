@@ -6,10 +6,10 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Contracts\Tool;
+use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
 use UseTheFork\Synapse\Services\SerpApi\SerpApiConnector;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
-use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Google News using a query.')]
 final class SerpAPIGoogleNewsTool extends BaseTool implements Tool

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Integrations\Enums;
+namespace UseTheFork\Synapse\Constants;
 
 final class Role
 {

@@ -6,10 +6,10 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Contracts\Tool;
+use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Crunchbase\CrunchbaseConnector;
 use UseTheFork\Synapse\Services\Crunchbase\Requests\CrunchbaseRequest;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
-use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Crunchbase for Company data.')]
 final class CrunchbaseTool extends BaseTool implements Tool

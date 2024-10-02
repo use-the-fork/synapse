@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Agent;
 
+
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 

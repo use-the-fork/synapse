@@ -7,8 +7,8 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
-use UseTheFork\Synapse\Integrations\Enums\ResponseType;
-use UseTheFork\Synapse\Integrations\Enums\Role;
+use UseTheFork\Synapse\Constants\Role;
+use UseTheFork\Synapse\Enums\ResponseType;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Integrations\ValueObjects\Response as IntegrationResponse;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
@@ -79,7 +79,7 @@ class ChatRequest extends Request implements HasBody
 
         $payload = collect();
         foreach ($this->prompt as $message) {
-            switch ($message->role()) {
+            switch (Role::from($message->role())) {
                 case Role::SYSTEM:
                     $this->system = $message->content();
                     break;

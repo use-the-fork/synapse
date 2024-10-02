@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\Agent\HasOutputSchema;
-    use UseTheFork\Synapse\ValueObject\SchemaRule;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\Traits\Agent\HasOutputSchema;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Connects', function () {
+test('Connects', function (): void {
 
     class OpenAiTestAgent extends Agent
     {
@@ -37,35 +37,33 @@ declare(strict_types=1);
     ]);
 
     $agent = new OpenAiTestAgent;
-    $agentResponse = $agent->handle(['input' => 'hello!']);
+    $message = $agent->handle(['input' => 'hello!']);
 
-    $agentResponseArray = $agentResponse->toArray();
+    $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-                                          ->and($agentResponseArray['content'])->toHaveKey('answer');
+        ->and($agentResponseArray['content'])->toHaveKey('answer');
 });
 
-test('Connects With OutputSchema', function () {
+test('Connects With OutputSchema', function (): void {
 
-    class OpenAiTestAgent extends Agent
+    class OpenAiConnectsTestAgent extends Agent
     {
-
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
     }
 
     MockClient::global([
         ChatRequest::class => MockResponse::fixture('openai/simple'),
     ]);
 
-    $agent = new OpenAiTestAgent;
-    $agentResponse = $agent->handle(['input' => 'hello!']);
+    $agent = new OpenAiConnectsTestAgent;
+    $message = $agent->handle(['input' => 'hello!']);
 
-    $agentResponseArray = $agentResponse->toArray();
+    $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->not->toBeArray();
 });
 
-test('uses tools', function () {
+test('uses tools', function (): void {
 
     class OpenAiToolTestAgent extends Agent
     {
@@ -93,7 +91,7 @@ test('uses tools', function () {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest) {
+        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $count = count($pendingRequest->body()->get('messages'));
 
             return MockResponse::fixture("openai/uses-tools/message-{$count}");
@@ -102,9 +100,9 @@ test('uses tools', function () {
     ]);
 
     $agent = new OpenAiToolTestAgent;
-    $agentResponse = $agent->handle(['input' => 'search google for the current president of the united states.']);
+    $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
-    $agentResponseArray = $agentResponse->toArray();
+    $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer');

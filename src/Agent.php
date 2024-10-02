@@ -8,12 +8,12 @@ use Exception;
 use InvalidArgumentException;
 use Throwable;
 use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
-use UseTheFork\Synapse\Integrations\Enums\Role;
 use UseTheFork\Synapse\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Memory\Concerns\HasMemory;
-use UseTheFork\Synapse\Tools\Concerns\HasTools;
+use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
+use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\Agent\UseIntegration;
 use UseTheFork\Synapse\Traits\Agent\UseLogging;
 use UseTheFork\Synapse\Traits\HasMiddleware;
@@ -22,8 +22,8 @@ class Agent
 {
     use UseIntegration,
         UseLogging,
-        HasMemory,
-        HasTools;
+		ManagesMemory,
+        ManagesTools;
     use HasMiddleware;
 
     /**

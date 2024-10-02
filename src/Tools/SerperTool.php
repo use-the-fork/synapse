@@ -6,10 +6,10 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Contracts\Tool;
+use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Services\Serper\SerperConnector;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
-use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Google using a query.')]
 final class SerperTool extends BaseTool implements Tool

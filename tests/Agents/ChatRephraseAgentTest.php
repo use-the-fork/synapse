@@ -5,9 +5,9 @@ declare(strict_types=1);
 	use Saloon\Http\Faking\MockClient;
 	use Saloon\Http\Faking\MockResponse;
 	use Saloon\Http\PendingRequest;
+	use UseTheFork\Synapse\Constants\Role;
+	use UseTheFork\Synapse\Enums\ResponseType;
 	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-	use UseTheFork\Synapse\Integrations\Enums\ResponseType;
-	use UseTheFork\Synapse\Integrations\Enums\Role;
 	use UseTheFork\Synapse\Integrations\ValueObjects\Message;
 	use UseTheFork\Synapse\Templates\ChatRephraseAgent;
 

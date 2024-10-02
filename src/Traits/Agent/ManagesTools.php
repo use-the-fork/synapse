@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 //Credits to https://github.com/bootstrapguru/dexor
 
-namespace UseTheFork\Synapse\Tools\Concerns;
+namespace UseTheFork\Synapse\Traits\Agent;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ use UseTheFork\Synapse\Attributes\Description;
  * @author Hermann D. Schimpf (hschimpf)
  * Refer https://github.com/openai-php/client/issues/285#issuecomment-1883895076
  */
-trait HasTools
+trait ManagesTools
 {
     protected array $registered_tools = [];
 

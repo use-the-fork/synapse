@@ -8,7 +8,7 @@ namespace UseTheFork\Synapse\Traits\Agent;
 use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\OpenAIConnector;
-use UseTheFork\Synapse\Traits\hasIntegration;
+use UseTheFork\Synapse\Traits\HasIntegration;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
 trait UseIntegration

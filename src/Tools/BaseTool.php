@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\Tools;
 
 use Saloon\Http\Connector;
 use UseTheFork\Synapse\Attributes\Description;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Traits\Agent\UseLogging;
 
 #[Description('Useful for getting the contents of a webpage.')]
