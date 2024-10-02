@@ -9,7 +9,7 @@ use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Enums\PipeOrder;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
-trait UseLogging
+trait LogsAgentActivity
 {
     use HasMiddleware;
 
@@ -80,7 +80,7 @@ trait UseLogging
         ]);
     }
 
-    public function bootHasLogging(): void
+    public function bootLogsAgentActivity(): void
     {
         $this->middleware()->onStartThread(fn (PendingAgentTask $pendingAgentTask) => $this->logStartThread($pendingAgentTask), 'logStartThread', PipeOrder::LAST);
         $this->middleware()->onStartIteration(fn (PendingAgentTask $pendingAgentTask) => $this->logStartIteration($pendingAgentTask), 'logStartIteration', PipeOrder::LAST);

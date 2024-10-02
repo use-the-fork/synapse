@@ -10,7 +10,7 @@ use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Traits\HasIntegration;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
-trait UseIntegration
+trait ManagesIntegration
 {
     use HasIntegration;
     use HasMiddleware;
@@ -44,7 +44,7 @@ trait UseIntegration
         return new OpenAIIntegration;
     }
 
-    public function bootHasIntegration(PendingAgentTask $pendingAgentTask): void
+    public function bootManagesIntegration(PendingAgentTask $pendingAgentTask): void
     {
         $this->middleware()->onStartThread(fn () => $this->initializeIntegration(), 'initializeIntegration');
     }

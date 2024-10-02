@@ -15,7 +15,7 @@ use UseTheFork\Synapse\ValueObject\SchemaRule;
 /**
  * Indicates if the agent has an output schema.
  */
-trait HasOutputSchema
+trait ValidatesOutputSchema
 {
     use HasMiddleware;
 
@@ -135,7 +135,7 @@ trait HasOutputSchema
     /**
      * sets the initial output schema type this agent will use.
      */
-    public function bootHasOutputSchema(PendingAgentTask $pendingAgentTask): void
+    public function bootValidatesOutputSchema(PendingAgentTask $pendingAgentTask): void
     {
         $this->middleware()->onStartThread(fn (PendingAgentTask $pendingAgentTask) => $this->addOutputSchema($pendingAgentTask), 'addOutputSchema');
         $this->middleware()->onEndThread(fn (PendingAgentTask $pendingAgentTask) => $this->doValidateOutputSchema($pendingAgentTask), 'doValidateOutputSchema', PipeOrder::LAST);

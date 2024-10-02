@@ -11,20 +11,20 @@ use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
+use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
+use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
 use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
-use UseTheFork\Synapse\Traits\Agent\UseIntegration;
-use UseTheFork\Synapse\Traits\Agent\UseLogging;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
 
 class Agent
 {
-    use UseIntegration,
-        UseLogging,
-		ManagesMemory,
-        ManagesTools;
     use HasMiddleware;
+    use LogsAgentActivity,
+        ManagesIntegration,
+        ManagesMemory,
+        ManagesTools;
 
     /**
      * a keyed array of values to be used as extra inputs that are passed to the prompt when it is generated.

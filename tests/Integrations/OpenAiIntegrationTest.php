@@ -9,14 +9,14 @@ use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\HasOutputSchema;
+use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 test('Connects', function (): void {
 
     class OpenAiTestAgent extends Agent
     {
-        use HasOutputSchema;
+        use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
@@ -67,7 +67,7 @@ test('uses tools', function (): void {
 
     class OpenAiToolTestAgent extends Agent
     {
-        use HasOutputSchema;
+        use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
