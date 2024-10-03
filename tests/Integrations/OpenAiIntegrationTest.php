@@ -84,15 +84,14 @@ test('uses tools', function (): void {
 
         protected function resolveTools(): array
         {
-            return [SerperTool::class];
+            return [new SerperTool];
         }
     }
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
-            $count = count($pendingRequest->body()->get('messages'));
-
-            return MockResponse::fixture("openai/uses-tools/message-{$count}");
+            $hash = md5(json_encode($pendingRequest->body()->get('messages')));
+            return MockResponse::fixture("openai/uses-tools/message-{$hash}");
         },
         SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),
     ]);

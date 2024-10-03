@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Thu, 03 Oct 2024 17:21:04 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "523",
+        "Connection": "keep-alive"
+    },
+    "data": "{\"id\":\"msg_01BCmUueKuM5LNUnyVsYvVaE\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"Certainly! I'll use the Google search tool to find information about the current president of the United States for you.\"},{\"type\":\"tool_use\",\"id\":\"toolu_019TcpRFgSYNTm48xupzaqH1\",\"name\":\"serper_tool\",\"input\":{\"query\":\"current president of the United States\",\"searchType\":\"search\"}}],\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":517,\"output_tokens\":101}}"
+}

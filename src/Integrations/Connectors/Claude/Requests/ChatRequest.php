@@ -8,6 +8,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Constants\Role;
+use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Enums\ResponseType;
 use UseTheFork\Synapse\ValueObject\Message;
 use UseTheFork\Synapse\ValueObject\Response as IntegrationResponse;
@@ -79,7 +80,7 @@ class ChatRequest extends Request implements HasBody
 
         $payload = collect();
         foreach ($this->prompt as $message) {
-            switch (Role::from($message->role())) {
+            switch ($message->role()) {
                 case Role::SYSTEM:
                     $this->system = $message->content();
                     break;
@@ -102,7 +103,7 @@ class ChatRequest extends Request implements HasBody
         return $payload->values()->toArray();
     }
 
-    private function formatAssistantMessage(array $message): array
+    private function formatAssistantMessage(Message $message): array
     {
         $message = $message->toArray();
 
@@ -160,12 +161,12 @@ class ChatRequest extends Request implements HasBody
     private function convertResponseType($stopReason): string
     {
         return match ($stopReason) {
-            'tool_use' => ResponseType::TOOL_CALL,
-            default => ResponseType::STOP,
+            'tool_use' => FinishReason::TOOL_CALL->value,
+            default => FinishReason::STOP->value,
         };
     }
 
-    public function createDtoFromResponse(Response $response): IntegrationResponse
+    public function createDtoFromResponse(Response $response): Message
     {
         $data = $response->array();
         $message = [];
@@ -177,17 +178,14 @@ class ChatRequest extends Request implements HasBody
             if ($choice['type'] === 'text') {
                 $message['content'] = $choice['text'];
             } else {
-                $message['tool_call'] = ToolCall::make([
-                    'id' => $choice['id'],
-                    'type' => 'function',
-                    'function' => [
-                        'name' => $choice['name'],
-                        'arguments' => json_encode($choice['input']),
-                    ],
-                ])->toArray();
+                $message['tool_call_id'] = $choice['id'];
+                $message['tool_name'] = $choice['name'];
+                $message['tool_arguments'] = json_encode($choice['input']);
+                $message['role'] = Role::TOOL;
             }
         }
 
-        return IntegrationResponse::makeOrNull($message);
+
+        return Message::make($message);
     }
 }

@@ -10,17 +10,14 @@ use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
-use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
 use UseTheFork\Synapse\ValueObject\Message;
-use UseTheFork\Synapse\ValueObject\Response;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/Claude/ClaudeAIConnector.php
-class ClaudeAIConnector extends Connector implements Integration
+class ClaudeAIConnector extends Connector
 {
     use AcceptsJson, AlwaysThrowOnErrors, HasTimeout;
 
@@ -31,37 +28,20 @@ class ClaudeAIConnector extends Connector implements Integration
     /**
      * Handles the request to generate a chat response.
      *
-     * @param  Message[]  $prompt  The chat prompt.
-     * @param  Tool[]  $tools  Tools the agent has access to.
+     * @param  array<Message>  $prompt  The chat prompt.
+     * @param  array<Tool>  $tools  Tools the agent has access to.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
+     * @return Message The response from the chat request.
      *
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleCompletion(
+    public function doCompletionRequest(
         array $prompt,
         array $tools = [],
         array $extraAgentArgs = []
-    ): Response {
+    ): Message {
         return $this->send(new ChatRequest($prompt, $tools, $extraAgentArgs))->dto();
-    }
-
-    /**
-     * Handles the request to generate a chat response.
-     *
-     * @param  Message  $message  The chat message that is used for validation.
-     * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
-     * @return Response The response from the chat request.
-     *
-     * @throws FatalRequestException
-     * @throws RequestException
-     */
-    public function handleValidationCompletion(
-        Message $message,
-        array $extraAgentArgs = []
-    ): Response {
-        return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }
 
     /**

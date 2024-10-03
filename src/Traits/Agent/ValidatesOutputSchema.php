@@ -23,11 +23,11 @@ trait ValidatesOutputSchema
      * Performs validation on the given response.
      *
      * @param  PendingAgentTask  $pendingAgentTask  The response to validate.
-     * @return mixed If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
+     * @return PendingAgentTask If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
      *
      * @throws Throwable
      */
-    protected function doValidateOutputSchema(PendingAgentTask $pendingAgentTask): mixed
+    protected function doValidateOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
 
         $response = $pendingAgentTask->currentIteration()->getResponse()->content();
@@ -61,6 +61,7 @@ trait ValidatesOutputSchema
                 $errorsAsString = "### Here are the errors that Failed validation \n".implode("\n", $errorsFlat)."\n\n";
             }
             $response = $this->doRevalidate($response, $pendingAgentTask, $errorsAsString);
+
             //since all integrations return a Message value object we need to grab the content
             $response = $response->content();
         }
@@ -87,11 +88,11 @@ trait ValidatesOutputSchema
      *
      * @param  string  $result  The result to revalidate.
      * @param  string  $errors  The validation errors.
-     * @return mixed The result of handling the validation completion.
+     * @return Message The result of handling the validation completion.
      *
      * @throws Throwable
      */
-    protected function doRevalidate(string $result, PendingAgentTask $pendingAgentTask, string $errors = ''): mixed
+    protected function doRevalidate(string $result, PendingAgentTask $pendingAgentTask, string $errors = ''): Message
     {
 
         $agent = $pendingAgentTask->getAgent();
@@ -107,7 +108,7 @@ trait ValidatesOutputSchema
             'content' => $prompt,
         ]);
 
-        return $agent->integration()->handleValidationCompletion($prompt);
+        return $agent->integration()->handleCompletion($prompt);
     }
 
     /**

@@ -20,6 +20,7 @@ use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
+use UseTheFork\Synapse\Contracts\Tool;
 
 /**
  * Trait HasTools
@@ -36,7 +37,7 @@ trait ManagesTools
     /**
      * Registers the tools.
      *
-     * @return array The registered tools.
+     * @return array<Tool> The registered tools.
      */
     protected function resolveTools(): array
     {
@@ -136,16 +137,13 @@ trait ManagesTools
 
         foreach ($this->resolveTools() as $tool) {
 
-            if (! class_exists($tool)) {
-                continue;
-            }
 
             $reflection = new ReflectionClass($tool);
 
-            $toolName = Str::snake(basename(str_replace('\\', '/', $tool)));
+            $toolName = Str::snake(basename(str_replace('\\', '/', $tool::class)));
 
             if (! $reflection->hasMethod('handle')) {
-                Log::warning(sprintf('Tool class %s has no "handle" method', $tool));
+                Log::warning(sprintf('Tool class %s has no "handle" method', $tool::class));
 
                 continue;
             }
@@ -170,9 +168,9 @@ trait ManagesTools
                 $toolDefinition['function']['parameters'] = $this->parseToolParameters($reflection, $paramTags);
             }
 
-            $tool = new $tool;
-            $tool->boot($pendingAgentTask);
             $tool->setPendingAgentTask($pendingAgentTask);
+            $tool->boot($pendingAgentTask);
+
 
             $pendingAgentTask->addTool($toolName, [
                 'definition' => $toolDefinition,
