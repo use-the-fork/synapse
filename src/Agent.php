@@ -9,20 +9,24 @@ use InvalidArgumentException;
 use Throwable;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
+use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
+use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
 
-class Agent
+class Agent implements HasIntegration, HasMemory
 {
     use HasMiddleware;
     use LogsAgentActivity,
         ManagesIntegration,
+        ManagesMemory,
         ManagesTools;
 
     /**
@@ -93,13 +97,6 @@ class Agent
             $promptChain = $this->parsePrompt(
                 $this->getPrompt($pendingAgentTask)
             );
-
-            //load the Iteration Memory and spread to combine it with the current prompt chain.
-            $iterationMemory = $this->parsePrompt($pendingAgentTask->getIterationMemory());
-            $promptChain = [
-                ...$promptChain,
-                ...$iterationMemory
-            ];
 
             $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
@@ -173,7 +170,7 @@ class Agent
             $prompts[] = Message::make($messageData);
         }
 
-        if ($prompts === [] && !empty(trim($prompt))) {
+        if ($prompts === [] && (trim($prompt) !== '' && trim($prompt) !== '0')) {
             // The whole document is a prompt
             $prompts[] = Message::make([
                 'role' => Role::USER,
@@ -227,7 +224,7 @@ class Agent
             $response['tool_content'] = $toolResult;
         }
 
-        $pendingAgentTask->iterationMemory()->create(Message::make($response));
+        $pendingAgentTask->currentIteration()->setResponse(Message::make($response));
     }
 
     /**

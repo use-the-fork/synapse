@@ -5,15 +5,15 @@ declare(strict_types=1);
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Contracts\Integration;
-    use UseTheFork\Synapse\Integrations\ClaudeIntegration;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\ClaudeIntegration;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-    use UseTheFork\Synapse\ValueObject\SchemaRule;
+use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 test('Connects', function (): void {
 
@@ -23,7 +23,7 @@ test('Connects', function (): void {
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function defaultIntegration(): Integration
+        public function resolveIntegration(): Integration
         {
             return new ClaudeIntegration;
         }
@@ -61,7 +61,7 @@ test('uses tools', function (): void {
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function defaultIntegration(): Integration
+        public function resolveIntegration(): Integration
         {
             return new ClaudeIntegration;
         }

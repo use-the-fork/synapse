@@ -6,11 +6,9 @@ namespace UseTheFork\Synapse\AgentTask;
 
 use Illuminate\Support\Collection;
 use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\AgentTask;
 use UseTheFork\Synapse\AgentTask\StartTasks\BootTraits;
 use UseTheFork\Synapse\AgentTask\StartTasks\MergeProperties;
 use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
 class PendingAgentTask
@@ -23,16 +21,11 @@ class PendingAgentTask
 
     protected CurrentIteration $currentIteration;
 
-    protected Memory $iterationMemory;
-
     protected array $tools = [];
 
     public function __construct(Agent $agent, array $inputs, array $extraAgentArgs = [])
     {
         $this->agent = $agent;
-
-        $this->iterationMemory = new CollectionMemory();
-        $this->iterationMemory->boot();
 
         $this->currentIteration = new CurrentIteration;
         $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
@@ -62,15 +55,9 @@ class PendingAgentTask
         $this->tools[$key] = $value;
     }
 
-    public function iterationMemory(): Memory
+    public function memory(): Memory
     {
-        return $this->iterationMemory;
-    }
-
-    public function getIterationMemory(): string
-    {
-        $inputs = $this->iterationMemory->asInputs();
-        return $inputs['memoryWithMessages'];
+        return $this->memory;
     }
 
     public function tools(): array

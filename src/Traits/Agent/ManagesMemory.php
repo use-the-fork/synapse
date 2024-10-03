@@ -6,11 +6,15 @@ namespace UseTheFork\Synapse\Traits\Agent;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
+use UseTheFork\Synapse\Memory\CollectionMemory;
 
 trait ManagesMemory
 {
+
+    use HasMiddleware;
+
     /**
      * The memory that this Model should use
      */
@@ -31,19 +35,32 @@ trait ManagesMemory
      *
      * @return Memory The memory object of the agent
      */
-    public function getMemory(): Memory
+    public function memory(): Memory
     {
         return $this->memory;
+    }
+
+    public function loadMemory(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        $payload = $this->memory->asInputs();
+
+        $pendingAgentTask->addInput('memory', $payload['memory']);
+        $pendingAgentTask->addInput('memoryWithMessages', $payload['memoryWithMessages']);
+
+        return $pendingAgentTask;
     }
 
     /**
      * Adds a message to the current memory
      *
-     * @param  Message  $message  The message to add to the memory.
+     * @param  PendingAgentTask  $pendingAgentTask  The message to add to the memory.
      */
-    public function addMessageToMemory(Message $message): void
+    public function addMessageToMemory(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
+        $message = $pendingAgentTask->currentIteration()->getResponse();
         $this->memory->create($message);
+
+        return $pendingAgentTask;
     }
 
     /**
@@ -59,23 +76,27 @@ trait ManagesMemory
     /**
      * Initializes the memory by registering the memory object.
      */
-    protected function initializeMemory(): void
+    protected function initializeMemory(PendingAgentTask $pendingAgentTask): void
     {
-        $this->memory = $this->defaultMemory();
+        $this->memory = $this->resolveMemory();
+        $this->memory->boot($pendingAgentTask);
     }
 
     /**
      * Registers the memory type.
      *
-     * @return Memory The registered memory instance.
+     * @return Memory The registered memory instance
      */
-    public function defaultMemory(): Memory
+    public function resolveMemory(): Memory
     {
-        return new CollectionMemory;
+      return new CollectionMemory;
     }
 
     public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
     {
-        $this->middleware()->onStartThread(fn () => $this->initializeMemory(), 'initializeMemory');
+        $this->middleware()->onStartThread(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
+        $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
+        $this->middleware()->onEndIteration(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryEndIteration');
+        $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryAgentFinish');
     }
 }

@@ -28,7 +28,7 @@ trait ManagesIntegration
      */
     public function initializeIntegration(): void
     {
-        $this->integration = $this->defaultIntegration();
+        $this->integration = $this->resolveIntegration();
     }
 
     /**
@@ -39,7 +39,7 @@ trait ManagesIntegration
      *
      * @return Integration The integration object.
      */
-    protected function defaultIntegration(): Integration
+    public function resolveIntegration(): Integration
     {
         return new OpenAIIntegration;
     }

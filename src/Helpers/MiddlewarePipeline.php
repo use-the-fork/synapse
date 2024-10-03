@@ -325,7 +325,7 @@ class MiddlewarePipeline
 
         $this->agentFinishPipeline->setPipes($agentFinishPipes);
 
-        $this->startIterationPipeline->setPipes($endIterationPipes);
+        $this->endIterationPipeline->setPipes($endIterationPipes);
 
         $this->endThreadPipeline->setPipes($endThreadPipes);
 
