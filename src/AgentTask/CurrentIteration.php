@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agent;
+namespace UseTheFork\Synapse\AgentTask;
 
 
 use UseTheFork\Synapse\Enums\FinishReason;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
@@ -18,7 +18,7 @@ final class FirecrawlTool extends BaseTool implements Tool
     {
         $this->apiKey = config('synapse.services.firecrawl.key');
 
-        if(empty($this->apiKey)) {
+        if (empty($this->apiKey)) {
             throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
         }
 
@@ -28,9 +28,8 @@ final class FirecrawlTool extends BaseTool implements Tool
     /**
      * Useful for getting the contents of a webpage.
      *
-     * @param string $url The full URL to get the contents from.
-     * @param string $extractionPrompt A prompt describing what information to extract from the page
-     *
+     * @param  string  $url  The full URL to get the contents from.
+     * @param  string  $extractionPrompt  A prompt describing what information to extract from the page
      */
     public function handle(
         string $url,

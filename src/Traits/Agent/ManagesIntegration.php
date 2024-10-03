@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Agent;
 
-use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Traits\HasIntegration;

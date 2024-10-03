@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Templates;
 
-use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\AgentTask;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 class ChatRephraseAgent extends Agent

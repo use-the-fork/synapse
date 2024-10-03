@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 	use Saloon\Http\Faking\MockClient;
 	use Saloon\Http\Faking\MockResponse;
-	use UseTheFork\Synapse\Agent;
+	use UseTheFork\Synapse\AgentTask;
 	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 	use UseTheFork\Synapse\ValueObject\SchemaRule;
 

@@ -2,10 +2,10 @@
 
     declare(strict_types=1);
 
-    namespace UseTheFork\Synapse\Agent\StartTasks;
+    namespace UseTheFork\Synapse\AgentTask\StartTasks;
 
 
-    use UseTheFork\Synapse\Agent\PendingAgentTask;
+    use UseTheFork\Synapse\AgentTask\PendingAgentTask;
     use UseTheFork\Synapse\Helpers\Helpers;
 
     class BootTraits

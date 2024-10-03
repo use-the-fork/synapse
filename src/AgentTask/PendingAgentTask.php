@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agent;
+namespace UseTheFork\Synapse\AgentTask;
 
 use Illuminate\Support\Collection;
 use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Agent\StartTasks\BootTraits;
-use UseTheFork\Synapse\Agent\StartTasks\MergeProperties;
+use UseTheFork\Synapse\AgentTask;
+use UseTheFork\Synapse\AgentTask\StartTasks\BootTraits;
+use UseTheFork\Synapse\AgentTask\StartTasks\MergeProperties;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
 class PendingAgentTask

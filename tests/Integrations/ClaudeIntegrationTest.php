@@ -6,7 +6,6 @@ use Saloon\Http\Connector;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;

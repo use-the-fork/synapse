@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
-use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;

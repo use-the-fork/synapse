@@ -19,7 +19,7 @@ use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
-use UseTheFork\Synapse\Agent\PendingAgentTask;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 
 /**
  * Trait HasTools

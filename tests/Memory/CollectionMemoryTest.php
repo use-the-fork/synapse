@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
