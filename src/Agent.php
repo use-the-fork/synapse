@@ -10,6 +10,7 @@ use Throwable;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
+use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
@@ -35,6 +36,11 @@ class Agent
      * The view to use when generating the prompt for this agent
      */
     protected string $promptView;
+
+    /**
+     * The maximum number "loops" that this agent should run
+     */
+    protected int $maximumIterations = 25;
 
     /**
      * Initializes the agent.
@@ -93,7 +99,7 @@ class Agent
     {
         $pendingAgentTask = $this->createPendingAgentTask($input, $extraAgentArgs);
 
-        while (true) {
+        for ($i = 1; $i <= $this->maximumIterations; $i++) {
 
             $pendingAgentTask->middleware()->executeStartIterationPipeline($pendingAgentTask);
             $this->memory->load();
@@ -122,6 +128,8 @@ class Agent
             }
             $pendingAgentTask->middleware()->executeEndIterationPipeline($pendingAgentTask);
         }
+
+        throw new MaximumIterationsException($this->maximumIterations);
     }
 
     /**
