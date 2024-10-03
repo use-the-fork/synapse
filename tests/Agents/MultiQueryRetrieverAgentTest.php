@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-	use Saloon\Http\Faking\MockClient;
-	use Saloon\Http\Faking\MockResponse;
-	use Saloon\Http\PendingRequest;
-	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-	use UseTheFork\Synapse\Templates\MultiQueryRetrieverAgent;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agents\MultiQueryRetrieverAgent;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 
-	it('can run the Multi Query Retriever Agent.', function () {
+it('can run the Multi Query Retriever Agent.', function (): void {
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest) {
+        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $count = count($pendingRequest->body()->get('messages'));
 
             return MockResponse::fixture("agents/multi-query-retriever-agent/message-{$count}");

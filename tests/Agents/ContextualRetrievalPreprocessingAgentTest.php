@@ -5,7 +5,7 @@ declare(strict_types=1);
     use Saloon\Http\Faking\MockClient;
     use Saloon\Http\Faking\MockResponse;
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Templates\ContextualRetrievalPreprocessingAgent;
+    use UseTheFork\Synapse\Agents\ContextualRetrievalPreprocessingAgent;
 
     it('can run the Knowledge Graph Extraction Agent.', function () {
 

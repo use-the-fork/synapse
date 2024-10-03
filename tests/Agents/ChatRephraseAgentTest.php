@@ -8,7 +8,7 @@ declare(strict_types=1);
 	use UseTheFork\Synapse\Constants\Role;
 	use UseTheFork\Synapse\Enums\ResponseType;
 	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-	use UseTheFork\Synapse\Templates\ChatRephraseAgent;
+	use UseTheFork\Synapse\Agents\ChatRephraseAgent;
 	use UseTheFork\Synapse\ValueObject\Message;
 
 	it('can run the Chat Rephrase Agent.', function () {

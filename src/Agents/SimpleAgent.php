@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Templates;
+namespace UseTheFork\Synapse\Agents;
 
-use UseTheFork\Synapse\AgentTask;
 use UseTheFork\Synapse\Tools\FirecrawlTool;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 

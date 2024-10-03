@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use UseTheFork\Synapse\Templates\KnowledgeGraphExtractionAgent;
+use UseTheFork\Synapse\Agents\KnowledgeGraphExtractionAgent;
 
 it('can run the Knowledge Graph Extraction Agent.', function (): void {
 
