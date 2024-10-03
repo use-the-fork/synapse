@@ -9,6 +9,4 @@ use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 interface Tool
 {
     public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask;
-
-    public function execute(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 }

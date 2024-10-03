@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Contracts;
 
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\ValueObject\Message;
 
 interface Memory
@@ -49,4 +50,11 @@ interface Memory
      * @param  array  $messages  The array of messages.
      */
     public function set(array $messages): void;
+
+    /**
+     * Boots the memory service.
+     *
+     * @param PendingAgentTask $pendingAgentTask
+     */
+    public function boot(PendingAgentTask $pendingAgentTask): void;
 }

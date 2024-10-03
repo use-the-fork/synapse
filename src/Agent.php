@@ -14,7 +14,6 @@ use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
-use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
@@ -24,7 +23,6 @@ class Agent
     use HasMiddleware;
     use LogsAgentActivity,
         ManagesIntegration,
-        ManagesMemory,
         ManagesTools;
 
     /**
@@ -52,7 +50,7 @@ class Agent
      */
     public function __construct()
     {
-        $this->initializeAgent();
+        $this->initializeIntegration();
     }
 
     /**
@@ -61,17 +59,6 @@ class Agent
     public function createPendingAgentTask(array $input, array $extraAgentArgs): PendingAgentTask
     {
         return new PendingAgentTask($this, $input, $extraAgentArgs);
-    }
-
-    /**
-     * Initialize the agent by calling initialization methods for integration, memory, tools, and output rules.
-     *
-     * @throws Throwable
-     */
-    protected function initializeAgent(): void
-    {
-        $this->initializeIntegration();
-        $this->initializeMemory();
     }
 
     /**
@@ -102,11 +89,18 @@ class Agent
         for ($i = 1; $i <= $this->maximumIterations; $i++) {
 
             $pendingAgentTask->middleware()->executeStartIterationPipeline($pendingAgentTask);
-            $this->memory->load();
 
             $promptChain = $this->parsePrompt(
                 $this->getPrompt($pendingAgentTask)
             );
+
+            //load the Iteration Memory and spread to combine it with the current prompt chain.
+            $iterationMemory = $this->parsePrompt($pendingAgentTask->getIterationMemory());
+            $promptChain = [
+                ...$promptChain,
+                ...$iterationMemory
+            ];
+
             $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
             // Create the Chat request we will be sending.
@@ -166,10 +160,10 @@ class Agent
             ];
             if ($tool) {
                 $tool = json_decode(base64_decode($tool), true);
-                $messageData['tool_call_id'] = $tool['id'];
-                $messageData['tool_name'] = $tool['name'] ?? null;
-                $messageData['tool_arguments'] = $tool['arguments'] ?? null;
-                $messageData['tool_content'] = $tool['content'] ?? null;
+                $messageData['tool_call_id'] = $tool['tool_call_id'];
+                $messageData['tool_name'] = $tool['tool_name'] ?? null;
+                $messageData['tool_arguments'] = $tool['tool_arguments'] ?? null;
+                $messageData['tool_content'] = $tool['tool_content'] ?? null;
             }
             if ($image) {
                 $image = json_decode(base64_decode($image), true);
@@ -179,7 +173,7 @@ class Agent
             $prompts[] = Message::make($messageData);
         }
 
-        if ($prompts === []) {
+        if ($prompts === [] && !empty(trim($prompt))) {
             // The whole document is a prompt
             $prompts[] = Message::make([
                 'role' => Role::USER,
@@ -212,8 +206,6 @@ class Agent
         return view($this->promptView, [
             ...$inputs,
             ...$this->extraInputs,
-            // We return both Memory With Messages and without.
-            ...$this->memory->asInputs(),
             'tools' => $toolNames,
         ])->render();
     }
@@ -235,8 +227,7 @@ class Agent
             $response['tool_content'] = $toolResult;
         }
 
-        $this->memory->create(Message::make($response));
-
+        $pendingAgentTask->iterationMemory()->create(Message::make($response));
     }
 
     /**

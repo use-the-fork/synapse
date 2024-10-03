@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Agent;
 
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\DatabaseMemory;
+use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\ValueObject\Message;
 
 trait ManagesMemory
@@ -48,7 +49,7 @@ trait ManagesMemory
     /**
      * Sets the memory with the given array of messages.
      *
-     * @param  array  $messages  The array of messages to be set in the memory.
+     * @param  array<Message>  $messages  The array of messages to be set in the memory.
      */
     public function setMemory(array $messages): void
     {
@@ -60,7 +61,7 @@ trait ManagesMemory
      */
     protected function initializeMemory(): void
     {
-        $this->memory = $this->registerMemory();
+        $this->memory = $this->defaultMemory();
     }
 
     /**
@@ -68,8 +69,13 @@ trait ManagesMemory
      *
      * @return Memory The registered memory instance.
      */
-    protected function registerMemory(): Memory
+    public function defaultMemory(): Memory
     {
-        return new DatabaseMemory;
+        return new CollectionMemory;
+    }
+
+    public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
+    {
+        $this->middleware()->onStartThread(fn () => $this->initializeMemory(), 'initializeMemory');
     }
 }

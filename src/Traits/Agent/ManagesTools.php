@@ -137,7 +137,6 @@ trait ManagesTools
 
         foreach ($this->resolveTools() as $tool) {
 
-
             $reflection = new ReflectionClass($tool);
 
             $toolName = Str::snake(basename(str_replace('\\', '/', $tool::class)));
@@ -168,9 +167,7 @@ trait ManagesTools
                 $toolDefinition['function']['parameters'] = $this->parseToolParameters($reflection, $paramTags);
             }
 
-            $tool->setPendingAgentTask($pendingAgentTask);
             $tool->boot($pendingAgentTask);
-
 
             $pendingAgentTask->addTool($toolName, [
                 'definition' => $toolDefinition,

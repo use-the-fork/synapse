@@ -16,7 +16,6 @@ final class SerperTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-
     public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
         $this->apiKey = config('synapse.services.serper.key');

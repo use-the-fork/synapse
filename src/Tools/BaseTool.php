@@ -6,27 +6,28 @@ namespace UseTheFork\Synapse\Tools;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
-use UseTheFork\Synapse\Traits\Makeable;
+use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 
 abstract class BaseTool implements Tool
 {
-    use Makeable;
+    use LogsAgentActivity;
 
     protected PendingAgentTask $pendingAgentTask;
 
     /**
-     * Handle the boot lifecycle hook
+     * Initializes the tool.
      */
-    public function setPendingAgentTask(PendingAgentTask $pendingAgentTask): void
-    {
-        $this->pendingAgentTask = $pendingAgentTask;
-    }
+    protected function initializeTool(): void {}
 
     /**
      * Handle the boot lifecycle hook
      */
-    public function execute(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
+        $this->pendingAgentTask = $pendingAgentTask;
+        $this->initializeTool();
+
         return $pendingAgentTask;
+
     }
 }
