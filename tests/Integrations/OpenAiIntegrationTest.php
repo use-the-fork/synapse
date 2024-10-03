@@ -6,7 +6,8 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
@@ -14,13 +15,13 @@ use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 test('Connects', function (): void {
 
-    class OpenAiTestAgent extends Agent
+    class OpenAiTestAgent extends Agent implements HasOutputSchema
     {
         use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function defaultOutputSchema(): array
+        public function defaultOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -65,13 +66,13 @@ test('Connects With OutputSchema', function (): void {
 
 test('uses tools', function (): void {
 
-    class OpenAiToolTestAgent extends Agent
+    class OpenAiToolTestAgent extends Agent implements HasOutputSchema
     {
         use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-        protected function defaultOutputSchema(): array
+        public function defaultOutputSchema(): array
         {
             return [
                 SchemaRule::make([
