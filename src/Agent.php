@@ -66,7 +66,6 @@ class Agent
     {
         $this->initializeIntegration();
         $this->initializeMemory();
-        $this->initializeTools();
     }
 
     /**
@@ -223,7 +222,7 @@ class Agent
         $response = $pendingAgentTask->currentIteration()->getResponse()->toArray();
 
         if (! empty($response['tool_call_id'])) {
-            $toolResult = $this->executeToolCall($response);
+            $toolResult = $this->executeToolCall($response, $pendingAgentTask);
 
             $response['tool_content'] = $toolResult;
         }
@@ -244,12 +243,13 @@ class Agent
      * @throws Exception If an error occurs while calling the tool function.
      * @throws Throwable If JSON decoding of the arguments fails.
      */
-    private function executeToolCall(array $toolCall): string
+    private function executeToolCall(array $toolCall, PendingAgentTask $pendingAgentTask): string
     {
         try {
             return $this->call(
+                $pendingAgentTask,
                 $toolCall['tool_name'],
-                json_decode($toolCall['tool_arguments'], true, 512, JSON_THROW_ON_ERROR)
+                json_decode($toolCall['tool_arguments'], true, 512, JSON_THROW_ON_ERROR),
             );
 
         } catch (Exception $e) {

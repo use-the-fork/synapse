@@ -5,48 +5,40 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Services\Serper\SerperConnector;
 
-#[Description('Search Google using a query.')]
 final class SerperTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    public function __construct(?string $apiKey = null)
-    {
 
-        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
-            $this->apiKey = $apiKey;
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        $this->apiKey = config('synapse.services.serper.key');
+
+        if(empty($this->apiKey)) {
+            throw new MissingApiKeyException('API (SERPER_API_KEY) key is required.');
         }
 
-        parent::__construct();
+        return $pendingAgentTask;
     }
 
-    protected function initializeTool(): void
-    {
-
-        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
-            return;
-        }
-
-        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.serper.key'))) {
-            $this->apiKey = config('synapse.services.serper.key');
-
-            return;
-        }
-        throw new MissingApiKeyException('API (SERPER_API_KEY) key is required.');
-    }
-
+    /**
+     * Search Google using a query.
+     *
+     * @param string $query the search query to execute.
+     * @param string $searchType the type of search must be one of `search`, `places`, `news`.  (usually search).
+     * @param int $numberOfResults the number of results to return must be one of `10`, `20`, `30`, `40`, `50` (usually `10`).
+     *
+     */
     public function handle(
-        #[Description('the search query to execute')]
         string $query,
-        #[Description('the type of search must be one of `search`, `places`, `news`.  (usually search)')]
         string $searchType = 'search',
-        #[Description('the number of results to return must be one of `10`, `20`, `30`, `40`, `50` (usually `10`).')]
         int $numberOfResults = 10,
     ): string {
 

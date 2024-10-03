@@ -49,6 +49,8 @@ abstract class TestCase extends Orchestra
             $config->set('synapse', $synapseConfig);
         });
 
+
+
         parent::getEnvironmentSetUp($app);
     }
 }

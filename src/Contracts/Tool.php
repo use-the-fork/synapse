@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Contracts;
 
-use Saloon\Http\Connector;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 
 interface Tool
 {
-    /**
-     * Sets the AI integration that this Tool should use when needed.
-     */
-    public function setIntegration(Connector $connector): void;
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask;
+
+    public function execute(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 }

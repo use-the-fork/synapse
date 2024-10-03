@@ -20,12 +20,11 @@ class PendingAgentTask
 
     protected CurrentIteration $currentIteration;
 
-    protected Collection $tools;
+    protected array $tools = [];
 
     public function __construct(Agent $agent, array $inputs, array $extraAgentArgs = [])
     {
         $this->agent = $agent;
-        $this->tools = collect();
 
         $this->currentIteration = new CurrentIteration;
         $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
@@ -45,14 +44,19 @@ class PendingAgentTask
         return $this->agent;
     }
 
-    public function currentIteration(): CurrentIteration|null
+    public function currentIteration(): ?CurrentIteration
     {
         return $this->currentIteration;
     }
 
+    public function addTool(string $key, array $value): void
+    {
+        $this->tools[$key] = $value;
+    }
+
     public function tools(): array
     {
-        return $this->tools->toArray();
+        return $this->tools;
     }
 
     public function inputs(): array
@@ -65,7 +69,7 @@ class PendingAgentTask
         return $this->inputs[$key];
     }
 
-    public function addInput(string $key,mixed $value): void
+    public function addInput(string $key, mixed $value): void
     {
         $this->inputs[$key] = $value;
     }

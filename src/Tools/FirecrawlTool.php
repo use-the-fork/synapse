@@ -4,53 +4,42 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
 use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
 
-#[Description('Useful for getting the contents of a webpage.')]
 final class FirecrawlTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    public function __construct(?string $apiKey = null)
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
+        $this->apiKey = config('synapse.services.firecrawl.key');
 
-        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
-            $this->apiKey = $apiKey;
+        if(empty($this->apiKey)) {
+            throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
         }
 
-        parent::__construct();
+        return $pendingAgentTask;
     }
 
-    protected function initializeTool(): void
-    {
-        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
-            return;
-        }
-
-        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.firecrawl.key'))) {
-            $this->apiKey = config('synapse.services.firecrawl.key');
-
-            return;
-        }
-        throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
-    }
-
+    /**
+     * Useful for getting the contents of a webpage.
+     *
+     * @param string $url The full URL to get the contents from.
+     * @param string $extractionPrompt A prompt describing what information to extract from the page
+     *
+     */
     public function handle(
-        #[Description('The full URL to get the contents from')]
         string $url,
-        #[Description('A prompt describing what information to extract from the page')]
         string $extractionPrompt,
     ): string {
 
-        $this->log('Entered', ['url' => $url, 'extractionPrompt' => $extractionPrompt]);
         $firecrawlConnector = new FirecrawlConnector($this->apiKey);
         $firecrawlRequest = new FirecrawlRequest($url, $extractionPrompt);
         $results = $firecrawlConnector->send($firecrawlRequest)->array();
-        $this->log('Finished');
 
         return $this->parseResults($results);
     }

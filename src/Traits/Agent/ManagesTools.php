@@ -8,11 +8,18 @@ namespace UseTheFork\Synapse\Traits\Agent;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser;
 use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Agent\PendingAgentTask;
 
 /**
  * Trait HasTools
@@ -22,14 +29,24 @@ use UseTheFork\Synapse\Attributes\Description;
  */
 trait ManagesTools
 {
-    protected array $registered_tools = [];
+    protected array $registeredTools = [];
 
     protected array $tools = [];
 
     /**
+     * Registers the tools.
+     *
+     * @return array The registered tools.
+     */
+    protected function resolveTools(): array
+    {
+        return [];
+    }
+
+    /**
      * Calls a registered tool with the given name and arguments.
      *
-     * @param  string  $tool_name  The name of the tool to call.
+     * @param  string  $toolName  The name of the tool to call.
      * @param  array|null  $arguments  The arguments to pass to the tool.
      * @return mixed The result of calling the tool, or null if the tool is not registered.
      *               If a required parameter is missing, a string error message is returned.
@@ -38,22 +55,24 @@ trait ManagesTools
      *
      * @throws ReflectionException
      */
-    public function call(string $tool_name, ?array $arguments = []): mixed
+    public function call(PendingAgentTask $pendingAgentTask, string $toolName, ?array $arguments = []): mixed
     {
-        if (null === $tool_class = $this->registered_tools[$tool_name]) {
+        if (null === $toolClass = $pendingAgentTask->tools()[$toolName]) {
             return null;
         }
-        $tool = $tool_class['tool'];
+        $tool = $toolClass['tool'];
 
-        $tool_class = new ReflectionClass($tool_class['tool']);
-        $reflectionMethod = $tool_class->getMethod('handle');
+        $toolClass = new ReflectionClass($toolClass['tool']);
+        $reflectionMethod = $toolClass->getMethod('handle');
 
         $params = [];
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $parameter_description = $this->getParameterDescription($reflectionParameter);
-            if (! array_key_exists($reflectionParameter->name, $arguments) && ! $reflectionParameter->isOptional() && ! $reflectionParameter->isDefaultValueAvailable()) {
-                return sprintf('Parameter %s(%s) is required for the tool %s', $reflectionParameter->name, $parameter_description, $tool_name);
-            }
+
+            //TODO: need to add relooping here.
+            //            $parameter_description = $this->getParameterDescription($reflectionParameter);
+            //            if (! array_key_exists($reflectionParameter->name, $arguments) && ! $reflectionParameter->isOptional() && ! $reflectionParameter->isDefaultValueAvailable()) {
+            //                return sprintf('Parameter %s(%s) is required for the tool %s', $reflectionParameter->name, $parameter_description, $tool_name);
+            //            }
 
             // check if parameter type is an Enum and add fetch a valid value
             if (($parameter_type = $reflectionParameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
@@ -66,22 +85,6 @@ trait ManagesTools
         }
 
         return $tool->handle(...$params);
-    }
-
-    /**
-     * Gets the description for a given ReflectionParameter.
-     *
-     * @param  ReflectionParameter  $reflectionParameter  The ReflectionParameter to get the description for.
-     * @return string The description of the parameter.
-     */
-    private function getParameterDescription(ReflectionParameter $reflectionParameter): string
-    {
-        $descriptions = $reflectionParameter->getAttributes(Description::class);
-        if ($descriptions !== []) {
-            return implode("\n", array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions));
-        }
-
-        return $this->getToolParameterType($reflectionParameter);
     }
 
     /**
@@ -123,13 +126,23 @@ trait ManagesTools
      *
      * @throws ReflectionException
      */
-    public function initializeTools(): void
+    public function initializeTools(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        foreach ($this->registerTools() as $tool) {
+
+        $lexer = new Lexer;
+        $constExprParser = new ConstExprParser;
+        $typeParser = new TypeParser($constExprParser);
+        $phpDocParser = new PhpDocParser($typeParser, $constExprParser);
+
+        foreach ($this->resolveTools() as $tool) {
+
+            if (! class_exists($tool)) {
+                continue;
+            }
 
             $reflection = new ReflectionClass($tool);
 
-            $tool_name = Str::snake(basename(str_replace('\\', '/', $tool::class)));
+            $toolName = Str::snake(basename(str_replace('\\', '/', $tool)));
 
             if (! $reflection->hasMethod('handle')) {
                 Log::warning(sprintf('Tool class %s has no "handle" method', $tool));
@@ -137,82 +150,89 @@ trait ManagesTools
                 continue;
             }
 
-            $tool_definition = [
+            $toolDefinition = [
                 'type' => 'function',
-                'function' => ['name' => $tool_name],
+                'function' => ['name' => $toolName],
             ];
 
-            // set function description, if it has one
-            if (($descriptions = $reflection->getAttributes(Description::class)) !== []) {
-                $tool_definition['function']['description'] = implode(
-                    separator: "\n",
-                    array: array_map(static fn ($td) => $td->newInstance()->value, $descriptions),
-                );
+            $tokens = new TokenIterator($lexer->tokenize($reflection->getMethod('handle')->getDocComment()));
+            $phpDocNode = $phpDocParser->parse($tokens); // PhpDocNode
+
+            //First we get the comment text block
+            $textNodes = array_filter($phpDocNode->children, fn ($node): bool => $node instanceof PhpDocTextNode && ! empty($node->text));
+
+            if ($textNodes !== []) {
+                $toolDefinition['function']['description'] = (string) $textNodes[0];
             }
 
             if ($reflection->getMethod('handle')->getNumberOfParameters() > 0) {
-                $tool_definition['function']['parameters'] = $this->parseToolParameters($reflection);
+                $paramTags = $phpDocNode->getParamTagValues();
+                $toolDefinition['function']['parameters'] = $this->parseToolParameters($reflection, $paramTags);
             }
 
-            $this->registered_tools[$tool_name] = [
-                'definition' => $tool_definition,
-                'tool' => $tool,
-            ];
-        }
-    }
+            $tool = new $tool;
+            $tool->boot($pendingAgentTask);
+            $tool->setPendingAgentTask($pendingAgentTask);
 
-    /**
-     * Registers the tools.
-     *
-     * @return array The registered tools.
-     */
-    protected function registerTools(): array
-    {
-        return [];
+            $pendingAgentTask->addTool($toolName, [
+                'definition' => $toolDefinition,
+                'tool' => $tool,
+            ]);
+
+        }
+
+        return $pendingAgentTask;
     }
 
     /**
      * Parses the parameters of a tool.
      *
      * @param  ReflectionClass  $reflectionClass  The tool reflection class.
+     * @param  array<ParamTagValueNode>  $paramTagValueNode  The Param tags that will be used to get the description.
      * @return array The parsed parameters of the tool.
      *
      * @throws ReflectionException
      */
-    private function parseToolParameters(ReflectionClass $reflectionClass): array
+    private function parseToolParameters(ReflectionClass $reflectionClass, array $paramTagValueNode): array
     {
         $parameters = ['type' => 'object'];
 
-        if (count($method_parameters = $reflectionClass->getMethod('handle')->getParameters()) > 0) {
+        if (count($methodParameters = $reflectionClass->getMethod('handle')->getParameters()) > 0) {
             $parameters['properties'] = [];
         }
 
-        foreach ($method_parameters as $method_parameter) {
-            $property = ['type' => $this->getToolParameterType($method_parameter)];
+        foreach ($methodParameters as $methodParameter) {
+
+            $property = ['type' => $this->getToolParameterType($methodParameter)];
 
             // set property description, if it has one
-            if (! empty($descriptions = $method_parameter->getAttributes(Description::class))) {
+            if (($descriptions = array_filter($paramTagValueNode, fn (ParamTagValueNode $paramTagValueNode): bool => $paramTagValueNode->parameterName == '$'.$methodParameter->getName())) !== []) {
                 $property['description'] = implode(
                     separator: "\n",
-                    array: array_map(static fn ($pd) => $pd->newInstance()->value, $descriptions),
+                    array: array_map(static fn (ParamTagValueNode $paramTagValueNode) => $paramTagValueNode->description, $descriptions),
                 );
             }
 
             // register parameter to the required properties list if it's not optional
-            if (! $method_parameter->isOptional()) {
+            if (! $methodParameter->isOptional()) {
                 $parameters['required'] ??= [];
-                $parameters['required'][] = $method_parameter->getName();
+                $parameters['required'][] = $methodParameter->getName();
             }
 
             // check if parameter type is an Enum and add it's valid values to the property
-            if (($parameter_type = $method_parameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
+            if (($parameter_type = $methodParameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
                 $property['type'] = 'string';
                 $property['enum'] = array_column((new ReflectionEnum($parameter_type->getName()))->getConstants(), 'value');
             }
 
-            $parameters['properties'][$method_parameter->getName()] = $property;
+            $parameters['properties'][$methodParameter->getName()] = $property;
         }
 
         return $parameters;
+    }
+
+    public function bootManagesTools(PendingAgentTask $pendingAgentTask): void
+    {
+        $this->middleware()->onStartThread(fn () => $this->initializeTools($pendingAgentTask), 'initializeTools');
     }
 }

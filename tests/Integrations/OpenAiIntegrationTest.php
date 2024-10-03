@@ -82,11 +82,9 @@ test('uses tools', function (): void {
             ];
         }
 
-        protected function registerTools(): array
+        protected function resolveTools(): array
         {
-            return [
-                new SerperTool,
-            ];
+            return [SerperTool::class];
         }
     }
 
