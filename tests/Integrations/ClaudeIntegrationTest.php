@@ -15,6 +15,9 @@ use UseTheFork\Synapse\Tools\SerperTool;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
+use UseTheFork\Synapse\Contracts\Memory;
+use UseTheFork\Synapse\Memory\CollectionMemory;
+
 test('Connects', function (): void {
 
     class ClaudeTestAgent extends Agent
@@ -26,6 +29,11 @@ test('Connects', function (): void {
         public function resolveIntegration(): Integration
         {
             return new ClaudeIntegration;
+        }
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory();
         }
 
         protected function defaultOutputSchema(): array
@@ -65,6 +73,12 @@ test('uses tools', function (): void {
         {
             return new ClaudeIntegration;
         }
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory();
+        }
+
 
         protected function defaultOutputSchema(): array
         {

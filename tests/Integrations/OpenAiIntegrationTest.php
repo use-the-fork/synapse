@@ -7,7 +7,11 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
@@ -20,6 +24,16 @@ test('Connects', function (): void {
         use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+        public function resolveIntegration(): Integration
+        {
+            return new OpenAIIntegration;
+        }
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory;
+        }
 
         public function defaultOutputSchema(): array
         {
@@ -51,6 +65,16 @@ test('Connects With OutputSchema', function (): void {
     class OpenAiConnectsTestAgent extends Agent
     {
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+        public function resolveIntegration(): Integration
+        {
+            return new OpenAIIntegration;
+        }
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory;
+        }
     }
 
     MockClient::global([
@@ -72,6 +96,16 @@ test('uses tools', function (): void {
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
+        public function resolveIntegration(): Integration
+        {
+            return new OpenAIIntegration;
+        }
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory;
+        }
+
         public function defaultOutputSchema(): array
         {
             return [
@@ -92,6 +126,7 @@ test('uses tools', function (): void {
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
+
             return MockResponse::fixture("openai/uses-tools/message-{$hash}");
         },
         SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),

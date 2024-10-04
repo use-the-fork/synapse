@@ -11,8 +11,11 @@ use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
 use UseTheFork\Synapse\Contracts\Agent\HasMemory;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
+use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
@@ -251,5 +254,22 @@ class Agent implements HasIntegration, HasMemory
         } catch (Exception $e) {
             throw new Exception("Error calling tool: {$e->getMessage()}", $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Registers the memory type.
+     *
+     * @return Integration The registered Integration instance
+     *
+     * @throws MissingResolverException
+     */
+    public function resolveIntegration(): Integration
+    {
+        throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
+    }
+
+    public function resolveMemory(): Memory
+    {
+        throw new MissingResolverException('ManagesMemory', 'resolveMemory');
     }
 }

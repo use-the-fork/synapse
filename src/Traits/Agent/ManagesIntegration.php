@@ -6,7 +6,7 @@ namespace UseTheFork\Synapse\Traits\Agent;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Traits\HasIntegration;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
@@ -41,7 +41,7 @@ trait ManagesIntegration
      */
     public function resolveIntegration(): Integration
     {
-        return new OpenAIIntegration;
+        throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
     }
 
     public function bootManagesIntegration(PendingAgentTask $pendingAgentTask): void

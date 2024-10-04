@@ -6,9 +6,9 @@ namespace UseTheFork\Synapse\Traits\Agent;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Memory;
+use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
-use UseTheFork\Synapse\Memory\CollectionMemory;
 
 trait ManagesMemory
 {
@@ -75,21 +75,12 @@ trait ManagesMemory
 
     /**
      * Initializes the memory by registering the memory object.
+     * @throws MissingResolverException
      */
     protected function initializeMemory(PendingAgentTask $pendingAgentTask): void
     {
         $this->memory = $this->resolveMemory();
         $this->memory->boot($pendingAgentTask);
-    }
-
-    /**
-     * Registers the memory type.
-     *
-     * @return Memory The registered memory instance
-     */
-    public function resolveMemory(): Memory
-    {
-      return new CollectionMemory;
     }
 
     public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
