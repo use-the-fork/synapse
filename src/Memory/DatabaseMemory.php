@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Memory;
 
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Models\AgentMemory;
@@ -13,7 +14,7 @@ class DatabaseMemory implements Memory
 {
     protected AgentMemory $agentMemory;
 
-    public function __construct()
+    public function boot(?PendingAgentTask $pendingAgentTask = null): void
     {
         $this->agentMemory = new AgentMemory;
         $this->agentMemory->save();

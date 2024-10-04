@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
@@ -10,13 +11,15 @@ use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Memory\DatabaseMemory;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-it('Collection Memory', function (): void {
+uses(RefreshDatabase::class);
 
-    class CollectionMemoryAgent extends Agent
+it('Database Memory', function (): void {
+
+    class DatabaseMemoryAgent extends Agent
     {
         use ValidatesOutputSchema;
 
@@ -40,7 +43,7 @@ it('Collection Memory', function (): void {
 
         public function resolveMemory(): Memory
         {
-            return new CollectionMemory;
+            return new DatabaseMemory;
         }
     }
 
@@ -48,11 +51,13 @@ it('Collection Memory', function (): void {
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("memory/collection-{$hash}");
+            return MockResponse::fixture("Memory/DatabaseMemory-{$hash}");
         },
     ]);
 
-    $agent = new CollectionMemoryAgent;
+    $this->assertDatabaseCount('agent_memories', 0);
+
+    $agent = new DatabaseMemoryAgent;
     $message = $agent->handle(['input' => 'hello this a test']);
     $agentResponseArray = $message->toArray();
 
@@ -65,5 +70,8 @@ it('Collection Memory', function (): void {
     expect($followupResponseArray['content'])->toBeArray()
         ->and($followupResponseArray['content'])->toHaveKey('answer')
         ->and($followupResponseArray['content']['answer'])->toBe('?sdrawkcaB .yas tsuj I did tahw');
+
+    $this->assertDatabaseCount('agent_memories', 1);
+    $this->assertDatabaseCount('messages', 2);
 
 });
