@@ -37,7 +37,7 @@ class Message extends ArrayValueObject
         return $this->value['finish_reason'];
     }
 
-    public function content(): ?string
+    public function content(): mixed
     {
         return empty($this->value['content']) ? null : $this->value['content'];
     }
