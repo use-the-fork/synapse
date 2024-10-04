@@ -10,6 +10,11 @@ use UseTheFork\Synapse\Enums\PipeOrder;
 class MiddlewarePipeline
 {
     /**
+     * Boot Agent Pipeline
+     */
+    protected Pipeline $bootAgentPipeline;
+
+    /**
      * Start Thread Pipeline
      */
     protected Pipeline $startThreadPipeline;
@@ -49,6 +54,8 @@ class MiddlewarePipeline
     public function __construct()
     {
         // This is layed out in the order in which these pipes will fire
+        $this->bootAgentPipeline = new Pipeline;
+
         $this->startThreadPipeline = new Pipeline;
 
         $this->startIterationPipeline = new Pipeline;
@@ -67,7 +74,22 @@ class MiddlewarePipeline
 
     }
 
-    public function onStartThread(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onBootAgent(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
+    {
+        $this->bootAgentPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
+            $result = $callable($pendingAgentTask);
+
+            if ($result instanceof PendingAgentTask) {
+                return $result;
+            }
+
+            return $pendingAgentTask;
+        }, $name, $pipeOrder);
+
+        return $this;
+    }
+
+    public function onStartThread(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->startThreadPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -77,12 +99,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onIntegrationResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onIntegrationResponse(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->integrationResponsePipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -92,12 +114,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onStartToolCall(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onStartToolCall(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->startToolCallPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -107,12 +129,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onAgentFinish(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onAgentFinish(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->agentFinishPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -122,12 +144,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onEndToolCall(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onEndToolCall(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->endToolCallPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -137,12 +159,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onStartIteration(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onStartIteration(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->startIterationPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -152,12 +174,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onEndIteration(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onEndIteration(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->endIterationPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -167,12 +189,12 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function onEndThread(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onEndThread(callable $callable, ?string $name = null, ?PipeOrder $pipeOrder = null): static
     {
         $this->endThreadPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
             $result = $callable($pendingAgentTask);
@@ -182,49 +204,59 @@ class MiddlewarePipeline
             }
 
             return $pendingAgentTask;
-        }, $name, $order);
+        }, $name, $pipeOrder);
 
         return $this;
     }
 
-    public function executeStartThreadPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeBootAgentPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->startThreadPipeline->process($pendingAgent);
+        return $this->bootAgentPipeline->process($pendingAgentTask);
     }
 
-    public function executeIntegrationResponsePipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeStartThreadPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->integrationResponsePipeline->process($pendingAgent);
+        return $this->startThreadPipeline->process($pendingAgentTask);
     }
 
-    public function executeStartToolCallPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeIntegrationResponsePipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->startToolCallPipeline->process($pendingAgent);
+        return $this->integrationResponsePipeline->process($pendingAgentTask);
     }
 
-    public function executeEndToolCallPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeStartToolCallPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->endToolCallPipeline->process($pendingAgent);
+        return $this->startToolCallPipeline->process($pendingAgentTask);
     }
 
-    public function executeAgentFinishPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeEndToolCallPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->agentFinishPipeline->process($pendingAgent);
+        return $this->endToolCallPipeline->process($pendingAgentTask);
     }
 
-    public function executeStartIterationPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeAgentFinishPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->startIterationPipeline->process($pendingAgent);
+        return $this->agentFinishPipeline->process($pendingAgentTask);
     }
 
-    public function executeEndIterationPipeline(PendingAgentTask $pendingAgent): PendingAgentTask
+    public function executeStartIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->endIterationPipeline->process($pendingAgent);
+        return $this->startIterationPipeline->process($pendingAgentTask);
     }
 
-    public function executeEndThreadPipeline(PendingAgentTask $pendingAgentResponse): PendingAgentTask
+    public function executeEndIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->endThreadPipeline->process($pendingAgentResponse);
+        return $this->endIterationPipeline->process($pendingAgentTask);
+    }
+
+    public function executeEndThreadPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        return $this->endThreadPipeline->process($pendingAgentTask);
+    }
+
+    public function getBootAgentPipeline(): Pipeline
+    {
+        return $this->bootAgentPipeline;
     }
 
     public function getStartThreadPipeline(): Pipeline
@@ -274,7 +306,12 @@ class MiddlewarePipeline
      */
     public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
-        $starThreadPipes = array_merge(
+        $bootAgentPipes = array_merge(
+            $this->getBootAgentPipeline()->getPipes(),
+            $middlewarePipeline->getBootAgentPipeline()->getPipes()
+        );
+
+        $startThreadPipes = array_merge(
             $this->getStartThreadPipeline()->getPipes(),
             $middlewarePipeline->getStartThreadPipeline()->getPipes()
         );
@@ -314,7 +351,9 @@ class MiddlewarePipeline
             $middlewarePipeline->getEndThreadPipeline()->getPipes()
         );
 
-        $this->startThreadPipeline->setPipes($starThreadPipes);
+        $this->bootAgentPipeline->setPipes($bootAgentPipes);
+
+        $this->startThreadPipeline->setPipes($startThreadPipes);
 
         $this->integrationResponsePipeline->setPipes($integrationResponsePipes);
 

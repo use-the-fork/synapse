@@ -1,11 +1,12 @@
 # Collection Memory
 
-To get started you will need to add the `HasMemory` interface. To your agent without this interface, your Agent will not have memory.
+To get started you will need to add the `HasMemory` interface. This will add the proper resolver method to your agent.
 
 ```php
 <?php
 
-use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;
+use UseTheFork\Synapse\Agents\Agent;
+use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;
 
 class SimpleAgent extends Agent implements HasMemory
 {

@@ -1,5 +1,4 @@
-import { defineConfig } from 'vitepress';
-
+import {defineConfig} from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: 'Laravel-Synapse',
@@ -10,11 +9,11 @@ export default defineConfig({
         nav: [
             { text: 'Home', link: '/' },
             {
-                text: '4.1.1',
+                text: '0.0.0',
                 items: [
                     {
                         text: 'Changelog',
-                        link: 'https://github.com/pdphilip/laravel-elasticsearch/compare/v4.1.0...v4.1.1',
+                        link: 'https://github.com/use-the-fork/laravel-synapse/',
                     },
                 ],
             },
@@ -26,22 +25,13 @@ export default defineConfig({
                 items: [{ text: 'Getting Started', link: '/' }],
             },
             {
-                text: 'Eloquent',
+                text: 'Agents',
                 items: [
-                    { text: 'The Base model', link: '/eloquent/the-base-model' },
+                    { text: 'Introduction', link: '/agents' },
+                    { text: 'Working With Agents', link: '/agents/working-with-agents' },
                     { text: 'Querying Models', link: '/eloquent/querying-models' },
                     { text: 'Saving Models', link: '/eloquent/saving-models' },
                     { text: 'Deleting Models', link: '/eloquent/deleting-models' },
-                    {
-                        text: 'Ordering & Pagination',
-                        link: '/eloquent/ordering-and-pagination',
-                    },
-                    { text: 'Distinct & GroupBy', link: '/eloquent/distinct' },
-                    { text: 'Aggregation', link: '/eloquent/aggregation' },
-                    { text: 'ES Specific Queries', link: '/eloquent/es-specific' },
-                    { text: 'Nested Queries', link: '/eloquent/nested-queries' },
-                    { text: 'Full-Text Search', link: '/eloquent/full-text-search' },
-                    { text: 'Dynamic Indices', link: '/eloquent/dynamic-indices' },
                 ],
             }
         ],

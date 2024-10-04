@@ -13,11 +13,15 @@ use UseTheFork\Synapse\Traits\HasMiddleware;
 
 class PendingAgentTask
 {
+    public $memory;
     use HasMiddleware;
 
     protected Agent $agent;
+
     protected CurrentIteration $currentIteration;
+
     protected Collection $inputs;
+
     protected array $tools = [];
 
     public function __construct(Agent $agent)
@@ -29,6 +33,8 @@ class PendingAgentTask
         $this
             ->tap(new BootTraits)
             ->tap(new MergeProperties);
+
+        $this->middleware()->executeBootAgentPipeline($this);
     }
 
     /**
@@ -78,7 +84,7 @@ class PendingAgentTask
         return $this->memory;
     }
 
-    public function reboot(array $inputs, array $extraAgentArgs = [])
+    public function reboot(array $inputs, array $extraAgentArgs = []): void
     {
 
         $this->currentIteration = new CurrentIteration;

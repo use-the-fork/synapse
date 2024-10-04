@@ -85,7 +85,7 @@ trait ManagesMemory
 
     public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
     {
-        $this->middleware()->onStartThread(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
+        $this->middleware()->onBootAgent(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
         $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
         $this->middleware()->onEndIteration(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryEndIteration');
         $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryAgentFinish');

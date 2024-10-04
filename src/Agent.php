@@ -83,7 +83,7 @@ class Agent implements HasIntegration, HasMemory
     public function handle(?array $input, ?array $extraAgentArgs = []): Message
     {
         $this->pendingAgentTask->reboot($input, $extraAgentArgs);
-        $this->pendingAgentTask = $this->getAnswer();
+        $this->pendingAgentTask = $this->doLoop();
 
         $this->pendingAgentTask = $this->pendingAgentTask->middleware()->executeEndThreadPipeline($this->pendingAgentTask);
 
@@ -93,7 +93,7 @@ class Agent implements HasIntegration, HasMemory
     /**
      * @throws Throwable
      */
-    protected function getAnswer(): PendingAgentTask
+    protected function doLoop(): PendingAgentTask
     {
 
         for ($i = 1; $i <= $this->maximumIterations; $i++) {

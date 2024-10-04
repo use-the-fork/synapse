@@ -1,14 +1,11 @@
 # Memory
 
-When working with agents it's often desirable for an agent to have "memory" or a record of the conversation so far.
-Synapse makes this easy for you with built-in traits. Keep in mind that an agent has a temporary memory stored on the
-`PendingAgentTask` class. This memory is used while the agent is running tool calls. For longer term memory ie memory
-that is saved across multiple invokes you should use the below.
+Because of the nature of tool calls and user agent conversations in general All Synapse agents must have a memory type set to function.
+When the `resolveMemory` method is not overwritten by your agent you will simply receive a Exception until one is added and a memory type is resolved.
 
 ## Getting Started
 
-To get started, you will need to add the `HasMemory` interface to your agent. This interface is required as it
-bootstraps the agent with the required methods for memory.
+To get started, you will need to override the `resolveMemory` method of your agent with one of the Memory types available by Synapse 
 
 ```php
 <?php
