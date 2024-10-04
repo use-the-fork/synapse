@@ -31,7 +31,6 @@ final class CrunchbaseTool extends BaseTool implements Tool
      *
      * @param  string  $entityId  The crunchbase organizations `entityId`
      */
-
     public function handle(
         string $entityId,
     ): string {

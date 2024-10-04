@@ -4,52 +4,38 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Clearbit\ClearbitConnector;
 use UseTheFork\Synapse\Services\Clearbit\Requests\ClearbitCompanyRequest;
 
-#[Description('Search Clearbit Company data.')]
 final class ClearbitCompanyTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    /**
-     * Constructor for the Laravel application.
-     *
-     * @param  string|null  $apiKey  The API key to be used for Clearbit (optional if synapse.services.clearbit.key is set).
-     * @return void
-     */
-    public function __construct(?string $apiKey = null)
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
+        $this->apiKey = config('synapse.services.clearbit.key', '');
 
-        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
-            $this->apiKey = $apiKey;
+        if (empty($this->apiKey)) {
+            throw new MissingApiKeyException('API (CLEARBIT_API_KEY) key is required.');
         }
 
-        parent::__construct();
+        return $pendingAgentTask;
     }
 
     /**
-     * Handle method for the Laravel application.
+     * Search Clearbit Company data.
      *
-     * @param  string  $domain  The Top Level domain name to lookup (e.g., 'clearbit.com').
-     * @return string The parsed results of the Clearbit lookup.
-     *
-     * @throws FatalRequestException
-     * @throws RequestException
+     * @param  string  $domain  the Top Level domain name to lookup for example `clearbit.com`
      */
     public function handle(
-        #[Description('the Top Level domain name to lookup for example `clearbit.com`')]
         string $domain,
     ): string {
 
         $clearbitConnector = new ClearbitConnector($this->apiKey, 'company');
-        $clearbitCompanyRequest = new ClearbitCompanyRequest($domain);
-        $results = $clearbitConnector->send($clearbitCompanyRequest)->array();
+        $results = $clearbitConnector->send(new ClearbitCompanyRequest($domain))->array();
 
         return $this->parseResults($results);
     }
@@ -95,25 +81,5 @@ final class ClearbitCompanyTool extends BaseTool implements Tool
         }
 
         return $snip->implode("\n");
-    }
-
-    /**
-     * Initializes the tool by setting the API key.
-     *
-     * @throws MissingApiKeyException Thrown when the API key is missing.
-     */
-    protected function initializeTool(): void
-    {
-
-        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
-            return;
-        }
-
-        if (! empty(config('synapse.services.clearbit.key'))) {
-            $this->apiKey = config('synapse.services.clearbit.key');
-
-            return;
-        }
-        throw new MissingApiKeyException('API (CLEARBIT_API_KEY) key is required.');
     }
 }
