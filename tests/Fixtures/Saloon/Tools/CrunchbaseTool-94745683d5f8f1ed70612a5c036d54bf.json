@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Fri, 04 Oct 2024 14:03:00 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AEdBP55xlCkeEdXugbO3OGzRBFGh8\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728050575,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Siteimprove offers comprehensive cloud-based digital presence optimization software. This company is based in Copenhagen, Denmark, and has a presence across multiple locations including Hovedstaden and the broader European region. Siteimprove's digital footprint includes a LinkedIn page available at http:\/\/www.linkedin.com\/company\/siteimprove, a Facebook page at http:\/\/www.facebook.com\/Siteimprove, and a Twitter profile at https:\/\/x.com\/Siteimprove. More about the company can be found on their website: http:\/\/siteimprove.com.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 863,\n    \"completion_tokens\": 119,\n    \"total_tokens\": 982,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_82bed303cf\"\n}\n"
+}

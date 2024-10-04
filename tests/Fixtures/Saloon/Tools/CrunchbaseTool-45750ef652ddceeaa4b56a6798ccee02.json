@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 04 Oct 2024 13:59:51 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AEd8Rfeihc8ExizWSphUAU1n7CFle\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728050391,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_mRZAQmndYAUYzFpJMnTlWWfa\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"crunchbase_tool\",\n              \"arguments\": \"{\\\"entityId\\\":\\\"siteimprove\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 115,\n    \"completion_tokens\": 19,\n    \"total_tokens\": 134,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_82bed303cf\"\n}\n"
+}

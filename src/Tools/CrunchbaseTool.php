@@ -5,49 +5,39 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Crunchbase\CrunchbaseConnector;
 use UseTheFork\Synapse\Services\Crunchbase\Requests\CrunchbaseRequest;
 
-#[Description('Search Crunchbase for Company data.')]
 final class CrunchbaseTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    public function __construct(?string $apiKey = null)
+    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
+        $this->apiKey = config('synapse.services.crunchbase.key');
 
-        if ($apiKey !== null && $apiKey !== '' && $apiKey !== '0') {
-            $this->apiKey = $apiKey;
+        if (empty($this->apiKey)) {
+            throw new MissingApiKeyException('API (CRUNCHBASE_API_KEY) key is required.');
         }
 
-        parent::__construct();
+        return $pendingAgentTask;
     }
 
-    protected function initializeTool(): void
-    {
-        if (isset($this->apiKey) && ($this->apiKey !== '' && $this->apiKey !== '0')) {
-            return;
-        }
-
-        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.crunchbase.key'))) {
-            $this->apiKey = config('synapse.services.crunchbase.key');
-
-            return;
-        }
-        throw new MissingApiKeyException('API (CRUNCHBASE_API_KEY) key is required.');
-    }
+    /**
+     * Search Crunchbase for Company data.
+     *
+     * @param  string  $entityId  The crunchbase organizations `entityId`
+     */
 
     public function handle(
-        #[Description('The crunchbase organizations `entityId`')]
         string $entityId,
     ): string {
 
         $crunchbaseConnector = new CrunchbaseConnector($this->apiKey);
-        $crunchbaseRequest = new CrunchbaseRequest($entityId);
-        $results = $crunchbaseConnector->send($crunchbaseRequest)->array();
+        $results = $crunchbaseConnector->send(new CrunchbaseRequest($entityId))->array();
 
         return $this->parseResults($results);
     }
