@@ -104,7 +104,7 @@ class Agent implements HasIntegration, HasMemory
                 $this->getPrompt($this->pendingAgentTask)
             );
 
-            $this->pendingAgentTask->currentIteration()->setPromptChain($this->pendingAgentTask);
+            $this->pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
             // Create the Chat request we will be sending.
             $this->integration->handlePendingAgentTaskCompletion($this->pendingAgentTask);
