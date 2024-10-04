@@ -1,0 +1,9 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Fri, 04 Oct 2024 13:12:15 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AEcOMVg1N9uoRppCSIPzWPx7Jrkxs\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728047534,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Joe Biden\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 275,\n    \"completion_tokens\": 15,\n    \"total_tokens\": 290,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_82bed303cf\"\n}\n"
+}

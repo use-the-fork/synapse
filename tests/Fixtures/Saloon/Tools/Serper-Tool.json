@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "access-control-allow-origin": "*",
+    "x-ratelimit-limit": "500",
+    "x-ratelimit-remaining": "499",
+    "x-ratelimit-reset": "1728047535"
+  },
+  "data": "{\"searchParameters\":{\"q\":\"current president of the United States\",\"type\":\"search\",\"num\":1,\"engine\":\"google\"},\"answerBox\":{\"title\":\"United States / President\",\"answer\":\"Joe Biden\"},\"organic\":[{\"title\":\"Joe Biden: The President | The White House\",\"link\":\"https://www.whitehouse.gov/administration/president-biden/\",\"snippet\":\"President Biden represented Delaware for 36 years in the US Senate before becoming the 47th Vice President of the United States.\",\"position\":1}],\"relatedSearches\":[{\"query\":\"Who is the Vice President of the United States\"},{\"query\":\"Who is the 46th president\"},{\"query\":\"All Presidents in order\"},{\"query\":\"48th president of the United States\"},{\"query\":\"Who is the New president of the United States\"},{\"query\":\"Joe Biden age\"},{\"query\":\"47th President of the United States\"},{\"query\":\"First president of USA\"}],\"credits\":1}"
+}

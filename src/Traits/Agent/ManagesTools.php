@@ -228,6 +228,6 @@ trait ManagesTools
 
     public function bootManagesTools(PendingAgentTask $pendingAgentTask): void
     {
-        $this->middleware()->onStartThread(fn () => $this->initializeTools($pendingAgentTask), 'initializeTools');
+        $this->middleware()->onBootAgent(fn () => $this->initializeTools($pendingAgentTask), 'initializeTools');
     }
 }
