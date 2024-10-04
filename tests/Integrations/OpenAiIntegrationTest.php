@@ -1,142 +1,142 @@
 <?php
 
-declare(strict_types=1);
+    declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Contracts\Memory;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('Connects', function (): void {
+    test('Connects', function (): void {
 
-    class OpenAiTestAgent extends Agent implements HasOutputSchema
-    {
-        use ValidatesOutputSchema;
-
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
+        class OpenAiTestAgent extends Agent implements HasOutputSchema
         {
-            return new OpenAIIntegration;
+            use ValidatesOutputSchema;
+
+            protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+            public function resolveIntegration(): Integration
+            {
+                return new OpenAIIntegration;
+            }
+
+            public function resolveMemory(): Memory
+            {
+                return new CollectionMemory;
+            }
+
+            public function resolveOutputSchema(): array
+            {
+                return [
+                    SchemaRule::make([
+                                         'name'        => 'answer',
+                                         'rules'       => 'required|string',
+                                         'description' => 'your final answer to the query.',
+                                     ]),
+                ];
+            }
         }
 
-        public function resolveMemory(): Memory
+        MockClient::global([
+                               ChatRequest::class => MockResponse::fixture('openai/simple'),
+                           ]);
+
+        $agent = new OpenAiTestAgent;
+        $message = $agent->handle(['input' => 'hello!']);
+
+        $agentResponseArray = $message->toArray();
+
+        expect($agentResponseArray['content'])->toBeArray()
+                                              ->and($agentResponseArray['content'])->toHaveKey('answer');
+    });
+
+    test('Connects With OutputSchema', function (): void {
+
+        class OpenAiConnectsTestAgent extends Agent
         {
-            return new CollectionMemory;
+            protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+            public function resolveIntegration(): Integration
+            {
+                return new OpenAIIntegration;
+            }
+
+            public function resolveMemory(): Memory
+            {
+                return new CollectionMemory;
+            }
         }
 
-        public function defaultOutputSchema(): array
+        MockClient::global([
+                               ChatRequest::class => MockResponse::fixture('openai/simple'),
+                           ]);
+
+        $agent = new OpenAiConnectsTestAgent;
+        $message = $agent->handle(['input' => 'hello!']);
+
+        $agentResponseArray = $message->toArray();
+        expect($agentResponseArray['content'])->not->toBeArray();
+    });
+
+    test('uses tools', function (): void {
+
+        class OpenAiToolTestAgent extends Agent implements HasOutputSchema
         {
-            return [
-                SchemaRule::make([
-                    'name' => 'answer',
-                    'rules' => 'required|string',
-                    'description' => 'your final answer to the query.',
-                ]),
-            ];
-        }
-    }
+            use ValidatesOutputSchema;
 
-    MockClient::global([
-        ChatRequest::class => MockResponse::fixture('openai/simple'),
-    ]);
+            protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
-    $agent = new OpenAiTestAgent;
-    $message = $agent->handle(['input' => 'hello!']);
+            public function resolveIntegration(): Integration
+            {
+                return new OpenAIIntegration;
+            }
 
-    $agentResponseArray = $message->toArray();
+            public function resolveMemory(): Memory
+            {
+                return new CollectionMemory;
+            }
 
-    expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
-});
+            public function resolveOutputSchema(): array
+            {
+                return [
+                    SchemaRule::make([
+                                         'name'        => 'answer',
+                                         'rules'       => 'required|string',
+                                         'description' => 'your final answer to the query.',
+                                     ]),
+                ];
+            }
 
-test('Connects With OutputSchema', function (): void {
-
-    class OpenAiConnectsTestAgent extends Agent
-    {
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
-        {
-            return new OpenAIIntegration;
-        }
-
-        public function resolveMemory(): Memory
-        {
-            return new CollectionMemory;
-        }
-    }
-
-    MockClient::global([
-        ChatRequest::class => MockResponse::fixture('openai/simple'),
-    ]);
-
-    $agent = new OpenAiConnectsTestAgent;
-    $message = $agent->handle(['input' => 'hello!']);
-
-    $agentResponseArray = $message->toArray();
-    expect($agentResponseArray['content'])->not->toBeArray();
-});
-
-test('uses tools', function (): void {
-
-    class OpenAiToolTestAgent extends Agent implements HasOutputSchema
-    {
-        use ValidatesOutputSchema;
-
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
-        {
-            return new OpenAIIntegration;
+            protected function resolveTools(): array
+            {
+                return [new SerperTool];
+            }
         }
 
-        public function resolveMemory(): Memory
-        {
-            return new CollectionMemory;
-        }
+        MockClient::global([
+                               ChatRequest::class         => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+                                   $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-        public function defaultOutputSchema(): array
-        {
-            return [
-                SchemaRule::make([
-                    'name' => 'answer',
-                    'rules' => 'required|string',
-                    'description' => 'your final answer to the query.',
-                ]),
-            ];
-        }
+                                   return MockResponse::fixture("openai/uses-tools/message-{$hash}");
+                               },
+                               SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),
+                           ]);
 
-        protected function resolveTools(): array
-        {
-            return [new SerperTool];
-        }
-    }
+        $agent = new OpenAiToolTestAgent;
+        $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
-    MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
-            $hash = md5(json_encode($pendingRequest->body()->get('messages')));
+        $agentResponseArray = $message->toArray();
 
-            return MockResponse::fixture("openai/uses-tools/message-{$hash}");
-        },
-        SerperSearchRequest::class => MockResponse::fixture('openai/uses-tools/serper'),
-    ]);
-
-    $agent = new OpenAiToolTestAgent;
-    $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
-
-    $agentResponseArray = $message->toArray();
-
-    expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
-});
+        expect($agentResponseArray['content'])->toBeArray()
+                                              ->and($agentResponseArray['content'])->toHaveKey('answer');
+    });

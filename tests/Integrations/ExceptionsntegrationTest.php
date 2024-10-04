@@ -25,7 +25,7 @@ test('Resolve Memory', function (): void {
             return new OpenAIIntegration;
         }
 
-        public function defaultOutputSchema(): array
+        public function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -54,7 +54,7 @@ test('Resolve Integration', function (): void {
             return new CollectionMemory;
         }
 
-        public function defaultOutputSchema(): array
+        public function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -69,3 +69,26 @@ test('Resolve Integration', function (): void {
     $agent = new ResolveIntegrationExceptionTestAgent;
     $message = $agent->handle(['input' => 'hello!']);
 })->throws(MissingResolverException::class, 'The "ManagesIntegration" trait requires a "resolveIntegration" method.');
+
+test('Resolve OutputSchema', function (): void {
+
+    class ResolveOutputSchemaExceptionTestAgent extends Agent implements HasOutputSchema
+    {
+        use ValidatesOutputSchema;
+
+        protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+        public function resolveMemory(): Memory
+        {
+            return new CollectionMemory;
+        }
+
+        public function resolveIntegration(): Integration
+        {
+            return new OpenAIIntegration;
+        }
+    }
+
+    $agent = new ResolveOutputSchemaExceptionTestAgent;
+    $message = $agent->handle(['input' => 'hello!']);
+})->throws(MissingResolverException::class, 'The "ValidatesOutputSchema" trait requires a "resolveOutputSchema" method.');

@@ -1,116 +1,115 @@
 <?php
 
-declare(strict_types=1);
+    declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\ClaudeIntegration;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Contracts\Memory;
+    use UseTheFork\Synapse\Integrations\ClaudeIntegration;
+    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\CollectionMemory;
+    test('Connects', function (): void {
 
-test('Connects', function (): void {
-
-    class ClaudeTestAgent extends Agent
-    {
-        use ValidatesOutputSchema;
-
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
+        class ClaudeTestAgent extends Agent
         {
-            return new ClaudeIntegration;
+            use ValidatesOutputSchema;
+
+            protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+            public function resolveIntegration(): Integration
+            {
+                return new ClaudeIntegration;
+            }
+
+            public function resolveMemory(): Memory
+            {
+                return new CollectionMemory();
+            }
+
+            protected function resolveOutputSchema(): array
+            {
+                return [
+                    SchemaRule::make([
+                                         'name'        => 'answer',
+                                         'rules'       => 'required|string',
+                                         'description' => 'your final answer to the query.',
+                                     ]),
+                ];
+            }
         }
 
-        public function resolveMemory(): Memory
+        MockClient::global([
+                               ChatRequest::class => MockResponse::fixture('claude/simple'),
+                           ]);
+
+        $agent = new ClaudeTestAgent;
+        $message = $agent->handle(['input' => 'hello!']);
+
+        $agentResponseArray = $message->toArray();
+
+        expect($agentResponseArray['content'])->toBeArray()
+                                              ->and($agentResponseArray['content'])->toHaveKey('answer');
+    });
+
+    test('uses tools', function (): void {
+
+        class ClaudeToolTestAgent extends Agent
         {
-            return new CollectionMemory();
+            use ValidatesOutputSchema;
+
+            protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+            public function resolveIntegration(): Integration
+            {
+                return new ClaudeIntegration;
+            }
+
+            public function resolveMemory(): Memory
+            {
+                return new CollectionMemory();
+            }
+
+            protected function resolveOutputSchema(): array
+            {
+                return [
+                    SchemaRule::make([
+                                         'name'        => 'answer',
+                                         'rules'       => 'required|string',
+                                         'description' => 'your final answer to the query.',
+                                     ]),
+                ];
+            }
+
+            protected function resolveTools(): array
+            {
+                return [new SerperTool];
+            }
         }
 
-        protected function defaultOutputSchema(): array
-        {
-            return [
-                SchemaRule::make([
-                    'name' => 'answer',
-                    'rules' => 'required|string',
-                    'description' => 'your final answer to the query.',
-                ]),
-            ];
-        }
-    }
+        MockClient::global([
+                               ChatRequest::class           => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+                                   $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-    MockClient::global([
-        ChatRequest::class => MockResponse::fixture('claude/simple'),
-    ]);
+                                   return MockResponse::fixture("claude/uses-tools/message-{$hash}");
+                               },
+                               ValidateOutputRequest::class => MockResponse::fixture('claude/uses-tools/validate'),
+                               SerperSearchRequest::class   => MockResponse::fixture('claude/uses-tools/serper'),
+                           ]);
 
-    $agent = new ClaudeTestAgent;
-    $message = $agent->handle(['input' => 'hello!']);
+        $agent = new ClaudeToolTestAgent;
+        $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
-    $agentResponseArray = $message->toArray();
+        $agentResponseArray = $message->toArray();
 
-    expect($agentResponseArray['content'])->toBeArray()
-                                          ->and($agentResponseArray['content'])->toHaveKey('answer');
-});
-
-test('uses tools', function (): void {
-
-    class ClaudeToolTestAgent extends Agent
-    {
-        use ValidatesOutputSchema;
-
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
-        {
-            return new ClaudeIntegration;
-        }
-
-        public function resolveMemory(): Memory
-        {
-            return new CollectionMemory();
-        }
-
-
-        protected function defaultOutputSchema(): array
-        {
-            return [
-                SchemaRule::make([
-                                     'name' => 'answer',
-                                     'rules' => 'required|string',
-                                     'description' => 'your final answer to the query.',
-                                 ]),
-            ];
-        }
-
-        protected function resolveTools(): array
-        {
-            return [new SerperTool];
-        }
-    }
-
-    MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
-            $hash = md5(json_encode($pendingRequest->body()->get('messages')));
-            return MockResponse::fixture("claude/uses-tools/message-{$hash}");
-        },
-        ValidateOutputRequest::class => MockResponse::fixture('claude/uses-tools/validate'),
-        SerperSearchRequest::class => MockResponse::fixture('claude/uses-tools/serper'),
-    ]);
-
-    $agent = new ClaudeToolTestAgent;
-    $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
-
-    $agentResponseArray = $message->toArray();
-
-    expect($agentResponseArray['content'])->toBeArray()
-                                          ->and($agentResponseArray['content'])->toHaveKey('answer');
-});
+        expect($agentResponseArray['content'])->toBeArray()
+                                              ->and($agentResponseArray['content'])->toHaveKey('answer');
+    });

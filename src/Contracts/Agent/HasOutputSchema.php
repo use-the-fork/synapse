@@ -6,5 +6,5 @@ namespace UseTheFork\Synapse\Contracts\Agent;
 
 interface HasOutputSchema
 {
-    public function defaultOutputSchema(): array;
+    public function resolveOutputSchema(): array;
 }
