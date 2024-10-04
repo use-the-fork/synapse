@@ -6,11 +6,9 @@ namespace UseTheFork\Synapse\Tools;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
-use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 
 abstract class BaseTool implements Tool
 {
-    use LogsAgentActivity;
 
     protected PendingAgentTask $pendingAgentTask;
 

@@ -17,7 +17,6 @@ use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
-use UseTheFork\Synapse\Traits\Agent\LogsAgentActivity;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
 use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
@@ -27,8 +26,7 @@ use UseTheFork\Synapse\ValueObject\Message;
 class Agent implements HasIntegration, HasMemory
 {
     use HasMiddleware;
-    use LogsAgentActivity,
-        ManagesIntegration,
+    use ManagesIntegration,
         ManagesMemory,
         ManagesTools;
 
