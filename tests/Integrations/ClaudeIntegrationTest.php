@@ -10,7 +10,6 @@
     use UseTheFork\Synapse\Contracts\Memory;
     use UseTheFork\Synapse\Integrations\ClaudeIntegration;
     use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
     use UseTheFork\Synapse\Memory\CollectionMemory;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
@@ -48,7 +47,7 @@
         }
 
         MockClient::global([
-                               ChatRequest::class => MockResponse::fixture('claude/simple'),
+                               ChatRequest::class => MockResponse::fixture('Integrations/ClaudeTestAgent'),
                            ]);
 
         $agent = new ClaudeTestAgent;
@@ -99,10 +98,9 @@
                                ChatRequest::class           => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
                                    $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-                                   return MockResponse::fixture("claude/uses-tools/message-{$hash}");
+                                   return MockResponse::fixture("Integrations/ClaudeTestAgent-{$hash}");
                                },
-                               ValidateOutputRequest::class => MockResponse::fixture('claude/uses-tools/validate'),
-                               SerperSearchRequest::class   => MockResponse::fixture('claude/uses-tools/serper'),
+                               SerperSearchRequest::class   => MockResponse::fixture('Integrations/ClaudeTestAgent-Serper-Tool'),
                            ]);
 
         $agent = new ClaudeToolTestAgent;
