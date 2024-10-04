@@ -6,7 +6,6 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
-use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
