@@ -16,68 +16,19 @@ class PendingAgentTask
     use HasMiddleware;
 
     protected Agent $agent;
-
-    protected Collection $inputs;
-
     protected CurrentIteration $currentIteration;
-
+    protected Collection $inputs;
     protected array $tools = [];
 
-    public function __construct(Agent $agent, array $inputs, array $extraAgentArgs = [])
+    public function __construct(Agent $agent)
     {
         $this->agent = $agent;
 
         $this->currentIteration = new CurrentIteration;
-        $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
-
-        $this->inputs = collect($inputs);
 
         $this
             ->tap(new BootTraits)
             ->tap(new MergeProperties);
-
-        $this->middleware()->executeStartThreadPipeline($this);
-
-    }
-
-    public function getAgent(): Agent
-    {
-        return $this->agent;
-    }
-
-    public function currentIteration(): ?CurrentIteration
-    {
-        return $this->currentIteration;
-    }
-
-    public function addTool(string $key, array $value): void
-    {
-        $this->tools[$key] = $value;
-    }
-
-    public function memory(): Memory
-    {
-        return $this->memory;
-    }
-
-    public function tools(): array
-    {
-        return $this->tools;
-    }
-
-    public function inputs(): array
-    {
-        return $this->inputs->toArray();
-    }
-
-    public function getInput(string $key): mixed
-    {
-        return $this->inputs[$key];
-    }
-
-    public function addInput(string $key, mixed $value): void
-    {
-        $this->inputs[$key] = $value;
     }
 
     /**
@@ -90,5 +41,57 @@ class PendingAgentTask
         $callable($this);
 
         return $this;
+    }
+
+    public function addInput(string $key, mixed $value): void
+    {
+        $this->inputs[$key] = $value;
+    }
+
+    public function addTool(string $key, array $value): void
+    {
+        $this->tools[$key] = $value;
+    }
+
+    public function currentIteration(): ?CurrentIteration
+    {
+        return $this->currentIteration;
+    }
+
+    public function getAgent(): Agent
+    {
+        return $this->agent;
+    }
+
+    public function getInput(string $key): mixed
+    {
+        return $this->inputs[$key];
+    }
+
+    public function inputs(): array
+    {
+        return $this->inputs->toArray();
+    }
+
+    public function memory(): Memory
+    {
+        return $this->memory;
+    }
+
+    public function reboot(array $inputs, array $extraAgentArgs = [])
+    {
+
+        $this->currentIteration = new CurrentIteration;
+        $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
+
+        $this->inputs = collect($inputs);
+
+        $this->middleware()->executeStartThreadPipeline($this);
+
+    }
+
+    public function tools(): array
+    {
+        return $this->tools;
     }
 }

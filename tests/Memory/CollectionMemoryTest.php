@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Contracts\Memory;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-it('can do a simple query', function (): void {
+    it('can do a simple query', function (): void {
 
     class CollectionMemoryAgent extends Agent
     {
+        use ValidatesOutputSchema;
+
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
         public function resolveIntegration(): Integration
@@ -20,7 +27,7 @@ it('can do a simple query', function (): void {
             return new OpenAIIntegration;
         }
 
-        protected function registerOutputSchema(): array
+        protected function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -35,16 +42,27 @@ it('can do a simple query', function (): void {
         {
             return new CollectionMemory;
         }
-
-        protected function registerMemory(): Memory
-        {
-            return new CollectionMemory;
-        }
     }
 
-    $agent = new CollectionMemoryAgent;
-    $message = $agent->handle(['query' => 'hello this a test']);
+        MockClient::global([
+                               ChatRequest::class         => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+                                   $hash = md5(json_encode($pendingRequest->body()->get('messages')));
+                                   return MockResponse::fixture("memory/collection-{$hash}");
+                               }
+                           ]);
 
-    expect($message)->toBeArray()
-        ->and($message)->toHaveKey('answer');
+
+        $agent = new CollectionMemoryAgent;
+        $message = $agent->handle(['query' => 'hello this a test']);
+        $agentResponseArray = $message->toArray();
+
+        expect($agentResponseArray['content'])->toBeArray()
+                                              ->and($agentResponseArray['content'])->toHaveKey('answer')
+                                              ->and($agentResponseArray['content']['answer'])->toBe('How can I assist you today?');
+
+        $followup = $agent->handle(['query' => 'what did I just say? But Backwards.']);
+        $followupResponseArray = $followup->toArray();
+        dd($followupResponseArray);
+
+
 });

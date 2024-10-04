@@ -38,14 +38,16 @@ class Agent implements HasIntegration, HasMemory
     protected array $extraInputs = [];
 
     /**
-     * The view to use when generating the prompt for this agent
-     */
-    protected string $promptView;
-
-    /**
      * The maximum number "loops" that this agent should run
      */
     protected int $maximumIterations = 25;
+
+    protected PendingAgentTask $pendingAgentTask;
+
+    /**
+     * The view to use when generating the prompt for this agent
+     */
+    protected string $promptView;
 
     /**
      * Initializes the agent.
@@ -58,14 +60,15 @@ class Agent implements HasIntegration, HasMemory
     public function __construct()
     {
         $this->initializeIntegration();
+        $this->pendingAgentTask = $this->createPendingAgentTask();
     }
 
     /**
      * Create a new PendingAgentTask
      */
-    public function createPendingAgentTask(array $input, array $extraAgentArgs): PendingAgentTask
+    public function createPendingAgentTask(): PendingAgentTask
     {
-        return new PendingAgentTask($this, $input, $extraAgentArgs);
+        return new PendingAgentTask($this);
     }
 
     /**
@@ -79,48 +82,48 @@ class Agent implements HasIntegration, HasMemory
      */
     public function handle(?array $input, ?array $extraAgentArgs = []): Message
     {
-        $pendingAgentTask = $this->getAnswer($input, $extraAgentArgs);
+        $this->pendingAgentTask->reboot($input, $extraAgentArgs);
+        $this->pendingAgentTask = $this->getAnswer();
 
-        $pendingAgentTask = $pendingAgentTask->middleware()->executeEndThreadPipeline($pendingAgentTask);
+        $this->pendingAgentTask = $this->pendingAgentTask->middleware()->executeEndThreadPipeline($this->pendingAgentTask);
 
-        return $pendingAgentTask->currentIteration()->getResponse();
+        return $this->pendingAgentTask->currentIteration()->getResponse();
     }
 
     /**
      * @throws Throwable
      */
-    protected function getAnswer(?array $input, ?array $extraAgentArgs = []): PendingAgentTask
+    protected function getAnswer(): PendingAgentTask
     {
-        $pendingAgentTask = $this->createPendingAgentTask($input, $extraAgentArgs);
 
         for ($i = 1; $i <= $this->maximumIterations; $i++) {
 
-            $pendingAgentTask->middleware()->executeStartIterationPipeline($pendingAgentTask);
+            $this->pendingAgentTask->middleware()->executeStartIterationPipeline($this->pendingAgentTask);
 
             $promptChain = $this->parsePrompt(
-                $this->getPrompt($pendingAgentTask)
+                $this->getPrompt($this->pendingAgentTask)
             );
 
-            $pendingAgentTask->currentIteration()->setPromptChain($promptChain);
+            $this->pendingAgentTask->currentIteration()->setPromptChain($this->pendingAgentTask);
 
             // Create the Chat request we will be sending.
-            $this->integration->handlePendingAgentTaskCompletion($pendingAgentTask);
-            $pendingAgentTask->middleware()->executeIntegrationResponsePipeline($pendingAgentTask);
+            $this->integration->handlePendingAgentTaskCompletion($this->pendingAgentTask);
+            $this->pendingAgentTask->middleware()->executeIntegrationResponsePipeline($this->pendingAgentTask);
 
-            switch ($pendingAgentTask->currentIteration()->finishReason()) {
+            switch ($this->pendingAgentTask->currentIteration()->finishReason()) {
                 case FinishReason::TOOL_CALL:
-                    $pendingAgentTask->middleware()->executeStartToolCallPipeline($pendingAgentTask);
-                    $this->handleTools($pendingAgentTask);
-                    $pendingAgentTask->middleware()->executeEndToolCallPipeline($pendingAgentTask);
+                    $this->pendingAgentTask->middleware()->executeStartToolCallPipeline($this->pendingAgentTask);
+                    $this->handleTools($this->pendingAgentTask);
+                    $this->pendingAgentTask->middleware()->executeEndToolCallPipeline($this->pendingAgentTask);
                     break;
                 case FinishReason::STOP:
-                    $pendingAgentTask->middleware()->executeAgentFinishPipeline($pendingAgentTask);
+                    $this->pendingAgentTask->middleware()->executeAgentFinishPipeline($this->pendingAgentTask);
 
-                    return $pendingAgentTask;
+                    return $this->pendingAgentTask;
                 default:
-                    throw new UnknownFinishReasonException("{$pendingAgentTask->currentIteration()->finishReason()} is not a valid finish reason.");
+                    throw new UnknownFinishReasonException("{$this->pendingAgentTask->currentIteration()->finishReason()} is not a valid finish reason.");
             }
-            $pendingAgentTask->middleware()->executeEndIterationPipeline($pendingAgentTask);
+            $this->pendingAgentTask->middleware()->executeEndIterationPipeline($this->pendingAgentTask);
         }
 
         throw new MaximumIterationsException($this->maximumIterations);
