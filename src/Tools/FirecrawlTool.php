@@ -40,6 +40,7 @@ final class FirecrawlTool extends BaseTool implements Tool
         $firecrawlRequest = new FirecrawlRequest($url, $extractionPrompt);
         $results = $firecrawlConnector->send($firecrawlRequest)->array();
 
+
         return $this->parseResults($results);
     }
 
@@ -47,23 +48,16 @@ final class FirecrawlTool extends BaseTool implements Tool
     {
         $snippets = collect();
 
-        if (! empty($results['data']['metadata']['title'])) {
+        if (! empty($results['data']['extract']['metadata']['title'])) {
             $snippets->push("Meta Title: {$results['data']['metadata']['title']}");
         }
 
-        if (! empty($results['data']['metadata']['description'])) {
-            $snippets->push("Meta Description: {$results['data']['metadata']['description']}");
+        if (! empty($results['data']['extract']['metadata']['description'])) {
+            $snippets->push("Meta Description: {$results['data']['extract']['metadata']['description']}");
         }
 
-        if (! empty($results['data']['content'])) {
-            $snippets->push("Content:\n {$results['data']['content']}");
-        }
-
-        if (! empty($results['data']['linksOnPage'])) {
-            $snippets->push('Links On Page:');
-            foreach ($results['data']['linksOnPage'] as $link) {
-                $snippets->push("- {$link}");
-            }
+        if (! empty($results['data']['extract']['result'])) {
+            $snippets->push("Content:\n {$results['data']['extract']['result']}");
         }
 
         if ($snippets->isEmpty()) {

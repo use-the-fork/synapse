@@ -1,0 +1,9 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 04 Oct 2024 13:48:07 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AEcx0nuS49mxVK0uzfVlDFeTQVgeB\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728049682,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"The 'https://www.firecrawl.dev/' webpage is about Firecrawl, a web scraping tool designed for extracting, cleaning, and converting web data into formats suitable for AI applications, especially Large Language Models (LLMs). It features capabilities to crawl pages, handle dynamic content, and provide data in clean markdown or structured formats. It targets LLM engineers, data scientists, and AI researchers, offering multiple pricing plans and integration options with popular frameworks. The tool is also open-source.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 462,\n    \"completion_tokens\": 108,\n    \"total_tokens\": 570,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_68a5bb159e\"\n}\n"
+}

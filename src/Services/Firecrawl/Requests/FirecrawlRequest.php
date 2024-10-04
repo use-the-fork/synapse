@@ -16,8 +16,6 @@ class FirecrawlRequest extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /**
-     * Creates a new instance of the class.
-     *
      * @param  string  $url  The URL to be used for extraction.
      * @param  string  $extractionPrompt  The extraction prompt to be used.
      */
@@ -31,7 +29,7 @@ class FirecrawlRequest extends Request implements HasBody
      */
     public function resolveEndpoint(): string
     {
-        return '/v0/scrape';
+        return '/v1/scrape';
     }
 
     /**
@@ -41,13 +39,15 @@ class FirecrawlRequest extends Request implements HasBody
     {
         return [
             'url' => $this->url,
-            'extractorOptions' => [
-                'mode' => 'llm-extraction',
-                'extractionPrompt' => "detailed markdown list related to **{$this->extractionPrompt}** if no relevant content is found return `No Relevant Content On Page` DO NOT respond with only a URL or Link.",
-                'extractionSchema' => [
+            'formats' => ['extract'],
+            'extract' => [
+                'schema' => [
                     'type' => 'object',
                     'properties' => [
-                        'result' => ['type' => 'string'],
+                        'result' => [
+                            'description' => "detailed markdown list related to **{$this->extractionPrompt}** if no relevant content is found return `No Relevant Content On Page` DO NOT respond with only a URL or Link.",
+                            'type' => 'string',
+                        ],
                     ],
                     'required' => [
                         'result',
