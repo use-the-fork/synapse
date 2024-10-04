@@ -48,7 +48,7 @@ it('Collection Memory', function (): void {
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("memory/collection-{$hash}");
+            return MockResponse::fixture("Memory/CollectionMemory-{$hash}");
         },
     ]);
 
@@ -64,6 +64,6 @@ it('Collection Memory', function (): void {
     $followupResponseArray = $followup->toArray();
     expect($followupResponseArray['content'])->toBeArray()
         ->and($followupResponseArray['content'])->toHaveKey('answer')
-        ->and($followupResponseArray['content']['answer'])->toBe('?sdrawkcaB .yas tsuj I did tahw');
+        ->and($followupResponseArray['content']['answer'])->toBe('.sdrawkcab yas tsuj I did tahw');
 
 });
