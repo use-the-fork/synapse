@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Faking\Fixture;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
@@ -55,7 +56,7 @@ test('Serper Tool', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
             return MockResponse::fixture("Tools/SerperTestAgent-{$hash}");
