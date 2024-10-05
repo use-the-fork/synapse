@@ -8,9 +8,13 @@ To get started you will need to add the `HasHooks` interface. This will add the 
 use UseTheFork\Synapse\Agents\Agent;
 use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;
 use UseTheFork\Synapse\Traits\Agent\ManagesHooks;
+use UseTheFork\Synapse\Contracts\Agent\HasHooks;
 
 class SimpleAgent extends Agent implements HasMemory, HasHooks  // [!code focus]
 {
+
+    use ManagesHooks;
+
     public function resolvePromptView(): string
     {
         return 'synapse::Prompts.SimpleAgentPrompt';
@@ -20,7 +24,7 @@ class SimpleAgent extends Agent implements HasMemory, HasHooks  // [!code focus]
     {
         return new OpenAIIntegration();
     }
-    
+
     public function hookAgentFinish(PendingAgentTask $pendingAgentTask): PendingAgentTask; // [!code focus:17]
 
     public function hookEndIteration(PendingAgentTask $pendingAgentTask): PendingAgentTask;
@@ -36,7 +40,7 @@ class SimpleAgent extends Agent implements HasMemory, HasHooks  // [!code focus]
     public function hookStartThread(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 
     public function hookStartToolCall(PendingAgentTask $pendingAgentTask): PendingAgentTask;
-    
+
 }
 ```
 
