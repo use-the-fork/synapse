@@ -153,7 +153,7 @@ class Agent implements HasIntegration, HasMemory
             $promptContent = trim($promptContent);
 
             if (! $role) {
-                throw new InvalidArgumentException("Each message block must define a type.\nExample:\n<message type='assistant'>Foo {bar}</message>");
+                throw new InvalidArgumentException("Each message block must define a role.\nExample:\n<message role='assistant'>Foo {bar}</message>");
             }
             $messageData = [
                 'role' => $role,
