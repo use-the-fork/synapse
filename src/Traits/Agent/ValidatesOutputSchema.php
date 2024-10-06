@@ -8,6 +8,7 @@
     use Throwable;
     use UseTheFork\Synapse\AgentTask\PendingAgentTask;
     use UseTheFork\Synapse\Enums\PipeOrder;
+    use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
     use UseTheFork\Synapse\Exceptions\MissingResolverException;
     use UseTheFork\Synapse\Traits\HasMiddleware;
     use UseTheFork\Synapse\ValueObject\Message;
@@ -21,6 +22,11 @@
         use HasMiddleware;
 
         /**
+         * The maximum number "loops" that this Validation should run .
+         */
+        protected int $maximumValidationIterations = 5;
+
+        /**
          * sets the initial output schema type this agent will use.
          */
         public function bootValidatesOutputSchema(): void
@@ -29,6 +35,9 @@
             $this->middleware()->onEndThread(fn(PendingAgentTask $pendingAgentTask) => $this->doValidateOutputSchema($pendingAgentTask), 'doValidateOutputSchema', PipeOrder::LAST);
         }
 
+        /**
+         * @throws MissingResolverException
+         */
         public function addOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask
         {
             $pendingAgentTask->addInput('outputSchema', $this->getOutputSchema());
@@ -40,6 +49,7 @@
          * Retrieves the output rules as a JSON string.
          *
          * @return string|null The output rules encoded as a JSON string. Returns null if there are no output rules.
+         * @throws MissingResolverException
          */
         public function getOutputSchema(): ?string
         {
@@ -81,7 +91,7 @@
                 $outputSchema[$rule->getName()] = $rule->getRules();
             });
 
-            while (TRUE) {
+            for ($i = 1; $i <= $this->maximumValidationIterations; $i++) {
                 $result = $this->parseResponse($response);
                 $errorsAsString = '';
                 if (!empty($result)) {
@@ -98,17 +108,21 @@
                         return $pendingAgentTask;
                     }
 
-                    $errors = $validator->errors()->toArray();
-                    $errorsFlat = array_reduce($errors, function ($carry, $item): array {
-                        return array_merge($carry, is_array($item) ? $item : [$item]);
-                    },                         []);
-                    $errorsAsString = "### Here are the errors that Failed validation \n" . implode("\n", $errorsFlat) . "\n\n";
+                    $errorsFlat = collect();
+                    $errors = $validator->errors()->messages();
+                    foreach ($errors as $error) {
+                        $errorsFlat->push(implode(PHP_EOL, $error));
+                    }
+                    $errorsFlat = $errorsFlat->implode(PHP_EOL);
+                    $errorsAsString = $errorsFlat . "\n\n";
                 }
-                $response = $this->doRevalidate($response, $pendingAgentTask, $errorsAsString);
+                $response = $this->doRevalidate($errorsAsString);
 
                 //since all integrations return a Message value object we need to grab the content
-                $response = $response->content();
+                $response = $response->currentIteration()->getResponse()->content();
             }
+
+            throw new MaximumIterationsException($this->maximumValidationIterations);
         }
 
         /**
@@ -131,22 +145,18 @@
         /**
          * Performs revalidation on the given result.
          *
-         * @param string $result The result to revalidate.
          * @param string $errors The validation errors.
          *
-         * @return Message The result of handling the validation completion.
+         * @return PendingAgentTask The result of handling the validation completion against the prompt chain.
          *
          * @throws Throwable
          */
-        protected function doRevalidate(string $result, PendingAgentTask $pendingAgentTask, string $errors = ''): Message
+        protected function doRevalidate(string $errors = ''): PendingAgentTask
         {
-
-            $agent = $pendingAgentTask->getAgent();
 
             $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
                 'outputRules' => $this->getOutputSchema(),
-                'errors'      => $errors,
-                'result'      => $result,
+                'errors'      => $errors
             ])->render();
 
             $prompt = Message::make([
@@ -154,6 +164,14 @@
                                         'content' => $prompt,
                                     ]);
 
-            return $agent->integration()->handleCompletion($prompt);
+            //We get the whole conversation so far but append a validation message
+            $promptChain = $this->pendingAgentTask->currentIteration()->getPromptChain();
+            $this->pendingAgentTask->currentIteration()->setPromptChain([
+                ...$promptChain,
+                $prompt
+                                                                        ]);
+
+            // Create the Chat request we will be sending.
+            return $this->integration->handlePendingAgentTaskCompletion($this->pendingAgentTask);
         }
     }
