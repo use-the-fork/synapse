@@ -7,7 +7,18 @@ declare(strict_types=1);
     use Saloon\Http\Faking\MockResponse;
     use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\AgentTask\PendingAgentTask;
     use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasBootAgentHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndIterationHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndThreadHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndToolCallHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasIntegrationResponseHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptGeneratedHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptParsedHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartIterationHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartThreadHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartToolCallHook;
     use UseTheFork\Synapse\Contracts\Integration;
     use UseTheFork\Synapse\Contracts\Memory;
     use UseTheFork\Synapse\Events\Agent\AgentFinish;
@@ -30,11 +41,11 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
     use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Handles Agent Events', function (): void {
+    test('Handles Agent Events', closure: function (): void {
 
         Event::fake();
 
-    class ManagesHooksTestAgent extends Agent implements HasOutputSchema
+    class ManagesHooksTestAgent extends Agent implements HasOutputSchema, HasStartThreadHook, HasBootAgentHook, HasEndIterationHook, HasEndThreadHook, HasEndToolCallHook, HasIntegrationResponseHook, HasPromptGeneratedHook, HasPromptParsedHook, HasStartIterationHook, HasStartToolCallHook
     {
         use ValidatesOutputSchema;
         use HandlesAgentEvents;
@@ -65,6 +76,67 @@ declare(strict_types=1);
         protected function resolveTools(): array
         {
             return [new SerperTool];
+        }
+
+        public function hookStartThread(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            StartThread::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+
+        }
+
+        public function hookBootAgent(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            BootAgent::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookEndIteration(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            EndIteration::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookEndThread(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            EndThread::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookEndToolCall(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            EndToolCall::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookIntegrationResponse(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            IntegrationResponse::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookPromptGenerated(string $generatedPrompt): string
+        {
+            PromptGenerated::dispatch($generatedPrompt);
+            return $generatedPrompt;
+        }
+
+        public function hookPromptParsed(array $parsedPrompt): array
+        {
+            PromptParsed::dispatch($parsedPrompt);
+            return $parsedPrompt;
+        }
+
+        public function hookStartIteration(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            StartIteration::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
+        }
+
+        public function hookStartToolCall(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            StartToolCall::dispatch($pendingAgentTask);
+            return $pendingAgentTask;
         }
     }
 

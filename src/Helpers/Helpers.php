@@ -16,42 +16,25 @@ use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 final class Helpers
 {
     /**
-     * Returns all traits used by a class, its parent classes and trait of their traits.
-     *
-     * @param  object|class-string  $class
-     * @return array<class-string, class-string>
-     */
-    public static function classUsesRecursive(object|string $class): array
-    {
-        if (is_object($class)) {
-            $class = get_class($class);
-        }
-
-        $results = [];
-
-        foreach (array_reverse(class_parents($class)) + [$class => $class] as $class) {
-            $results += self::traitUsesRecursive($class);
-        }
-
-        return array_unique($results);
-    }
-
-    /**
-     * Returns all traits used by a trait and its traits.
+     * Boot a plugin
      *
      * @param  class-string  $trait
-     * @return array<class-string, class-string>
+     *
+     * @throws \ReflectionException
      */
-    public static function traitUsesRecursive(string $trait): array
+    public static function bootPlugin(PendingAgentTask $pendingAgentTask, string $trait): void
     {
-        /** @var array<class-string, class-string> $traits */
-        $traits = class_uses($trait) ?: [];
+        $agent = $pendingAgentTask->agent();
 
-        foreach ($traits as $trait) {
-            $traits += self::traitUsesRecursive($trait);
+        $traitReflection = new ReflectionClass($trait);
+
+        $bootMethodName = 'boot'.$traitReflection->getShortName();
+
+        if (! method_exists($agent, $bootMethodName)) {
+            return;
         }
 
-        return $traits;
+        $agent->{$bootMethodName}($pendingAgentTask);
     }
 
     /**
@@ -96,11 +79,42 @@ final class Helpers
     }
 
     /**
-     * Return the default value of the given value.
+     * Returns all traits used by a class, its parent classes and trait of their traits.
+     *
+     * @param  object|class-string  $class
+     * @return array<class-string, class-string>
      */
-    public static function value(mixed $value, mixed ...$args): mixed
+    public static function classUsesRecursive(object|string $class): array
     {
-        return $value instanceof Closure ? $value(...$args) : $value;
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
+        $results = [];
+
+        foreach (array_reverse(class_parents($class)) + [$class => $class] as $class) {
+            $results += self::traitUsesRecursive($class);
+        }
+
+        return array_unique($results);
+    }
+
+    /**
+     * Returns all traits used by a trait and its traits.
+     *
+     * @param  class-string  $trait
+     * @return array<class-string, class-string>
+     */
+    public static function traitUsesRecursive(string $trait): array
+    {
+        /** @var array<class-string, class-string> $traits */
+        $traits = class_uses($trait) ?: [];
+
+        foreach ($traits as $trait) {
+            $traits += self::traitUsesRecursive($trait);
+        }
+
+        return $traits;
     }
 
     /**
@@ -118,24 +132,10 @@ final class Helpers
     }
 
     /**
-     * Boot a plugin
-     *
-     * @param  class-string  $trait
-     *
-     * @throws \ReflectionException
+     * Return the default value of the given value.
      */
-    public static function bootPlugin(PendingAgentTask $pendingAgentTask, string $trait): void
+    public static function value(mixed $value, mixed ...$args): mixed
     {
-        $agent = $pendingAgentTask->getAgent();
-
-        $traitReflection = new ReflectionClass($trait);
-
-        $bootMethodName = 'boot'.$traitReflection->getShortName();
-
-        if (! method_exists($agent, $bootMethodName)) {
-            return;
-        }
-
-        $agent->{$bootMethodName}($pendingAgentTask);
+        return $value instanceof Closure ? $value(...$args) : $value;
     }
 }

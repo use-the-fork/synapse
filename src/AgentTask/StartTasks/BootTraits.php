@@ -16,7 +16,7 @@
         public function __invoke(PendingAgentTask $pendingAgentTask): PendingAgentTask
         {
 
-            $agent = $pendingAgentTask->getAgent();
+            $agent = $pendingAgentTask->agent();
             $agentTraits = Helpers::classUsesRecursive($agent);
 
             foreach ($agentTraits as $agentTrait) {

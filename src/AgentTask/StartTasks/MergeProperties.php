@@ -14,7 +14,7 @@ class MergeProperties
     public function __invoke(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
 
-        $agent = $pendingAgentTask->getAgent();
+        $agent = $pendingAgentTask->agent();
 
         $pendingAgentTask->middleware()
             ->merge($agent->middleware());

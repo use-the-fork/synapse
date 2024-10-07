@@ -8,5 +8,12 @@
 
     interface HasIntegrationResponseHook
     {
+        /**
+         * Hook into the integration response of a pending agent task.
+         *
+         * @param PendingAgentTask $pendingAgentTask The pending agent task to hook into.
+         *
+         * @return PendingAgentTask Returns the pending agent task, possibly modified.
+         */
         public function hookIntegrationResponse(PendingAgentTask $pendingAgentTask): PendingAgentTask;
     }

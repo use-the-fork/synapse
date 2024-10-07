@@ -8,5 +8,12 @@
 
     interface HasEndToolCallHook
     {
+        /**
+         * Hook that gets executed at the end of a tool call.
+         *
+         * @param PendingAgentTask $pendingAgentTask The pending agent task instance.
+         *
+         * @return PendingAgentTask Returns the pending agent task, possibly modified.
+         */
         public function hookEndToolCall(PendingAgentTask $pendingAgentTask): PendingAgentTask;
     }

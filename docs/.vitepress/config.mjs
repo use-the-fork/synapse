@@ -29,6 +29,7 @@ export default defineConfig({
                 items: [
                     { text: 'Introduction', link: '/agents' },
                     { text: 'Working With Agents', link: '/agents/working-with-agents' },
+                    { text: 'Agent Lifecycle', link: '/agent-lifecycle' },
                     { text: 'Prompts', link: '/agents/Prompts' },
                     { text: 'Agent Traits', link: '/agent-traits' },
                     { text: 'Querying Models', link: '/eloquent/querying-models' },
