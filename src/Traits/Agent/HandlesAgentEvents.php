@@ -12,10 +12,13 @@ use UseTheFork\Synapse\Events\Agent\EndIteration;
 use UseTheFork\Synapse\Events\Agent\EndThread;
 use UseTheFork\Synapse\Events\Agent\EndToolCall;
 use UseTheFork\Synapse\Events\Agent\IntegrationResponse;
+use UseTheFork\Synapse\Events\Agent\PromptGenerated;
+use UseTheFork\Synapse\Events\Agent\PromptParsed;
 use UseTheFork\Synapse\Events\Agent\StartIteration;
 use UseTheFork\Synapse\Events\Agent\StartThread;
 use UseTheFork\Synapse\Events\Agent\StartToolCall;
 use UseTheFork\Synapse\Traits\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\Message;
 
 trait HandlesAgentEvents
 {
@@ -24,8 +27,12 @@ trait HandlesAgentEvents
     public function bootHandlesAgentEvents(): void
     {
         $this->middleware()->onBootAgent(fn (PendingAgentTask $pendingAgentTask) => $this->eventBootAgent($pendingAgentTask), 'eventBootAgent', PipeOrder::LAST);
+
         $this->middleware()->onStartThread(fn (PendingAgentTask $pendingAgentTask) => $this->eventStartThread($pendingAgentTask), 'eventStartThread', PipeOrder::LAST);
         $this->middleware()->onStartIteration(fn (PendingAgentTask $pendingAgentTask) => $this->eventStartIteration($pendingAgentTask), 'eventStartIteration', PipeOrder::LAST);
+
+        $this->middleware()->onPromptGenerated(fn (string $generatedPrompt) => $this->eventPromptGenerated($generatedPrompt), 'eventPromptGenerated', PipeOrder::LAST);
+        $this->middleware()->onPromptParsed(fn (array $parsedPrompt) => $this->eventPromptParsed($parsedPrompt), 'eventPromptParsed', PipeOrder::LAST);
 
         $this->middleware()->onIntegrationResponse(fn (PendingAgentTask $pendingAgentTask) => $this->eventIntegrationResponse($pendingAgentTask), 'eventIntegrationResponse', PipeOrder::LAST);
 
@@ -56,6 +63,21 @@ trait HandlesAgentEvents
     protected function eventStartIteration(PendingAgentTask $pendingAgentTask): void
     {
         StartIteration::dispatch($pendingAgentTask);
+    }
+
+    protected function eventPromptGenerated(string $generatedPrompt): void
+    {
+        PromptGenerated::dispatch($generatedPrompt);
+    }
+
+    /**
+     * Handle the event when a prompt is parsed.
+     *
+     * @param  array<Message>  $parsedPrompt  The parsed prompt array.
+     */
+    protected function eventPromptParsed(array $parsedPrompt): void
+    {
+        PromptParsed::dispatch($parsedPrompt);
     }
 
     /**

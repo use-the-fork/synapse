@@ -26,7 +26,7 @@ trait ManagesIntegration
      * This method assigns the integration object returned by the `registerIntegration` method
      * to the `$integration` property of the class.
      */
-    public function initializeIntegration(): void
+    public function bootManagesIntegration(PendingAgentTask $pendingAgentTask): void
     {
         $this->integration = $this->resolveIntegration();
     }
@@ -42,10 +42,5 @@ trait ManagesIntegration
     public function resolveIntegration(): Integration
     {
         throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
-    }
-
-    public function bootManagesIntegration(PendingAgentTask $pendingAgentTask): void
-    {
-        $this->middleware()->onStartThread(fn () => $this->initializeIntegration(), 'initializeIntegration');
     }
 }

@@ -34,7 +34,7 @@ declare(strict_types=1);
 
         Event::fake();
 
-    class HandlesAgentEventsTestAgent extends Agent implements HasOutputSchema
+    class ManagesHooksTestAgent extends Agent implements HasOutputSchema
     {
         use ValidatesOutputSchema;
         use HandlesAgentEvents;
@@ -77,7 +77,7 @@ declare(strict_types=1);
            SerperSearchRequest::class => MockResponse::fixture('Integrations/OpenAiToolTestAgent-Serper-Tool'),
        ]);
 
-    $agent = new HandlesAgentEventsTestAgent;
+    $agent = new ManagesHooksTestAgent;
     $message = $agent->handle(['input' => 'search google for the current president of the united states.']);
 
     $agentResponseArray = $message->toArray();

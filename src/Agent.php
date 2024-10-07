@@ -57,7 +57,6 @@ class Agent implements HasIntegration, HasMemory
      */
     public function __construct()
     {
-        $this->initializeIntegration();
         $this->pendingAgentTask = $this->createPendingAgentTask();
     }
 
@@ -98,9 +97,11 @@ class Agent implements HasIntegration, HasMemory
 
             $this->pendingAgentTask->middleware()->executeStartIterationPipeline($this->pendingAgentTask);
 
-            $promptChain = $this->parsePrompt(
-                $this->getPrompt($this->pendingAgentTask)
-            );
+            $prompt = $this->getPrompt($this->pendingAgentTask);
+            $prompt = $this->pendingAgentTask->middleware()->executePromptGeneratedPipeline($prompt);
+
+            $promptChain = $this->parsePrompt($prompt);
+            $promptChain = $this->pendingAgentTask->middleware()->executePromptParsedPipeline($promptChain);
 
             $this->pendingAgentTask->currentIteration()->setPromptChain($promptChain);
 
@@ -125,6 +126,32 @@ class Agent implements HasIntegration, HasMemory
         }
 
         throw new MaximumIterationsException($this->maximumIterations);
+    }
+
+    /**
+     * Retrieves the prompt view, based on the provided inputs.
+     *
+     * @param  PendingAgentTask  $pendingAgentTask  The inputs for the prompt.
+     * @return string The rendered prompt view.
+     *
+     * @throws Throwable
+     */
+    public function getPrompt(PendingAgentTask $pendingAgentTask): string
+    {
+
+        $inputs = $pendingAgentTask->inputs();
+
+        $toolNames = array_keys($this->tools);
+
+        if (isset($inputs['image'])) {
+            $inputs['image'] = base64_encode(json_encode($inputs['image']));
+        }
+
+        return view($this->promptView, [
+            ...$inputs,
+            ...$this->extraInputs,
+            'tools' => $toolNames,
+        ])->render();
     }
 
     /**
@@ -183,32 +210,6 @@ class Agent implements HasIntegration, HasMemory
         }
 
         return $prompts;
-    }
-
-    /**
-     * Retrieves the prompt view, based on the provided inputs.
-     *
-     * @param  PendingAgentTask  $pendingAgentTask  The inputs for the prompt.
-     * @return string The rendered prompt view.
-     *
-     * @throws Throwable
-     */
-    public function getPrompt(PendingAgentTask $pendingAgentTask): string
-    {
-
-        $inputs = $pendingAgentTask->inputs();
-
-        $toolNames = array_keys($this->tools);
-
-        if (isset($inputs['image'])) {
-            $inputs['image'] = base64_encode(json_encode($inputs['image']));
-        }
-
-        return view($this->promptView, [
-            ...$inputs,
-            ...$this->extraInputs,
-            'tools' => $toolNames,
-        ])->render();
     }
 
     /**
