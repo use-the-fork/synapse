@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 08 Oct 2024 23:28:12 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "408",
+        "Connection": "keep-alive"
+    },
+    "data": "{\"id\":\"msg_01WYJG7akjyJXCsBfbxabZ9o\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"```json\\n{\\n    \\\"answer\\\": \\\"The current president of the United States is Joe Biden. He is serving as the 46th president of the United States since 2021.\\\"\\n}\\n```\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":1440,\"output_tokens\":46}}"
+}

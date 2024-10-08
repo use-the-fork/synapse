@@ -9,6 +9,7 @@ use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\AgentTask\StartTasks\BootTraits;
 use UseTheFork\Synapse\AgentTask\StartTasks\MergeProperties;
 use UseTheFork\Synapse\Contracts\Memory;
+use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 
 class PendingAgentTask
@@ -18,7 +19,7 @@ class PendingAgentTask
     protected Agent $agent;
     protected CurrentIteration $currentIteration;
     protected Collection $inputs;
-    protected Memory $memory;
+    protected Memory $iterationMemory;
     protected array $tools = [];
 
     public function __construct(Agent $agent)
@@ -26,6 +27,8 @@ class PendingAgentTask
         $this->agent = $agent;
 
         $this->currentIteration = new CurrentIteration;
+        $this->iterationMemory = new CollectionMemory();
+        $this->iterationMemory->boot();
 
         $this
             ->tap(new BootTraits)
@@ -115,16 +118,6 @@ class PendingAgentTask
     }
 
     /**
-     * Retrieve the agent's memory instance.
-     *
-     * @return Memory The agent's memory instance.
-     */
-    public function memory(): Memory
-    {
-        return $this->memory;
-    }
-
-    /**
      * Reboots the pending agent task with the provided inputs and extra arguments.
      *
      * @param array $inputs         The inputs to be used for the task.
@@ -138,8 +131,19 @@ class PendingAgentTask
         $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
 
         $this->inputs = collect($inputs);
+        $this->iterationMemory()->clear();
 
         $this->middleware()->executeStartThreadPipeline($this);
+    }
+
+    /**
+     * Retrieve the current tasks memory instance.
+     *
+     * @return Memory The pending tasks memory instance.
+     */
+    public function iterationMemory(): Memory
+    {
+        return $this->iterationMemory;
     }
 
     /**

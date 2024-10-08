@@ -9,7 +9,6 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Agent;
     use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
     use UseTheFork\Synapse\Contracts\Integration;
-    use UseTheFork\Synapse\Contracts\Memory;
     use UseTheFork\Synapse\Events\Agent\AgentFinish;
     use UseTheFork\Synapse\Events\Agent\BootAgent;
     use UseTheFork\Synapse\Events\Agent\EndIteration;
@@ -23,7 +22,6 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Events\Agent\StartToolCall;
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
     use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-    use UseTheFork\Synapse\Memory\CollectionMemory;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
     use UseTheFork\Synapse\Tools\SerperTool;
     use UseTheFork\Synapse\Traits\Agent\HandlesAgentEvents;
@@ -44,11 +42,6 @@ declare(strict_types=1);
         public function resolveIntegration(): Integration
         {
             return new OpenAIIntegration;
-        }
-
-        public function resolveMemory(): Memory
-        {
-            return new CollectionMemory;
         }
 
         public function resolveOutputSchema(): array

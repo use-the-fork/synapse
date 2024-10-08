@@ -10,24 +10,20 @@ use Throwable;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
-use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
-use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
 
-class Agent implements HasIntegration, HasMemory
+class Agent implements HasIntegration
 {
     use HasMiddleware;
     use ManagesIntegration,
-        ManagesMemory,
         ManagesTools;
 
     /**
@@ -98,6 +94,9 @@ class Agent implements HasIntegration, HasMemory
             $this->pendingAgentTask->middleware()->executeStartIterationPipeline($this->pendingAgentTask);
 
             $prompt = $this->getPrompt($this->pendingAgentTask);
+            // append the prompt chain and iteration memory so tool calls are included
+            $prompt = $prompt."\n".$this->pendingAgentTask->iterationMemory()->asInputs()['memoryWithMessages'];
+
             $prompt = $this->pendingAgentTask->middleware()->executePromptGeneratedPipeline($prompt);
 
             $promptChain = $this->parsePrompt($prompt);
@@ -229,6 +228,7 @@ class Agent implements HasIntegration, HasMemory
             $response['tool_content'] = $toolResult;
         }
 
+        $pendingAgentTask->iterationMemory()->create(Message::make($response));
         $pendingAgentTask->currentIteration()->setResponse(Message::make($response));
     }
 
@@ -268,10 +268,5 @@ class Agent implements HasIntegration, HasMemory
     public function resolveIntegration(): Integration
     {
         throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
-    }
-
-    public function resolveMemory(): Memory
-    {
-        throw new MissingResolverException('ManagesMemory', 'resolveMemory');
     }
 }
