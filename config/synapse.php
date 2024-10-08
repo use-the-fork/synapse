@@ -7,13 +7,11 @@ return [
         'openai' => [
             'key' => env('OPENAI_API_KEY'),
             'chat_model' => env('OPENAI_API_CHAT_MODEL', 'gpt-4-turbo'),
-            'validate_model' => env('OPENAI_API_VALIDATE_MODEL', 'gpt-4-turbo'),
             'embedding_model' => env('OPENAI_API_EMBEDDING_MODEL', 'text-embedding-ada-002'),
         ],
         'claude' => [
             'key' => env('ANTHROPIC_API_KEY'),
             'chat_model' => env('ANTHROPIC_API_CHAT_MODEL', 'claude-3-5-sonnet-20240620'),
-            'validate_model' => env('ANTHROPIC_API_VALIDATE_MODEL', 'claude-3-5-sonnet-20240620'),
         ],
     ],
     'services' => [

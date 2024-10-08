@@ -28,13 +28,17 @@ export default defineConfig({
                 text: 'Agents',
                 items: [
                     { text: 'Introduction', link: '/agents' },
-                    { text: 'Working With Agents', link: '/agents/working-with-agents' },
-                    { text: 'Agent Lifecycle', link: '/agent-lifecycle' },
-                    { text: 'Prompts', link: '/agents/Prompts' },
-                    { text: 'Agent Traits', link: '/agent-traits' },
-                    { text: 'Querying Models', link: '/eloquent/querying-models' },
-                    { text: 'Saving Models', link: '/eloquent/saving-models' },
-                    { text: 'Deleting Models', link: '/eloquent/deleting-models' },
+                    { text: 'Agent Lifecycle', link: '/agents/agent-lifecycle' },
+                    { text: 'Prompts', link: '/agents/prompts' },
+                    { text: 'Agent Traits', link: '/agents/agent-traits' },
+                ],
+            },
+            {
+                text: 'Traits',
+                items: [
+                    { text: 'Introduction', link: '/traits' },
+                    { text: 'Validates Output Schema', link: '/traits/validates-output-schema' },
+                    { text: 'Hooks', link: '/traits/hook-trait' },
                 ],
             }
         ],

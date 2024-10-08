@@ -22,7 +22,12 @@ This is where the agent is setup and all of the hooks are booted.
 > If you would like to hook in to or modify the agent at this step see the `HasBootAgentHook` in the [Hook Traits section](/agent-traits/hook-trait).
 
 ### Code calls the `handle` method of the agent.
-At this point a new `CurrentIteration` is set and the `inputs` passed to `handle` are set. 
+At this point a new `CurrentIteration` is set and the `inputs` and `extraAgentArgs` passed to `handle` are set.
+
+```php
+  $simpleAgent = new SimpleAgent;
+  $result = $agent->handle(['input' => 'hello!'], ['model' => 'gpt-4o-mini']); // [!code highlight]
+```
 
 > If you would like to hook in to or modify the agent at this step see the `HasStartThreadHook` in the [Hook Traits section](/agent-traits/hook-trait).
 

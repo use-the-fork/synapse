@@ -5,7 +5,7 @@ When the `resolveMemory` method is not overwritten by your agent you will simply
 
 ## Getting Started
 
-To get started, you will need to override the `resolveMemory` method of your agent with one of the Memory types available by Synapse 
+To get started, you will need to override the `resolveMemory` method of your agent with one of the Memory types available by Synapse
 
 ```php
 <?php
@@ -23,7 +23,7 @@ class SimpleAgent extends Agent
     {
         return new OpenAIIntegration();
     }
-    
+
     public function resolveMemory(): Memory
     {
         return new CollectionMemory();
