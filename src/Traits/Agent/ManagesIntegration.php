@@ -43,4 +43,9 @@ trait ManagesIntegration
     {
         throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
     }
+
+    public function integration(): Integration
+    {
+        return $this->integration;
+    }
 }

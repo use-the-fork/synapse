@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
-use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Clearbit\ClearbitConnector;
 use UseTheFork\Synapse\Services\Clearbit\Requests\ClearbitCompanyRequest;
 
-final class ClearbitCompanyTool extends BaseTool implements Tool
+final class ClearbitCompanyTool extends BaseTool
 {
     private string $apiKey;
 
-    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function __construct()
     {
         $this->apiKey = config('synapse.services.clearbit.key', '');
 
         if (empty($this->apiKey)) {
             throw new MissingApiKeyException('API (CLEARBIT_API_KEY) key is required.');
         }
-
-        return $pendingAgentTask;
     }
 
     /**

@@ -6,7 +6,6 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
@@ -16,15 +15,13 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function __construct()
     {
         $this->apiKey = config('synapse.services.serp_api.key');
 
         if (empty($this->apiKey)) {
             throw new MissingApiKeyException('API (SERPAPI_API_KEY) key is required.');
         }
-
-        return $pendingAgentTask;
     }
 
     /**

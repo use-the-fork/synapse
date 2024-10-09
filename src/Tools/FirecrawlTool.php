@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
-use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
 use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
 
-final class FirecrawlTool extends BaseTool implements Tool
+final class FirecrawlTool extends BaseTool
 {
     private string $apiKey;
 
-    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function __construct()
     {
         $this->apiKey = config('synapse.services.firecrawl.key');
 
         if (empty($this->apiKey)) {
             throw new MissingApiKeyException('API (FIRECRAWL_API_KEY) key is required.');
         }
-
-        return $pendingAgentTask;
     }
 
     /**

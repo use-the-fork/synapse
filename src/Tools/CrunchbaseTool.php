@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Crunchbase\CrunchbaseConnector;
@@ -15,15 +14,13 @@ final class CrunchbaseTool extends BaseTool implements Tool
 {
     private string $apiKey;
 
-    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function __construct()
     {
         $this->apiKey = config('synapse.services.crunchbase.key');
 
         if (empty($this->apiKey)) {
             throw new MissingApiKeyException('API (CRUNCHBASE_API_KEY) key is required.');
         }
-
-        return $pendingAgentTask;
     }
 
     /**

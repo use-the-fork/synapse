@@ -9,11 +9,9 @@ use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
 use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\BaseTool;
 use UseTheFork\Synapse\Tools\SerperTool;
@@ -31,11 +29,6 @@ test('Serper Tool', function (): void {
         public function resolveIntegration(): Integration
         {
             return new OpenAIIntegration;
-        }
-
-        public function resolveMemory(): Memory
-        {
-            return new CollectionMemory;
         }
 
         public function resolveOutputSchema(): array

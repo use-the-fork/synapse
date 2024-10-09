@@ -34,7 +34,23 @@ export default defineConfig({
                 ],
             },
             {
-                text: 'Agent Memory',
+                text: 'Prompts',
+                items: [
+                    { text: 'Introduction', link: '/prompts/index' },
+                    { text: 'Parts', link: '/prompts/parts' },
+                    { text: 'Agents', link: '/prompts/agents' },
+                ],
+            },
+            {
+                text: 'Tools',
+                items: [
+                    { text: 'Introduction', link: '/tools' },
+                    { text: 'Anatomy Of A Tool', link: '/tools/anatomy-of-a-tool' },
+                    { text: 'Packaged Tools', link: '/tools/packaged-tools' },
+                ],
+            },
+            {
+                text: 'Memory',
                 items: [
                     { text: 'Introduction', link: '/memory' },
                     { text: 'Collection Memory', link: '/memory/collection' },

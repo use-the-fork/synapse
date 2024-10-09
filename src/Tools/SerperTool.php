@@ -5,25 +5,21 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
-use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Services\Serper\SerperConnector;
 
-final class SerperTool extends BaseTool implements Tool
+final class SerperTool extends BaseTool
 {
     private string $apiKey;
 
-    public function boot(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    public function __construct()
     {
         $this->apiKey = config('synapse.services.serper.key');
 
         if(empty($this->apiKey)) {
             throw new MissingApiKeyException('API (SERPER_API_KEY) key is required.');
         }
-
-        return $pendingAgentTask;
     }
 
     /**
