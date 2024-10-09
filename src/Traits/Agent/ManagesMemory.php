@@ -20,24 +20,27 @@ trait ManagesMemory
      */
     protected Memory $memory;
 
-    /**
-     * Clears the memory of the application.
-     *
-     * This method clears the memory that is currently stored in the application.
-     */
-    public function clearMemory(): void
+    public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
     {
-        $this->memory->clear();
+        $this->middleware()->onBootAgent(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
+        $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
+        $this->middleware()->onEndIteration(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryEndIteration');
+        $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryAgentFinish');
     }
 
     /**
-     * Retrieves the memory of the agent
-     *
-     * @return Memory The memory object of the agent
+     * Initializes the memory by registering the memory object.
+     * @throws MissingResolverException
      */
-    public function memory(): Memory
+    protected function initializeMemory(PendingAgentTask $pendingAgentTask): void
     {
-        return $this->memory;
+        $this->memory = $this->resolveMemory();
+        $this->memory->boot($pendingAgentTask);
+    }
+
+    public function resolveMemory(): Memory
+    {
+        throw new MissingResolverException('ManagesMemory', 'resolveMemory');
     }
 
     public function loadMemory(PendingAgentTask $pendingAgentTask): PendingAgentTask
@@ -64,6 +67,26 @@ trait ManagesMemory
     }
 
     /**
+     * Clears the memory of the application.
+     *
+     * This method clears the memory that is currently stored in the application.
+     */
+    public function clearMemory(): void
+    {
+        $this->memory->clear();
+    }
+
+    /**
+     * Retrieves the memory of the agent
+     *
+     * @return Memory The memory object of the agent
+     */
+    public function memory(): Memory
+    {
+        return $this->memory;
+    }
+
+    /**
      * Sets the memory with the given array of messages.
      *
      * @param  array<Message>  $messages  The array of messages to be set in the memory.
@@ -71,23 +94,5 @@ trait ManagesMemory
     public function setMemory(array $messages): void
     {
         $this->memory->set($messages);
-    }
-
-    /**
-     * Initializes the memory by registering the memory object.
-     * @throws MissingResolverException
-     */
-    protected function initializeMemory(PendingAgentTask $pendingAgentTask): void
-    {
-        $this->memory = $this->resolveMemory();
-        $this->memory->boot($pendingAgentTask);
-    }
-
-    public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
-    {
-        $this->middleware()->onBootAgent(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
-        $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
-        $this->middleware()->onEndIteration(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryEndIteration');
-        $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryAgentFinish');
     }
 }

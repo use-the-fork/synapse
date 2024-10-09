@@ -7,11 +7,13 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Contracts\Memory;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Memory\DatabaseMemory;
+use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
@@ -19,8 +21,9 @@ uses(RefreshDatabase::class);
 
 it('Database Memory', function (): void {
 
-    class DatabaseMemoryAgent extends Agent
+    class DatabaseMemoryAgent extends Agent implements HasMemory
     {
+        use ManagesMemory;
         use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';

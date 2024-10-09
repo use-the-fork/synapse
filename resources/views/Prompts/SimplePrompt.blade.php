@@ -4,7 +4,8 @@
 
 	@include('synapse::Parts.OutputSchema')
 </message>
-@include('synapse::Parts.Input')
 @include('synapse::Parts.MemoryAsMessages')
+@include('synapse::Parts.Input')
+
 
 

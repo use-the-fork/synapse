@@ -34,6 +34,14 @@ export default defineConfig({
                 ],
             },
             {
+                text: 'Agent Memory',
+                items: [
+                    { text: 'Introduction', link: '/memory' },
+                    { text: 'Collection Memory', link: '/memory/collection' },
+                    { text: 'Database Memory', link: '/memory/database' },
+                ],
+            },
+            {
                 text: 'Traits',
                 items: [
                     { text: 'Introduction', link: '/traits' },

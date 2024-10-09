@@ -14,10 +14,7 @@ class DatabaseMemory implements Memory
 {
     protected AgentMemory $agentMemory;
 
-    public function boot(?PendingAgentTask $pendingAgentTask = null): void
-    {
-        $this->agentMemory = new AgentMemory;
-        $this->agentMemory->save();
+    public function __construct(public readonly ?string $memoryId = null){
     }
 
     /**
@@ -59,6 +56,17 @@ class DatabaseMemory implements Memory
             'memoryWithMessages' => implode("\n", $payload['memoryWithMessages']),
             'memory' => implode("\n", $payload['memory']),
         ];
+    }
+
+    public function boot(?PendingAgentTask $pendingAgentTask = null): void
+    {
+        if(!empty($this->memoryId)){
+            $this->agentMemory = AgentMemory::firstOrNew($this->memoryId);
+        } else {
+            $this->agentMemory = new AgentMemory;
+            $this->agentMemory->save();
+        }
+
     }
 
     /**

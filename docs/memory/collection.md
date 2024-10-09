@@ -1,46 +1,34 @@
 # Collection Memory
 
-To get started you will need to add the `HasMemory` interface. This will add the proper resolver method to your agent.
+Collection memory lasts only for the duration of the applications lifecycle and stores messages in an array. As a result the memory is lost when the applications finishes.
+
+To get started, you will need to add the `HasMemory` trait and the `resolveMemory` method of your agent. Then add the `ManagesMemory` trait and you need to include the `@include('synapse::Parts.MemoryAsMessages')` snippet in your prompts blade view.
+
+From here you need to add `CollectionMemory` memory type to the `resolveMemory` method.
 
 ```php
 <?php
 
-use UseTheFork\Synapse\Agents\Agent;
-use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;
-
-class SimpleAgent extends Agent implements HasMemory
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Contracts\Agent\HasMemory;
+use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
+    
+class SimpleAgent extends Agent implements HasMemory  // [!code focus]
 {
-    public function resolvePromptView(): string
-    {
-        return 'synapse::Prompts.SimpleAgentPrompt';
-    }
+    use ManagesMemory;  // [!code focus]
 
-    public function resolveIntegration(): string
+    protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+    public function resolveIntegration(): Integration
     {
         return new OpenAIIntegration();
     }
-}
-```
 
-Next, you will need to add the `HasCollectionMemory` trait to your request. This trait will implement the agents memory as a `Collection`. This means the memory is erased at the end of the applications' lifecycle.
-
-```php
-<?php
-
-use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;
-
-class SimpleAgent extends Agent implements HasMemory
-{
-    use HasCollectionMemory;
-
-    public function resolvePromptView(): string
+    public function resolveMemory(): Memory // [!code focus:4]
     {
-        return 'synapse::Prompts.SimpleAgentPrompt';
-    }
-
-    public function resolveIntegration(): string
-    {
-        return new OpenAIIntegration();
+        return new CollectionMemory();
     }
 }
 ```
