@@ -20,7 +20,7 @@ use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
-    
+
 class SimpleAgent extends Agent implements HasMemory  // [!code focus]
 {
     use ManagesMemory;  // [!code focus]
@@ -42,10 +42,8 @@ class SimpleAgent extends Agent implements HasMemory  // [!code focus]
 `DatabaseMemory` takes a ID as it's input if you would like to load a specific memory in to your agent. If the ID is not found a new memory is created.
 
 ```php
-
     public function resolveMemory(): Memory
     {
         return new DatabaseMemory(123);
     }
-
 ```
