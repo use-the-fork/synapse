@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Thu, 10 Oct 2024 23:11:59 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "954",
+    "openai-version": "2020-10-01",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999902",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "2ms",
+    "x-request-id": "req_03c0db015a6ca12d7b16759adba83439",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=nE2EM8JX08apfifB8VMT4UicpOhx52b9aiCrhZjhbhE-1728601919-1.0.1.1-UQfVwb3Ku549D8Chg1TQMOabd.B0frjkuNMdDAx.IBvqwe2vGDi5AuxZ._TlvUG0.lAGS8kUSApmQwmbgf17vg; path=/; expires=Thu, 10-Oct-24 23:41:59 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=JPFLLfieyisXq.hxrjI3i8QfQ1flnHCTdLjNtGpJ3c0-1728601919322-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d0a4ae4ebfe434f-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AGwc25H0EVHsmnoLM7cBhrWiQntyT\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728601918,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"answer\\\": \\\"?yadot uoy tsi...ssa nac I woH !olleH\\\"\\n}\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 89,\n    \"completion_tokens\": 25,\n    \"total_tokens\": 114,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}
