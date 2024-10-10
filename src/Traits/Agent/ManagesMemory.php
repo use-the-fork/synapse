@@ -20,12 +20,22 @@ trait ManagesMemory
      */
     protected Memory $memory;
 
+    /**
+     * Adds a message to the current memory
+     *
+     * @param  Message  $message  The message to add to the memory.
+     */
+    public function addMessageToMemory(Message $message): void
+    {
+        $this->memory->create($message);
+    }
+
     public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
     {
         $this->middleware()->onBootAgent(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
         $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
-        $this->middleware()->onEndIteration(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryEndIteration');
-        $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemory($pendingAgentTask), 'memoryAgentFinish');
+        $this->middleware()->onEndIteration(fn () => $this->addMessageToMemoryPipeline($pendingAgentTask), 'memoryEndIteration');
+        $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemoryPipeline($pendingAgentTask), 'memoryAgentFinish');
     }
 
     /**
@@ -58,7 +68,7 @@ trait ManagesMemory
      *
      * @param  PendingAgentTask  $pendingAgentTask  The message to add to the memory.
      */
-    public function addMessageToMemory(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    protected function addMessageToMemoryPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
         $message = $pendingAgentTask->currentIteration()->getResponse();
         $this->memory->create($message);

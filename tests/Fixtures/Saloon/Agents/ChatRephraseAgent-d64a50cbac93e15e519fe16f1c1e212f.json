@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Thu, 10 Oct 2024 23:46:06 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "937",
+    "openai-version": "2020-10-01",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999707",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "8ms",
+    "x-request-id": "req_466c5caeb7b01c1b342b0548e150e60a",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=lT7uuqpRmkdYPIZTxNszN9rQM2PCT.dOEShecigouTk-1728603966-1.0.1.1-gQjC7x4jXAEUGjoDV0voBu_ddONefTrcC7M0Q88buScHWXOLcBcFSNv94Cjznw_qrDdlyQs.m67Hg8jyz0W6ig; path=/; expires=Fri, 11-Oct-24 00:16:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=WO504wXXEuVagLPYoXsRfBJv3MNEzHnkOqHmuvYuDnE-1728603966902-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d0a7ce199754228-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AGx93EGjkiQ6K7Aa6ZzxoCEB3KGyV\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728603965,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"standalone_question\\\": \\\"How can I improve my heart health?\\\"\\n}\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 228,\n    \"completion_tokens\": 17,\n    \"total_tokens\": 245,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"text_tokens\": 0,\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

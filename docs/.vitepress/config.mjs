@@ -79,6 +79,10 @@ export default defineConfig({
             text: 'Multi Query Retriever',
             link: '/prebuilt-agents/multi-query-retriever-agent',
           },
+          {
+            text: 'Chat Rephrase',
+            link: '/prebuilt-agents/chat-rephrase-agent',
+          },
         ],
       },
     ],
