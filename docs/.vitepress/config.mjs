@@ -1,4 +1,4 @@
-import {defineConfig} from 'vitepress';
+import { defineConfig } from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: '🧠 Laravel Synapse',
@@ -27,7 +27,7 @@ export default defineConfig({
       {
         text: 'Agents',
         items: [
-          { text: 'Introduction', link: '/agents' },
+          { text: 'Introduction', link: '/agents/' },
           { text: 'Lifecycle', link: '/agents/agent-lifecycle' },
           { text: 'Integrations', link: '/agents/integrations' },
           { text: 'Prompts', link: '/agents/prompts' },
@@ -37,7 +37,7 @@ export default defineConfig({
       {
         text: 'Prompts',
         items: [
-          { text: 'Introduction', link: '/prompts/index' },
+          { text: 'Introduction', link: '/prompts/index/' },
           { text: 'Parts', link: '/prompts/parts' },
           { text: 'Agents', link: '/prompts/agents' },
         ],
@@ -45,7 +45,7 @@ export default defineConfig({
       {
         text: 'Tools',
         items: [
-          { text: 'Introduction', link: '/tools' },
+          { text: 'Introduction', link: '/tools/' },
           { text: 'Anatomy Of A Tool', link: '/tools/anatomy-of-a-tool' },
           { text: 'Packaged Tools', link: '/tools/packaged-tools' },
         ],
@@ -53,7 +53,7 @@ export default defineConfig({
       {
         text: 'Memory',
         items: [
-          { text: 'Introduction', link: '/memory' },
+          { text: 'Introduction', link: '/memory/' },
           { text: 'Collection Memory', link: '/memory/collection' },
           { text: 'Database Memory', link: '/memory/database' },
         ],
@@ -61,7 +61,7 @@ export default defineConfig({
       {
         text: 'Traits',
         items: [
-          { text: 'Introduction', link: '/traits' },
+          { text: 'Introduction', link: '/traits/' },
           {
             text: 'Validates Output Schema',
             link: '/traits/validates-output-schema',
@@ -69,6 +69,16 @@ export default defineConfig({
           { text: 'Events', link: '/traits/events-trait' },
           { text: 'Logs', link: '/traits/log-trait' },
           { text: 'Hooks', link: '/traits/hook-trait' },
+        ],
+      },
+      {
+        text: 'Prebuilt Agents',
+        items: [
+          { text: 'Introduction', link: '/prebuilt-agents/' },
+          {
+            text: 'Multi Query Retriever',
+            link: '/prebuilt-agents/multi-query-retriever-agent',
+          },
         ],
       },
     ],

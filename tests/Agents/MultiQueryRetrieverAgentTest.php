@@ -12,19 +12,20 @@ it('can run the Multi Query Retriever Agent.', function (): void {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
-            $count = count($pendingRequest->body()->get('messages'));
+            $count = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("agents/multi-query-retriever-agent/message-{$count}");
+            return MockResponse::fixture("Agents/MultiQueryRetrieverAgent-{$count}");
         },
     ]);
 
     $agent = new MultiQueryRetrieverAgent;
 
-    $agentResponse = $agent->handle(['queryCount' => '5', 'input' => 'What gym activities do you recommend for heart health?']);
+    $message = $agent->handle(['queryCount' => '5', 'input' => 'What gym activities do you recommend for heart health?']);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer')
-        ->and($agentResponse['answer'])->toBeArray()
-        ->and($agentResponse['answer'])->toHaveCount(5);
+    $agentResponseArray = $message->toArray();
+
+    expect($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toBeArray()
+        ->and($agentResponseArray['content']['answer'])->toHaveCount(5);
 
 });
