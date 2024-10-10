@@ -1,12 +1,12 @@
 # Validates Output Schema Trait
 
-It's often desirable to have an agent respond in a specific format. To make this task easy Synapse uses Laravels built in validator, a view snippit, and a validation loop.
+To ensure that an agent responds in a specific format, Synapse leverages Laravel's built-in validator, a view snippet, and a validation loop. This is achieved using the `HasOutputSchema` interface, the `ValidatesOutputSchema` trait, and the `resolveOutputSchema` method.
 
-To get started add the `HasOutputSchema` interface, the `ValidatesOutputSchema` trait, and the `resolveOutputSchema` method to your agent. From here you can add an array of `SchemaRule` value objects.
+To start, add the `HasOutputSchema` interface and the `ValidatesOutputSchema` trait to your agent, and implement the `resolveOutputSchema` method. This method should return an array of `SchemaRule` value objects that define the validation rules for the agent's response.
 
-Keep in mind you will also need to include the `@include('synapse::Parts.OutputSchema')` in your blade view so the agent knows what schema to follow.
+Ensure you include `@include('synapse::Parts.OutputSchema')` in your Blade view so that the agent adheres to the specified schema.
 
-In the below example we have included our interface, trait, and method. Then we have `resolveOutputSchema` return one `SchemaRule`. That has the name of the key that should be returned. What is expected in the description and the Validator rules that must be followed.
+In the example below, the agent defines one `SchemaRule` for the `answer` field, describing its requirements and validation rules.
 
 ```php
 <?php
@@ -17,10 +17,9 @@ use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-class SimpleAgent extends Agent implements HasOutputSchema  // [!code focus]
+class SimpleAgent extends Agent implements HasOutputSchema
 {
-
-    use ValidatesOutputSchema; // [!code focus]
+    use ValidatesOutputSchema;
 
     public function resolvePromptView(): string
     {
@@ -32,7 +31,7 @@ class SimpleAgent extends Agent implements HasOutputSchema  // [!code focus]
         return new OpenAIIntegration();
     }
 
-    public function resolveOutputSchema(): array // [!code focus:10]
+    public function resolveOutputSchema(): array
     {
         return [
             SchemaRule::make([
@@ -42,49 +41,47 @@ class SimpleAgent extends Agent implements HasOutputSchema  // [!code focus]
             ]),
         ];
     }
-
 }
 ```
 
 ## The `SchemaRule` Value Object
-The `SchemaRule` Value Object takes three inputs:
-* name: The key that will be used in the return.
-* rules: Laravel validator rules to be applied to this input.
-* description: What should be the agent put in this field.
+The `SchemaRule` Value Object takes three parameters:
 
-Keep in mind you can use as many `SchemaRule` objects as you would like. For example below we ask for the output to be an array of `pdfs` objects. Each with a link, title, category, and product.
+- **name**: The key to be returned in the output.
+- **rules**: Laravel validation rules to apply.
+- **description**: Describes what should be placed in this field.
+
+You can define multiple `SchemaRule` objects. For instance, the example below requires an array of `pdfs` objects, each with specific attributes like link, title, category, and product.
 
 ```php
-
-  public function resolveOutputSchema(): array
-  {
-      return [
-          SchemaRule::make([
-              'name' => 'pdfs.*',
-              'rules' => 'sometimes|array',
-              'description' => 'An array of PDF links extracted from the website content.',
-          ]),
-          SchemaRule::make([
-              'name' => 'pdfs.*.link',
-              'rules' => 'required|url',
-              'description' => 'The link URL for the PDF.',
-          ]),
-          SchemaRule::make([
-              'name' => 'pdfs.*.title',
-              'rules' => 'required|string',
-              'description' => 'The Title of the PDF (usually the link text) in title case.',
-          ]),
-          SchemaRule::make([
-              'name' => 'pdfs.*.category',
-              'rules' => 'required|string',
-              'description' => 'One of `Order Form`, `Technical Data`, `Catalog`, `Parts Manual`, `Brochure`, `Template`, `Miscellaneous`',
-          ]),
-          SchemaRule::make([
-              'name' => 'pdfs.*.product',
-              'rules' => 'sometimes|string',
-              'description' => 'If this PDF relates to a specific product put the name here.',
-          ])
-      ];
-  }
-
+public function resolveOutputSchema(): array
+{
+    return [
+        SchemaRule::make([
+            'name' => 'pdfs.*',
+            'rules' => 'sometimes|array',
+            'description' => 'An array of PDF links extracted from the website content.',
+        ]),
+        SchemaRule::make([
+            'name' => 'pdfs.*.link',
+            'rules' => 'required|url',
+            'description' => 'The link URL for the PDF.',
+        ]),
+        SchemaRule::make([
+            'name' => 'pdfs.*.title',
+            'rules' => 'required|string',
+            'description' => 'The title of the PDF (usually the link text) in title case.',
+        ]),
+        SchemaRule::make([
+            'name' => 'pdfs.*.category',
+            'rules' => 'required|string',
+            'description' => 'One of `Order Form`, `Technical Data`, `Catalog`, `Parts Manual`, `Brochure`, `Template`, `Miscellaneous`.',
+        ]),
+        SchemaRule::make([
+            'name' => 'pdfs.*.product',
+            'rules' => 'sometimes|string',
+            'description' => 'If this PDF relates to a specific product, specify the name here.',
+        ])
+    ];
+}
 ```

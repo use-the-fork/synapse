@@ -1,23 +1,30 @@
 # Database Memory
 
-Database memory uses models to store itself in your database. This means that memory can be retrived or modified by other agents on the fly.
+Database memory persists data by storing it in your database, allowing other agents to retrieve or modify the memory on the fly.
 
-To get started, you need to publish the migrations that `DatabaseMemory` uses by running the install command and saying yes to publishing the migrations.
+## Getting Started
+
+To use database memory, follow these steps:
+
+1. Publish the migrations used by `DatabaseMemory` by running the install command and choosing to publish the migrations.
 
 ```bash
 php artisan synapse:install
 ```
 
-From here you will need to add the `HasMemory` trait and the `resolveMemory` method of your agent. Then add the `ManagesMemory` trait and include the `@include('synapse::Parts.MemoryAsMessages')` snippet in your prompts blade view.
+2. Add the `HasMemory` trait and implement the `resolveMemory` method in your agent.
+3. Include the `ManagesMemory` trait in your agent.
+4. In your Blade prompt view, use the `@include('synapse::Parts.MemoryAsMessages')` snippet to display the memory as messages.
+5. Set the memory type to `DatabaseMemory` in the `resolveMemory` method.
 
-From here you need to add `DatabaseMemory` memory type to the `resolveMemory` method.
+Example:
 
 ```php
 <?php
 
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Memory\DatabaseMemory;
 use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 
@@ -39,11 +46,15 @@ class SimpleAgent extends Agent implements HasMemory  // [!code focus]
 }
 ```
 
-`DatabaseMemory` takes a ID as it's input if you would like to load a specific memory in to your agent. If the ID is not found a new memory is created.
+## Using a Specific Memory ID
+
+`DatabaseMemory` accepts an ID as its input. If the specified ID is not found, a new memory entry is created.
+
+Example:
 
 ```php
-    public function resolveMemory(): Memory
-    {
-        return new DatabaseMemory(123);
-    }
+public function resolveMemory(): Memory
+{
+    return new DatabaseMemory(123);
+}
 ```

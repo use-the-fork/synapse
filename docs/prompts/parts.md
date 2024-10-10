@@ -1,43 +1,43 @@
 # Parts
 
-Synapse comes packaged with some useful prompt parts that you can include in your own prompts.
+Synapse comes with several useful prompt parts that can be included in your own prompts.
 
 ## Input
 
-This will take the array key `input` and insert it where you put the include. It will also attach an image if one was passed in to this user message.
+This part inserts the `input` array key into the prompt. It will also attach an image if one was passed with the user's message.
 
-```bladehtml
+```blade
 @include('synapse::Parts.Input')
 ```
 
 ## OutputSchema
 
-This part will add the required output rules to your prompt and is meant to be used in confjunction with the [`ValidatesOutputSchema` trait](/traits/validates-output-schema).
+This part adds the required output rules to your prompt and is intended to be used with the [`ValidatesOutputSchema` trait](/traits/validates-output-schema).
 
-```bladehtml
+```blade
 @include('synapse::Parts.OutputSchema')
 ```
 
 ## Memory As Messages
 
-This part will add the memory to your prompt but split up by messages to learn more see [`ManagesMemory` trait](/memory).
+This part adds the memory to your prompt, split up by individual messages. For more information, see the [`ManagesMemory` trait](/memory/index).
 
-```bladehtml
+```blade
 @include('synapse::Parts.MemoryAsMessages')
 ```
 
 ## Memory
 
-This part will add the memory to your prompt but one single text block to learn more see [`ManagesMemory` trait](/memory).
+This part adds the memory to your prompt as a single text block. For more information, see the [`ManagesMemory` trait](/memory/index).
 
-```bladehtml
+```blade
 @include('synapse::Parts.Memory')
 ```
 
 ## Tool List
 
-If you would like to explicitly list avliable tools as part of the prompt you can use this part. To learn more about tools see the [tools section](/tools).
+To explicitly list available tools as part of the prompt, you can use this part. For more information about tools, see the [tools section](/tools/index).
 
-```bladehtml
+```blade
 @include('synapse::Parts.ToolList')
 ```

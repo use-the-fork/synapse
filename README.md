@@ -1,5 +1,4 @@
-# Laravel Synapse
-⚡️ Langchain Like Agents 
+# 🧠 Laravel Synapse
 
 ![Build Status](https://github.com/sammyjo20/laravel-haystack/actions/workflows/tests.yml/badge.svg)
 
@@ -7,79 +6,177 @@
 
 </div>
 
-Laravel Haystack provides supercharged job chains for Laravel. It comes with powerful features like delaying jobs for as long as you like, applying middleware to every job, sharing data and models between jobs and even chunking jobs. Laravel Haystack supports every queue connection/worker out of the box. (Database, Redis/Horizon, SQS). It's great if you need to queue thousands of jobs in a chain or if you are looking for features that the original Bus chain doesn't provide.
+Laravel Synapse allows you to seamlessly integrate and manage AI agents in your Laravel applications. Inspired by Langchain and Laravel Saloon, this package simplifies AI agent creation and management, giving you the tools to run them at scale.
 
-```php
-$haystack = Haystack::build()
-   ->addJob(new RecordPodcast)
-   ->addJob(new ProcessPodcast)
-   ->addJob(new PublishPodcast)
-   ->then(function () {
-      // Haystack completed
-   })
-   ->catch(function () {
-      // Haystack failed
-   })
-   ->finally(function () {
-      // Always run either on success or fail.
-   })
-   ->withMiddleware([
-      // Middleware for every job
-   ])
-   ->withDelay(60)
-   ->withModel($user)
-   ->dispatch();
-```
+## Features
 
-#### But doesn't Laravel already have job chains?
-
-That's right! Laravel does have job chains but they have some disadvantages that you might want to think about.
-
-* They consume quite a lot of memory/data since the chain is stored inside the job. This is especially true if you are storing thousands of jobs.
-* They are volatile, meaning if you lose one job in the chain - you lose the whole chain.
-* They do not provide the `then`, `catch`, `finally` callable methods that batched jobs do.
-* Long delays with memory-based or SQS queue is not possible as you could lose the jobs due to expiry or if the server shuts down.
-* You can't share data between jobs as there is no "state" across the chain
-
-Laravel Haystack aims to solve this by storing the job chain in the database and queuing one job at a time. When the job is completed, Laravel Haystack listens out for the "job completed" event and queues the next job in the chain from the database.
-
-#### Laravel Haystack Features
-
-* Low memory consumption as one job is processed at a time and the chain is stored in the database
-* You can delay/release jobs for as long as you want since it will use the scheduler to restart a chain. Even if your queue driver is SQS!
-* It provides callback methods like `then`, `catch` and `finally`.
-* Global middleware that can be applied to every single job in the chain
-* You can store models and data that are shared with every job in the chain.
-* You can prepare a Haystack and dispatch it at a later time
-
-#### Use Cases
-
-* If you need to make hundreds or thousands of API calls in a row, can be combined with Spatie's Job Rate Limiter to keep track of delays and pause jobs when a rate limit is hit.
-* If you need to queue thousands of jobs in a chain at a time.
-* If you need to batch import rows of data - each row can be a haystack job (bale) and processed one at a time. While keeping important job information stored in the database.
-* If you need "release" times longer than 15 minutes if you are using Amazon SQS
+- Supports multiple AI integrations, including OpenAI and Claude.
+- Easily extendable agent lifecycle with customizable hooks.
+- Memory options for agents: temporary (CollectionMemory) or persistent (DatabaseMemory).
+- Use Laravel's Blade system to create dynamic prompts.
+- Build complex `few-shot` agent prompts with message tagging.
+- Extend functionality by creating custom tools that can interact with agents. Tools can even make additional API calls or invoke other agents.
 
 ## Installation
 
-You can install the package with Composer. **Laravel Haystack Requires Laravel 8+ and PHP 8.1**
+> **Requires [PHP 8.1+](https://php.net/releases/)**
 
-```bash
-composer require sammyjo20/laravel-haystack
+1. Install via Composer:
+
+    ```bash
+    composer require use-the-fork/laravel-synapse
+    ```
+
+2. Run the install command:
+
+    ```bash
+    php artisan synapse:install
+    ```
+
+3. If you plan to use `DatabaseMemory`, ensure you publish the migrations by saying "yes" during installation.
+
+## Configuration
+
+1. Set up your `.env` file with the required API keys:
+
+    ```dotenv
+    OPENAI_API_KEY=
+    ANTHROPIC_API_KEY=
+    ```
+
+2. If packages are not autoloaded, add the service provider:
+
+    For **Laravel 10**:
+    
+    ```php
+    //config/app.php
+    'providers' => [
+        ...
+        UseTheFork\Synapse\SynapseServiceProvider::class,
+        ...
+    ];
+    ```
+
+    For **Laravel 11**:
+    
+    ```php
+    //bootstrap/providers.php
+    <?php
+    return [
+        App\Providers\AppServiceProvider::class,
+        UseTheFork\Synapse\SynapseServiceProvider::class,
+    ];
+    ```
+
+## Usage
+
+### Defining an Agent
+
+Agents are the core of Synapse. To create an agent, extend the `Agent` class and define key methods like `resolveIntegration`, `resolveMemory`, and `$promptView`.
+
+Example:
+
+```php
+<?php
+
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Memory\CollectionMemory;
+
+class SimpleAgent extends Agent
+{
+    protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+    public function resolveIntegration(): Integration
+    {
+        return new OpenAIIntegration();
+    }
+
+    public function resolveMemory(): Memory
+    {
+        return new CollectionMemory();
+    }
+}
 ```
 
-Next, just run the installation command!
+### Memory Options
 
-```bash
-php artisan haystack:install
+Synapse offers two types of memory for agents:
+
+- **CollectionMemory**: Temporary memory that exists only for the duration of the application's lifecycle.
+- **DatabaseMemory**: Persistent memory stored in your database, allowing multiple agents to share or modify it.
+
+To switch between these options, simply change the memory type in the `resolveMemory` method.
+
+Example using `DatabaseMemory`:
+
+```php
+public function resolveMemory(): Memory
+{
+    return new DatabaseMemory(123);  // Use a specific memory ID
+}
 ```
+
+### Building Prompts
+
+Use Laravel's Blade system to create agent prompts. Leverage the custom `<message>` tags to distinguish between user, system, and tool messages.
+
+Example Blade prompt view:
+
+```blade
+<message role="user">
+  # Instruction
+  Write a welcome email for the following user:
+
+  ## User Information
+  Name: {{$user->name}}
+  Favorite Color: {{$user->favorite_color}}
+  Favorite Emoji: {{$user->favorite_emoji}}
+
+  @include('synapse::Parts.OutputSchema')
+</message>
+```
+
+## Integrations
+
+Synapse supports the following integrations:
+
+- **OpenAI**: Use the `OpenAIIntegration` class in your agents.
+- **Claude**: Use the `ClaudeIntegration` class in your agents.
+
+To configure these integrations, add the appropriate API key to your `.env` file and specify the integration in the `resolveIntegration` method.
+
+Example:
+
+```php
+public function resolveIntegration(): Integration
+{
+    return new OpenAIIntegration();
+}
+```
+
+## Agent Lifecycle & Hooks
+
+The Synapse agent lifecycle offers several points where you can hook in to modify the agent's behavior. These hooks allow for customizations such as adjusting input, memory, tools, and integration responses.
+
+Refer to the full documentation for more details on available hooks and how to use them.
+
 
 ## Documentation
 
 [Click here to read the documentation](https://docs.laravel-haystack.dev)
 
 ## Support Haystack's Development
-While I never expect anything, if you would like to support my work, you can donate to my Ko-Fi page by simply buying me a coffee or two!
+If you would like to support my work, you can donate to my Ko-Fi page by simply buying me a coffee or two!
 
-<a href='https://ko-fi.com/sammyjo20' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+<a href='https://ko-fi.com/usethefork' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
 
-Thank you for using Laravel Haystack ❤️
+Thank you for using Laravel Synapse ❤️
+
+
+## License
+
+This package is open-source and licensed under the [MIT License](LICENSE.md).
+
+---
+Start building AI-driven applications with Laravel Synapse today!
