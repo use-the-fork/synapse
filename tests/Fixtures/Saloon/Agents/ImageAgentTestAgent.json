@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Thu, 10 Oct 2024 22:47:17 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "841",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "3676",
+        "openai-version": "2020-10-01",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999153",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "25ms",
+        "x-request-id": "req_19ed4b03924a5d386a174708d90cfb1d",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=jIRlgtwCiOdu6yO24UbkZ_g_vf72leXRHw0icYGYpVw-1728600437-1.0.1.1-7MQX6IX35AO2alxv8cNLWRGJe1TTgyRKKpwFtBMMeAW6Rsg9CTMCfZH6Z4Q10yufn7zMaxPQXF225gTYjElacg; path=\/; expires=Thu, 10-Oct-24 23:17:17 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=fsZzoR20DPpq8.CklM7c1bQPPgrMgf1WmQQ7SnGDdzA-1728600437100-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d0a26a26f490f9d-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AGwE6enS8XIpfXZl43DERfaMsBlat\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728600434,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Crawler Options #\\\\n\\\\nYou can also pass params to the loader. This is a dictionary of options to pass to the crawler. See the FireCrawl API documentation for more information.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 491,\n    \"completion_tokens\": 50,\n    \"total_tokens\": 541,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_4dba7dd7b3\"\n}\n"
+}
