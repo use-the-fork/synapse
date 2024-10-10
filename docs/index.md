@@ -1,4 +1,4 @@
-# Laravel Synapse
+# 🧠 Laravel Synapse
 
 ## AI Agents for All!
 

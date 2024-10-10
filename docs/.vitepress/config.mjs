@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress';
+import {defineConfig} from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'Laravel-Synapse',
+  title: '🧠 Laravel Synapse',
   description: 'AI agents for all!',
   lastUpdated: true,
   themeConfig: {
@@ -66,6 +66,8 @@ export default defineConfig({
             text: 'Validates Output Schema',
             link: '/traits/validates-output-schema',
           },
+          { text: 'Events', link: '/traits/events-trait' },
+          { text: 'Logs', link: '/traits/log-trait' },
           { text: 'Hooks', link: '/traits/hook-trait' },
         ],
       },
