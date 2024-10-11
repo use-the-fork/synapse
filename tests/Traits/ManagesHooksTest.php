@@ -2,50 +2,51 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Event;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\AgentTask\PendingAgentTask;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasBootAgentHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndIterationHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndThreadHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndToolCallHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasIntegrationResponseHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptGeneratedHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptParsedHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartIterationHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartThreadHook;
-use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartToolCallHook;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Events\Agent\AgentFinish;
-use UseTheFork\Synapse\Events\Agent\BootAgent;
-use UseTheFork\Synapse\Events\Agent\EndIteration;
-use UseTheFork\Synapse\Events\Agent\EndThread;
-use UseTheFork\Synapse\Events\Agent\EndToolCall;
-use UseTheFork\Synapse\Events\Agent\IntegrationResponse;
-use UseTheFork\Synapse\Events\Agent\PromptGenerated;
-use UseTheFork\Synapse\Events\Agent\PromptParsed;
-use UseTheFork\Synapse\Events\Agent\StartIteration;
-use UseTheFork\Synapse\Events\Agent\StartThread;
-use UseTheFork\Synapse\Events\Agent\StartToolCall;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\HandlesAgentEvents;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Illuminate\Support\Facades\Event;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\AgentTask\PendingAgentTask;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasAgentFinishHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasBootAgentHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndIterationHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndThreadHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasEndToolCallHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasIntegrationResponseHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptGeneratedHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasPromptParsedHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartIterationHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartThreadHook;
+    use UseTheFork\Synapse\Contracts\Agent\Hooks\HasStartToolCallHook;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Events\Agent\AgentFinish;
+    use UseTheFork\Synapse\Events\Agent\BootAgent;
+    use UseTheFork\Synapse\Events\Agent\EndIteration;
+    use UseTheFork\Synapse\Events\Agent\EndThread;
+    use UseTheFork\Synapse\Events\Agent\EndToolCall;
+    use UseTheFork\Synapse\Events\Agent\IntegrationResponse;
+    use UseTheFork\Synapse\Events\Agent\PromptGenerated;
+    use UseTheFork\Synapse\Events\Agent\PromptParsed;
+    use UseTheFork\Synapse\Events\Agent\StartIteration;
+    use UseTheFork\Synapse\Events\Agent\StartThread;
+    use UseTheFork\Synapse\Events\Agent\StartToolCall;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ManagesHooks;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('Handles Agent Events', closure: function (): void {
+    test('Handles Agent Events', closure: function (): void {
 
     Event::fake();
 
-    class ManagesHooksTestAgent extends Agent implements HasBootAgentHook, HasEndIterationHook, HasEndThreadHook, HasEndToolCallHook, HasIntegrationResponseHook, HasOutputSchema, HasPromptGeneratedHook, HasPromptParsedHook, HasStartIterationHook, HasStartThreadHook, HasStartToolCallHook
+    class ManagesHooksTestAgent extends Agent implements HasBootAgentHook, HasEndIterationHook, HasEndThreadHook, HasEndToolCallHook, HasIntegrationResponseHook, HasOutputSchema, HasPromptGeneratedHook, HasPromptParsedHook, HasStartIterationHook, HasStartThreadHook, HasStartToolCallHook, HasAgentFinishHook
     {
-        use HandlesAgentEvents;
+        use ManagesHooks;
         use ValidatesOutputSchema;
 
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
@@ -138,6 +139,13 @@ test('Handles Agent Events', closure: function (): void {
         public function hookStartToolCall(PendingAgentTask $pendingAgentTask): PendingAgentTask
         {
             StartToolCall::dispatch($pendingAgentTask);
+
+            return $pendingAgentTask;
+        }
+
+        public function hookAgentFinish(PendingAgentTask $pendingAgentTask): PendingAgentTask
+        {
+            AgentFinish::dispatch($pendingAgentTask);
 
             return $pendingAgentTask;
         }

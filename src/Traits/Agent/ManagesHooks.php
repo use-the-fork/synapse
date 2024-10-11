@@ -43,7 +43,7 @@ trait ManagesHooks
         }
 
         if ($this instanceof HasPromptParsedHook) {
-            $this->middleware()->onPromptParsed(fn (string $generatedPrompt): string => $this->hookPromptParsed($generatedPrompt), 'hookPromptParsed', PipeOrder::LAST);
+            $this->middleware()->onPromptParsed(fn (array $parsedPrompt): array => $this->hookPromptParsed($parsedPrompt), 'hookPromptParsed', PipeOrder::LAST);
         }
 
         if ($this instanceof HasIntegrationResponseHook) {
