@@ -75,6 +75,6 @@ it('Database Memory', function (): void {
         ->and($followupResponseArray['content']['answer'])->toBe('.sdrawkcab yas tsuj I did tahw');
 
     $this->assertDatabaseCount('agent_memories', 1);
-    $this->assertDatabaseCount('messages', 2);
+    $this->assertDatabaseCount('messages', 4);
 
 });
