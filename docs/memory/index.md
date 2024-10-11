@@ -8,6 +8,10 @@ Synapse provides several memory types that can be easily integrated into your ag
 
 To get started, add the `HasMemory` interface and implement the `resolveMemory` method in your agent. You will also need to use the `ManagesMemory` trait. After that, select a memory type, have the `resolveMemory` method return it, and include the `@include('synapse::Parts.MemoryAsMessages')` snippet in your Blade prompt view.
 
+> \[!IMPORTANT\]
+> To keep things simple with memory, the `handle` method input should always have an `input` key. This is what is stored as the user's content. For example:\
+> `$agent->handle(['input' => 'How Are you?']);`
+
 In the example below, we use `CollectionMemory`, which stores memory for the duration of the application's lifecycle but clears it afterward.
 
 ```php

@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 11 Oct 2024 22:34:50 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1025",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AHIVbXfjdSkcqTXgZy45c0tqRXt5A\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728686087,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"The user requested to search Google to find out who the current President of the United States is. The search returned results identifying Joe Biden as the current President, serving as the 46th president since 2021. Various sources including the official White House website and Wikipedia confirm this information. The assistant affirmed that Joe Biden is the current President of the United States.\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 145,\n    \"completion_tokens\": 72,\n    \"total_tokens\": 217,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

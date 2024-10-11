@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress';
+import {defineConfig} from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: '🧠 Laravel Synapse',
@@ -57,6 +57,7 @@ export default defineConfig({
           { text: 'Introduction', link: '/memory/' },
           { text: 'Collection Memory', link: '/memory/collection' },
           { text: 'Database Memory', link: '/memory/database' },
+          { text: 'Conversation Summary Memory', link: '/memory/conversation-summary' },
         ],
       },
       {

@@ -12,7 +12,6 @@ use UseTheFork\Synapse\ValueObject\Message;
 
 trait ManagesMemory
 {
-
     use HasMiddleware;
 
     /**
@@ -33,6 +32,7 @@ trait ManagesMemory
     public function bootManagesMemory(PendingAgentTask $pendingAgentTask): void
     {
         $this->middleware()->onBootAgent(fn () => $this->initializeMemory($pendingAgentTask), 'initializeMemory');
+        $this->middleware()->onStartThread(fn () => $this->addUserInputToMemoryPipeline($pendingAgentTask), 'memoryStartThread');
         $this->middleware()->onStartIteration(fn () => $this->loadMemory($pendingAgentTask), 'loadMemory');
         $this->middleware()->onEndIteration(fn () => $this->addMessageToMemoryPipeline($pendingAgentTask), 'memoryEndIteration');
         $this->middleware()->onAgentFinish(fn () => $this->addMessageToMemoryPipeline($pendingAgentTask), 'memoryAgentFinish');
@@ -40,6 +40,7 @@ trait ManagesMemory
 
     /**
      * Initializes the memory by registering the memory object.
+     *
      * @throws MissingResolverException
      */
     protected function initializeMemory(PendingAgentTask $pendingAgentTask): void
@@ -51,6 +52,22 @@ trait ManagesMemory
     public function resolveMemory(): Memory
     {
         throw new MissingResolverException('ManagesMemory', 'resolveMemory');
+    }
+
+    /**
+     * Adds a user message to the current memory
+     *
+     * @param  PendingAgentTask  $pendingAgentTask  The message to add to the memory.
+     */
+    protected function addUserInputToMemoryPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        $input = $pendingAgentTask->getInput('input');
+        $this->memory->create(Message::make([
+            'role' => 'user',
+            'content' => $input,
+        ]));
+
+        return $pendingAgentTask;
     }
 
     public function loadMemory(PendingAgentTask $pendingAgentTask): PendingAgentTask

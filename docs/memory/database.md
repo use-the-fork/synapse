@@ -17,6 +17,10 @@ php artisan synapse:install
 4. In your Blade prompt view, use the `@include('synapse::Parts.MemoryAsMessages')` snippet to display the memory as messages.
 5. Set the memory type to `DatabaseMemory` in the `resolveMemory` method.
 
+> [!IMPORTANT]
+> To keep things simple with memory, the `handle` method input should always have an `input` key. This is what is stored as the user's content. For example:  
+> `$agent->handle(['input' => 'How Are you?']);`
+
 Example:
 
 ```php

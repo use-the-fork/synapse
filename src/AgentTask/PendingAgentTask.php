@@ -104,7 +104,7 @@ class PendingAgentTask
      */
     public function getInput(string $key): mixed
     {
-        return $this->inputs[$key];
+        return $this->inputs[$key] ?? null;
     }
 
     /**

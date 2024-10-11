@@ -14,11 +14,6 @@ class CollectionMemory implements Memory
 {
     protected Collection $agentMemory;
 
-    public function boot(?PendingAgentTask $pendingAgentTask = null): void
-    {
-        $this->agentMemory = collect();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -59,6 +54,11 @@ class CollectionMemory implements Memory
             'memoryWithMessages' => implode("\n", $payload['memoryWithMessages']),
             'memory' => implode("\n", $payload['memory']),
         ];
+    }
+
+    public function boot(?PendingAgentTask $pendingAgentTask = null): void
+    {
+        $this->agentMemory = collect();
     }
 
     /**
