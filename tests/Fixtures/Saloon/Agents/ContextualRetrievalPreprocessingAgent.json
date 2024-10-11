@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Thu, 10 Oct 2024 23:58:35 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "2732",
+        "openai-version": "2020-10-01",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1997322",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "80ms",
+        "x-request-id": "req_ab84df451a89637d134760104ae48bad",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=AhLoXBbn3OzdlEllguFPNaFudNQpKGo9i_gua7zIcAE-1728604715-1.0.1.1-IdfQYmWUy1s_BsQ_L1NMVpUK9CAona790V7.04ICQswYNV6.HVukbkWmetOun.1TnmQUXNbWQ9dVjyGeANx4jA; path=\/; expires=Fri, 11-Oct-24 00:28:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=aHNU2z6QsonPQ3BlCkw9TJ1oTldy6QgvnTMbZlKFmG4-1728604715005-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d0a8f19ea5643a5-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AGxL6JQFm5WvSWvPykmwbGi9BSTwN\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728604712,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"succinct_context\\\": \\\"This chunk introduces the DiffExecutor struct which plays a central role in the differential fuzzing system by wrapping two executors. The primary and secondary executors are designed to run sequentially with the same input to differentiate their behavior.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 2878,\n    \"completion_tokens\": 57,\n    \"total_tokens\": 2935,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"text_tokens\": 0,\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_4dba7dd7b3\"\n}\n"
+}

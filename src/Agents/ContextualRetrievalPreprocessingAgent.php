@@ -4,20 +4,29 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Agents;
 
-use UseTheFork\Synapse\AgentTask;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-class ContextualRetrievalPreprocessingAgent extends Agent
+class ContextualRetrievalPreprocessingAgent extends Agent implements HasOutputSchema
 {
-    protected bool $hasOutputRules = true;
+    use ValidatesOutputSchema;
 
     // Credits to https://www.anthropic.com/news/contextual-retrieval
     protected string $promptView = 'synapse::Prompts.ContextualRetrievalPreprocessingPrompt';
 
-    protected function registerOutputRules(): array
+    public function resolveIntegration(): Integration
+    {
+        return new OpenAIIntegration;
+    }
+
+    public function resolveOutputSchema(): array
     {
         return [
-            OutputRule::make([
+            SchemaRule::make([
                 'name' => 'succinct_context',
                 'rules' => 'required|string',
                 'description' => 'the succinct context string.',

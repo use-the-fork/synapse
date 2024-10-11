@@ -4,13 +4,13 @@ declare(strict_types=1);
 
     use Saloon\Http\Faking\MockClient;
     use Saloon\Http\Faking\MockResponse;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
     use UseTheFork\Synapse\Agents\ContextualRetrievalPreprocessingAgent;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 
     it('can run the Knowledge Graph Extraction Agent.', function () {
 
     MockClient::global([
-        ChatRequest::class => MockResponse::fixture("agents/ContextualRetrievalPreprocessingAgent"),
+        ChatRequest::class => MockResponse::fixture("Agents/ContextualRetrievalPreprocessingAgent"),
     ]);
 
     $agent = new ContextualRetrievalPreprocessingAgent;
@@ -20,7 +20,9 @@ declare(strict_types=1);
         'chunk' => "//! Executor for differential fuzzing.\n//! It wraps two executors that will be run after each other with the same input.\n//! In comparison to the [`crate::executors::CombinedExecutor`] it also runs the secondary executor in `run_target`.\n//!\nuse core::{cell::UnsafeCell, fmt::Debug, ptr};\n\nuse libafl_bolts::{ownedref::OwnedMutPtr, tuples::MatchName};\nuse serde::{Deserialize, Serialize};\n\nuse crate::{\n    executors::{Executor, ExitKind, HasObservers},\n    inputs::UsesInput,\n    observers::{DifferentialObserversTuple, ObserversTuple, UsesObservers},\n    state::UsesState,\n    Error,\n};\n\n/// A [`DiffExecutor`] wraps a primary executor, forwarding its methods, and a secondary one\n#[derive(Debug)]\npub struct DiffExecutor<A, B, OTA, OTB, DOT> {\n    primary: A,\n    secondary: B,\n    observers: UnsafeCell<ProxyObserversTuple<OTA, OTB, DOT>>,\n}\n\n"
                                     ]);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('succinct_context')
-        ->and($agentResponse['succinct_context'] == 'Introduction and definition for DiffExecutor, a differential fuzzing executor utilizing two separate executors, with detailed struct definitions involving state management and observer usage.')->toBeTrue();
+    $agentResponseArray = $agentResponse->toArray();
+
+    expect($agentResponseArray['content'])->toBeArray()
+        ->and($agentResponseArray['content'])->toHaveKey('succinct_context')
+        ->and($agentResponseArray['content']['succinct_context'] == 'This chunk introduces the DiffExecutor struct which plays a central role in the differential fuzzing system by wrapping two executors. The primary and secondary executors are designed to run sequentially with the same input to differentiate their behavior.')->toBeTrue();
 });

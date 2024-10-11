@@ -80,6 +80,10 @@ export default defineConfig({
             link: '/prebuilt-agents/multi-query-retriever-agent',
           },
           {
+            text: 'Contextual Retrieval Preprocessing',
+            link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
+          },
+          {
             text: 'Chat Rephrase',
             link: '/prebuilt-agents/chat-rephrase-agent',
           },
