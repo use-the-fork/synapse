@@ -3,60 +3,43 @@ name: run-tests
 on:
   push:
     branches:
-      - 'main'
-  pull_request:
-    branches:
-      - '*'
-
-env:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_PORT: 5432
-  MYSQL_USER: test
-  MYSQL_PASSWORD: password
-  MYSQL_PORT: 3306
-
+      - main
+      - dev-main
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest]
-        php: [8.1, 8.2, 8.3]
-        laravel: [10.*, 11.*]
-        stability: [prefer-lowest, prefer-stable]
-        include:
-          - laravel: 10.*
-            testbench: 8.*
-          - laravel: 11.*
-            testbench: 9.*
-        exclude:
-          - laravel: 11.*
-            php: 8.1
-
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    runs-on: ubuntu-22.04
+    env:
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: redis
+      DB_CONNECTION: testing
+      APP_KEY: base64:2fl+Ktvkfl+Fuz3Qp/A76G2RTiGVA/ZjKZaz6fiiM10=
+      APP_ENV: testing
+      BCRYPT_ROUNDS: 10
+      MAIL_MAILER: array
+      TELESCOPE_ENABLED: false
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP 🏗
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv, fileinfo
-          coverage: none
+          php-version: 8.2
+          tools: composer:v2
+          coverage: xdebug
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo, mysql
 
-      - name: Setup problem matchers
+      - name: Install Project Dependencies 💻
         run: |
-          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+          composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Install dependencies
+      - name: List Installed Dependencies 📦
+        run: composer show -D
+
+      - name: Run tests 🧪
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/pest
+          ./vendor/bin/pest  --version
+          ./vendor/bin/pest

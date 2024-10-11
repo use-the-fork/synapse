@@ -80,7 +80,7 @@
             # the required version of PHP for this project.
             php = {
               enable = true;
-              version = "8.1";
+              version = "8.2";
               extensions = ["grpc" "redis" "imagick" "memcached" "xdebug"];
               ini = ''
                 memory_limit = 5G
