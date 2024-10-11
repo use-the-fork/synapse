@@ -19,6 +19,11 @@ jobs:
       BCRYPT_ROUNDS: 10
       MAIL_MAILER: array
       TELESCOPE_ENABLED: false
+      SERPER_API_KEY: FOO
+      CLEARBIT_API_KEY: FOO
+      CRUNCHBASE_API_KEY: FOO
+      FIRECRAWL_API_KEY: FOO
+      SERPAPI_API_KEY: FOO
 
     steps:
       - name: Checkout 🛎

@@ -4,6 +4,7 @@ export default defineConfig({
   title: '🧠 Laravel Synapse',
   description: 'AI agents for all!',
   lastUpdated: true,
+  base: '/laravel-synapse/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
