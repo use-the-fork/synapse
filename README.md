@@ -1,8 +1,8 @@
 # 🧠 Laravel Synapse
 
-![Build Status](https://github.com/sammyjo20/laravel-haystack/actions/workflows/tests.yml/badge.svg)
+![Build Status](https://github.com/use-the-fork/laravel-synapse/actions/workflows/tests.yml/badge.svg)
 
-[Click here to read the documentation](https://docs.laravel-haystack.dev)
+[Click here to read the documentation](https://use-the-fork.github.io/laravel-synapse/)
 
 </div>
 
@@ -164,7 +164,7 @@ Refer to the full documentation for more details on available hooks and how to u
 
 ## Documentation
 
-[Click here to read the documentation](https://docs.laravel-haystack.dev)
+[Click here to read the documentation](https://use-the-fork.github.io/laravel-synapse/)
 
 ## Support Haystack's Development
 If you would like to support my work, you can donate to my Ko-Fi page by simply buying me a coffee or two!
