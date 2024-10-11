@@ -4,30 +4,39 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Agents;
 
-use UseTheFork\Synapse\AgentTask;
-use UseTheFork\Synapse\OutputRules\ValueObjects\OutputRule;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-class KnowledgeGraphExtractionAgent extends Agent
+class KnowledgeGraphExtractionAgent extends Agent implements HasOutputSchema
 {
-    protected bool $hasOutputRules = false;
+    use ValidatesOutputSchema;
 
-    # Credits to https://github.com/tomasonjo/blogs/blob/master/llm/openaifunction_constructing_graph.ipynb
+    // Credits to https://github.com/tomasonjo/blogs/blob/master/llm/openaifunction_constructing_graph.ipynb
     protected string $promptView = 'synapse::Prompts.KnowledgeGraphExtractionPrompt';
 
-    protected function registerOutputRules(): array
+    public function resolveIntegration(): Integration
+    {
+        return new OpenAIIntegration;
+    }
+
+    public function resolveOutputSchema(): array
     {
         return [
-            OutputRule::make([
+            SchemaRule::make([
                 'name' => 'nodes',
                 'rules' => 'required|array',
                 'description' => 'a .',
             ]),
-            OutputRule::make([
+            SchemaRule::make([
                 'name' => 'relationships',
                 'rules' => 'required|array',
                 'description' => 'the relationships that have been identified',
             ]),
-            OutputRule::make([
+            SchemaRule::make([
                 'name' => 'relationships.*.source',
                 'rules' => 'required|array',
                 'description' => 'the relationships that have been identified',
