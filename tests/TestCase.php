@@ -6,20 +6,16 @@ namespace UseTheFork\Synapse\Tests;
 
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use UseTheFork\Synapse\SynapseServiceProvider;
+use function Orchestra\Testbench\workbench_path;
 
 abstract class TestCase extends Orchestra
 {
     use WithWorkbench;
-
-    protected function getPackageProviders($app): array
-    {
-        return [
-            SynapseServiceProvider::class,
-        ];
-    }
+    use RefreshDatabase;
 
     /**
      * Define database migrations.
@@ -30,11 +26,15 @@ abstract class TestCase extends Orchestra
         $this->loadMigrationsFrom(
             __DIR__.'/../database/migrations'
         );
+
+        $this->loadMigrationsFrom(
+            workbench_path('database/migrations')
+        );
     }
 
-    protected function defineEnvironment($app): void {}
-
     protected function defineDatabaseSeeders(): void {}
+
+    protected function defineEnvironment($app): void {}
 
     protected function getEnvironmentSetUp($app): void
     {
@@ -52,5 +52,12 @@ abstract class TestCase extends Orchestra
 
 
         parent::getEnvironmentSetUp($app);
+    }
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            SynapseServiceProvider::class,
+        ];
     }
 }

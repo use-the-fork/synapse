@@ -115,3 +115,30 @@ protected function resolveTools(): array
     return [new ClearbitCompanyTool];
 }
 ```
+
+## SQL Database Tool
+
+The SQL Database toolset allows the agent to browse and answer questions based on the database your Laravel application is running. This toolset is adapted from the LangChain SQL Database tool: [LangChain SQL Database Tool](https://api.python.langchain.com/en/latest/_modules/langchain_community/tools/sql_database/tool.html).
+
+There are three tools your agent can use:
+
+- **`InfoSQLDatabaseTool`**: Retrieves the schema and sample rows from specified SQL tables using `Schema::getColumns($table)` and `DB::select("SELECT * FROM {$table} LIMIT 3")`.
+- **`ListSQLDatabaseTool`**: Lists the table names in your database using `Schema::getTables()`.
+- **`QuerySQLDataBaseTool`**: Executes a select query against the database using `DB::select($query)`.
+
+Typically, you would include all three tools in your agent:
+
+```php
+use UseTheFork\Synapse\Tools\SQL\InfoSQLDatabaseTool;
+use UseTheFork\Synapse\Tools\SQL\ListSQLDatabaseTool;
+use UseTheFork\Synapse\Tools\SQL\QuerySQLDataBaseTool;
+
+protected function resolveTools(): array
+{
+    return [
+        new InfoSQLDatabaseTool,
+        new ListSQLDatabaseTool,
+        new QuerySQLDataBaseTool,
+    ];
+}
+```

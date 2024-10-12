@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Sat, 12 Oct 2024 15:46:22 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "897",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AHYbuZGSMw35f3TwaP1nMvPUvhNmK\",\n  \"object\": \"chat.completion\",\n  \"created\": 1728747982,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_3UbiicoV2jrxS6qtWp2H2X3X\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"list_s_q_l_database_tool\",\n              \"arguments\": \"{}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 241,\n    \"completion_tokens\": 14,\n    \"total_tokens\": 255,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}
