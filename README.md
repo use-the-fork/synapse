@@ -1,12 +1,12 @@
-# 🧠 Laravel Synapse
+# 🧠 Synapse
 
 ![Build Status](https://github.com/use-the-fork/laravel-synapse/actions/workflows/tests.yml/badge.svg)
 
-[Click here to read the documentation](https://use-the-fork.github.io/laravel-synapse/)
+[Click here to read the documentation](https://use-the-fork.github.io/synapse/)
 
 </div>
 
-Laravel Synapse allows you to seamlessly integrate and manage AI agents in your Laravel applications. Inspired by Langchain and Laravel Saloon, this package simplifies AI agent creation and management, giving you the tools to run them at scale.
+Synapse allows you to seamlessly integrate and manage AI agents in your Laravel applications. Inspired by Langchain and Laravel Saloon, this package simplifies AI agent creation and management, giving you the tools to run them at scale.
 
 ## Features
 
@@ -25,7 +25,7 @@ Laravel Synapse allows you to seamlessly integrate and manage AI agents in your 
 1. Install via Composer:
 
    ```bash
-   composer require use-the-fork/laravel-synapse
+   composer require use-the-fork/synapse
    ```
 
 1. Run the install command:
@@ -167,7 +167,7 @@ Refer to the full documentation for more details on available hooks and how to u
 
 ## Documentation
 
-[Click here to read the documentation](https://use-the-fork.github.io/laravel-synapse/)
+[Click here to read the documentation](https://use-the-fork.github.io/synapse/)
 
 ## Support Synapse's Development
 
@@ -175,7 +175,7 @@ If you would like to support my work, you can donate to my Ko-Fi page by simply 
 
 <a href='https://ko-fi.com/usethefork' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-Thank you for using Laravel Synapse ❤️
+Thank you for using Synapse ❤️
 
 ## Credits
 

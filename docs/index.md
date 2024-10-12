@@ -1,8 +1,8 @@
-# 🧠 Laravel Synapse
+# 🧠 Synapse
 
 ## AI Agents for All!
 
-Laravel Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Laravel Saloon, this package simplifies AI integration and enables scalability.
+Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Laravel Saloon, this package simplifies AI integration and enables scalability.
 
 ## Installation
 
@@ -11,7 +11,7 @@ Laravel Synapse allows you to easily create and manage AI agents in your Laravel
 Install via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require use-the-fork/laravel-synapse
+composer require use-the-fork/synapse
 ```
 
 Then, run the installation command:
@@ -65,4 +65,4 @@ return [
 ];
 ```
 
-You're now ready to use Laravel Synapse.
+You're now ready to use Synapse.
