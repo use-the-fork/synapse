@@ -16,6 +16,7 @@ Laravel Synapse allows you to seamlessly integrate and manage AI agents in your 
 - Use Laravel's Blade system to create dynamic prompts.
 - Build complex `few-shot` agent prompts with message tagging.
 - Extend functionality by creating custom tools that can interact with agents. Tools can even make additional API calls or invoke other agents.
+- Prebuilt agents available for quick and easy use with popular integrations like OpenAI.
 
 ## Installation
 
@@ -23,50 +24,50 @@ Laravel Synapse allows you to seamlessly integrate and manage AI agents in your 
 
 1. Install via Composer:
 
-    ```bash
-    composer require use-the-fork/laravel-synapse
-    ```
+   ```bash
+   composer require use-the-fork/laravel-synapse
+   ```
 
-2. Run the install command:
+1. Run the install command:
 
-    ```bash
-    php artisan synapse:install
-    ```
+   ```bash
+   php artisan synapse:install
+   ```
 
-3. If you plan to use `DatabaseMemory`, ensure you publish the migrations by saying "yes" during installation.
+1. If you plan to use `DatabaseMemory`, ensure you publish the migrations by saying "yes" during installation.
 
 ## Configuration
 
 1. Set up your `.env` file with the required API keys:
 
-    ```dotenv
-    OPENAI_API_KEY=
-    ANTHROPIC_API_KEY=
-    ```
+   ```dotenv
+   OPENAI_API_KEY=
+   ANTHROPIC_API_KEY=
+   ```
 
-2. If packages are not autoloaded, add the service provider:
+1. If packages are not autoloaded, add the service provider:
 
-    For **Laravel 10**:
-    
-    ```php
-    //config/app.php
-    'providers' => [
-        ...
-        UseTheFork\Synapse\SynapseServiceProvider::class,
-        ...
-    ];
-    ```
+   For **Laravel 10**:
 
-    For **Laravel 11**:
-    
-    ```php
-    //bootstrap/providers.php
-    <?php
-    return [
-        App\Providers\AppServiceProvider::class,
-        UseTheFork\Synapse\SynapseServiceProvider::class,
-    ];
-    ```
+   ```php
+   //config/app.php
+   'providers' => [
+       ...
+       UseTheFork\Synapse\SynapseServiceProvider::class,
+       ...
+   ];
+   ```
+
+   For **Laravel 11**:
+
+   ```php
+   //bootstrap/providers.php
+   <?php
+   return [
+       App\Providers\AppServiceProvider::class,
+       UseTheFork\Synapse\SynapseServiceProvider::class,
+   ];
+   ```
 
 ## Usage
 
@@ -82,8 +83,11 @@ Example:
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Contracts\Agent\HasMemory;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Contracts\Memory;
 
-class SimpleAgent extends Agent
+class SimpleAgent extends Agent implements HasMemory
 {
     protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
@@ -161,22 +165,30 @@ The Synapse agent lifecycle offers several points where you can hook in to modif
 
 Refer to the full documentation for more details on available hooks and how to use them.
 
-
 ## Documentation
 
 [Click here to read the documentation](https://use-the-fork.github.io/laravel-synapse/)
 
-## Support Haystack's Development
+## Support Synapse's Development
+
 If you would like to support my work, you can donate to my Ko-Fi page by simply buying me a coffee or two!
 
-<a href='https://ko-fi.com/usethefork' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+<a href='https://ko-fi.com/usethefork' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 Thank you for using Laravel Synapse ❤️
 
+## Credits
+
+This project would not have been possible without:
+
+- Saloon - https://github.com/saloonphp/saloon
+- LangChain - https://python.langchain.com/
+- Dexor - https://github.com/bootstrapguru/dexor/
 
 ## License
 
 This package is open-source and licensed under the [MIT License](LICENSE.md).
 
 ---
+
 Start building AI-driven applications with Laravel Synapse today!
