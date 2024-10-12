@@ -1,5 +1,5 @@
 {
-  "name": "use-the-fork/laravel-synapse",
+  "name": "use-the-fork/synapse",
   "require": {
     "php": "^8.2",
     "illuminate/container": "^10.0|^11.0",

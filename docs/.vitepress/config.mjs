@@ -1,20 +1,20 @@
 import {defineConfig} from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: '🧠 Laravel Synapse',
+  title: '🧠 Synapse',
   description: 'AI agents for all!',
   lastUpdated: true,
-  base: '/laravel-synapse/',
+  base: '/synapse/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
       {
-        text: '0.0.0',
+        text: '0.1.0',
         items: [
           {
             text: 'Changelog',
-            link: 'https://github.com/use-the-fork/laravel-synapse/',
+            link: 'https://github.com/use-the-fork/synapse/tree/v0.1.0',
           },
         ],
       },
@@ -96,7 +96,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/use-the-fork/laravel-synapse',
+        link: 'https://github.com/use-the-fork/synapse',
       },
     ],
   },
