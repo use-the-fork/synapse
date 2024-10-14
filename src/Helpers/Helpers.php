@@ -117,6 +117,59 @@ final class Helpers
         return $traits;
     }
 
+
+    /**
+     * Remove any common leading whitespace from every line in `text`.
+     *
+     * This can be used to make multi-line strings line up with the left edge of
+     * the display while still being indented in the source code.
+     *
+     * Tabs and spaces are treated as whitespace, but they are not equal.
+     * Blank lines are normalized to a newline character.
+     *
+     * adapted from https://github.com/python/cpython/blob/3.13/Lib/textwrap.py
+     */
+    public static function dedent(string $text) {
+        // Define regular expressions
+        $whitespaceOnlyPattern = '/^[ \t]+$/m';
+        $leadingWhitespacePattern = '/(^[ \t]*)(?:[^ \t\n])/m';
+
+        // Remove lines that only contain whitespace
+        $text = preg_replace($whitespaceOnlyPattern, '', $text);
+
+        // Find all leading whitespaces
+        preg_match_all($leadingWhitespacePattern, $text, $matches);
+        $indents = $matches[1];
+        $margin = null;
+
+        // Determine the common leading whitespace (if any)
+        foreach ($indents as $indent) {
+            if ($margin === null) {
+                $margin = $indent;
+            } elseif (strpos($indent, $margin) === 0) {
+                // Current line more deeply indented, no change
+            } elseif (strpos($margin, $indent) === 0) {
+                // Current line has less or equal indentation, it's the new margin
+                $margin = $indent;
+            } else {
+                // Find the common prefix between the current indent and margin
+                for ($i = 0; $i < strlen($margin) && $i < strlen($indent); $i++) {
+                    if ($margin[$i] !== $indent[$i]) {
+                        $margin = substr($margin, 0, $i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // If we have a margin, remove it from all lines
+        if ($margin) {
+            $text = preg_replace('/^' . preg_quote($margin, '/') . '/m', '', $text);
+        }
+
+        return $text;
+    }
+
     /**
      * Check if a class is a subclass of another.
      *
@@ -138,4 +191,5 @@ final class Helpers
     {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
+
 }

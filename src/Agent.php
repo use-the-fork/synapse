@@ -15,6 +15,7 @@ use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
 use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
+use UseTheFork\Synapse\Helpers\Helpers;
 use UseTheFork\Synapse\Traits\Agent\ManagesIntegration;
 use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\HasMiddleware;
@@ -98,7 +99,6 @@ class Agent implements HasIntegration
             $prompt = $prompt."\n".$this->pendingAgentTask->iterationMemory()->asInputs()['memoryWithMessages'];
 
             $prompt = $this->pendingAgentTask->middleware()->executePromptGeneratedPipeline($prompt);
-
             $promptChain = $this->parsePrompt($prompt);
             $promptChain = $this->pendingAgentTask->middleware()->executePromptParsedPipeline($promptChain);
 
@@ -176,23 +176,23 @@ class Agent implements HasIntegration
             $image = $match['image'] ?? null;
             $promptContent = $match['message'] ?? '';
 
-            $promptContent = trim($promptContent);
+            $promptContent = Helpers::dedent($promptContent);
 
-            if (! $role) {
+            if ($role === '0') {
                 throw new InvalidArgumentException("Each message block must define a role.\nExample:\n<message role='assistant'>Foo {bar}</message>");
             }
             $messageData = [
                 'role' => $role,
                 'content' => $promptContent,
             ];
-            if ($tool) {
+            if ($tool !== '' && $tool !== '0') {
                 $tool = json_decode(base64_decode($tool), true);
                 $messageData['tool_call_id'] = $tool['tool_call_id'];
                 $messageData['tool_name'] = $tool['tool_name'] ?? null;
                 $messageData['tool_arguments'] = $tool['tool_arguments'] ?? null;
                 $messageData['tool_content'] = $tool['tool_content'] ?? null;
             }
-            if ($image) {
+            if ($image !== '' && $image !== '0') {
                 $image = json_decode(base64_decode($image), true);
                 // attach the image data to the message.
                 $messageData['image'] = $image;
@@ -204,7 +204,7 @@ class Agent implements HasIntegration
             // The whole document is a prompt
             $prompts[] = Message::make([
                 'role' => Role::USER,
-                'content' => trim($prompt),
+                'content' => Helpers::dedent($prompt),
             ]);
         }
 
