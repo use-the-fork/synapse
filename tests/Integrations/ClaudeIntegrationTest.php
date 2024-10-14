@@ -29,7 +29,7 @@ test('Connects', function (): void {
             return new ClaudeIntegration;
         }
 
-        protected function resolveOutputSchema(): array
+        public function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
@@ -72,7 +72,7 @@ test('uses tools', function (): void {
             return new CollectionMemory;
         }
 
-        protected function resolveOutputSchema(): array
+        public function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
