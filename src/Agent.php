@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use Throwable;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Constants\Role;
-use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Enums\FinishReason;
 use UseTheFork\Synapse\Exceptions\MaximumIterationsException;
@@ -21,7 +20,7 @@ use UseTheFork\Synapse\Traits\Agent\ManagesTools;
 use UseTheFork\Synapse\Traits\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Message;
 
-class Agent implements HasIntegration
+class Agent
 {
     use HasMiddleware;
     use ManagesIntegration,

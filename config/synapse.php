@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+
 return [
     'integrations' => [
+        'default' => OpenAIIntegration::class,
         'openai' => [
             'key' => env('OPENAI_API_KEY'),
             'chat_model' => env('OPENAI_API_CHAT_MODEL', 'gpt-4-turbo'),

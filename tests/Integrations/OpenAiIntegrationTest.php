@@ -2,22 +2,56 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-    use UseTheFork\Synapse\Contracts\Integration;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-    use UseTheFork\Synapse\ValueObject\SchemaRule;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+use UseTheFork\Synapse\Contracts\Integration;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Connects', function (): void {
+test('Connects with out resolveIntegration', function (): void {
 
-    class OpenAiTestAgent extends Agent implements HasOutputSchema
+    class OpenAiWithOutResolveTestAgent extends Agent implements HasOutputSchema
+    {
+        use ValidatesOutputSchema;
+
+        protected string $promptView = 'synapse::Prompts.SimplePrompt';
+
+        public function resolveOutputSchema(): array
+        {
+            return [
+                SchemaRule::make([
+                    'name' => 'answer',
+                    'rules' => 'required|string',
+                    'description' => 'your final answer to the query.',
+                ]),
+            ];
+        }
+    }
+
+    MockClient::global([
+        ChatRequest::class => MockResponse::fixture('Integrations/OpenAiWithOutResolveTestAgent'),
+    ]);
+
+    $agent = new OpenAiWithOutResolveTestAgent;
+    $message = $agent->handle(['input' => 'hello!']);
+
+    $agentResponseArray = $message->toArray();
+
+    expect($agentResponseArray['content'])->toBeArray()
+        ->and($agentResponseArray['content'])->toHaveKey('answer');
+});
+
+test('Connects', function (): void {
+
+    class OpenAiTestAgent extends Agent implements HasIntegration, HasOutputSchema
     {
         use ValidatesOutputSchema;
 
@@ -55,7 +89,7 @@ declare(strict_types=1);
 
 test('Connects With OutputSchema', function (): void {
 
-    class OpenAiConnectsTestAgent extends Agent
+    class OpenAiConnectsTestAgent extends Agent implements HasIntegration
     {
         protected string $promptView = 'synapse::Prompts.SimplePrompt';
 
@@ -78,7 +112,7 @@ test('Connects With OutputSchema', function (): void {
 
 test('uses tools', function (): void {
 
-    class OpenAiToolTestAgent extends Agent implements HasOutputSchema
+    class OpenAiToolTestAgent extends Agent implements HasIntegration, HasOutputSchema
     {
         use ValidatesOutputSchema;
 
