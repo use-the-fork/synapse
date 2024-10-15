@@ -2,7 +2,7 @@
 
 ## AI Agents for All!
 
-Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Laravel Saloon, this package simplifies AI integration and enables scalability.
+Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Saloon, this package simplifies AI integration and enables scalability.
 
 ## Installation
 
