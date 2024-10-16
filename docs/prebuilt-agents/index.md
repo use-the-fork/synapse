@@ -1,6 +1,6 @@
 # Prebuilt Agents
 
-Synapse includes several prebuilt agents that you can use right out of the box. If you're using OpenAI as your integration, simply include the agent in your code, and you're all set.
+Synapse includes several prebuilt agents that you can use right out of the box. If you have set a `default` integration in your `synapse` config, simply include the agent in your code, and you're all set.
 
 ```php
 <?php

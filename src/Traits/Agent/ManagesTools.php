@@ -34,83 +34,9 @@ trait ManagesTools
 
     protected array $tools = [];
 
-    /**
-     * Registers the tools.
-     *
-     * @return array<Tool> The registered tools.
-     */
-    protected function resolveTools(): array
+    public function bootManagesTools(PendingAgentTask $pendingAgentTask): void
     {
-        return [];
-    }
-
-    /**
-     * Calls a registered tool with the given name and arguments.
-     *
-     * @param  string  $toolName  The name of the tool to call.
-     * @param  array|null  $arguments  The arguments to pass to the tool.
-     * @return mixed The result of calling the tool, or null if the tool is not registered.
-     *               If a required parameter is missing, a string error message is returned.
-     *               If the parameter type is an enum, it attempts to fetch a valid value,
-     *               using the provided argument or the parameter's default value.
-     *
-     * @throws ReflectionException
-     */
-    public function call(PendingAgentTask $pendingAgentTask, string $toolName, ?array $arguments = []): mixed
-    {
-        if (null === $toolClass = $pendingAgentTask->tools()[$toolName]) {
-            return null;
-        }
-        $tool = $toolClass['tool'];
-
-        $toolClass = new ReflectionClass($toolClass['tool']);
-        $reflectionMethod = $toolClass->getMethod('handle');
-
-        $params = [];
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-
-            //TODO: need to add relooping here.
-            //            $parameter_description = $this->getParameterDescription($reflectionParameter);
-            //            if (! array_key_exists($reflectionParameter->name, $arguments) && ! $reflectionParameter->isOptional() && ! $reflectionParameter->isDefaultValueAvailable()) {
-            //                return sprintf('Parameter %s(%s) is required for the tool %s', $reflectionParameter->name, $parameter_description, $tool_name);
-            //            }
-
-            // check if parameter type is an Enum and add fetch a valid value
-            if (($parameter_type = $reflectionParameter->getType()) !== null && ! $parameter_type->isBuiltin() && enum_exists($parameter_type->getName())) {
-                $params[$reflectionParameter->name] = $parameter_type->getName()::tryFrom($arguments[$reflectionParameter->name]) ?? $reflectionParameter->getDefaultValue();
-
-                continue;
-            }
-
-            $params[$reflectionParameter->name] = $arguments[$reflectionParameter->name] ?? $reflectionParameter->getDefaultValue();
-        }
-
-        return $tool->handle(...$params);
-    }
-
-    /**
-     * Retrieves the type of the tool parameter.
-     *
-     * @param  ReflectionParameter  $reflectionParameter  The reflection parameter.
-     * @return string The type of the tool parameter.
-     */
-    private function getToolParameterType(ReflectionParameter $reflectionParameter): string
-    {
-        if (null === $parameter_type = $reflectionParameter->getType()) {
-            return 'string';
-        }
-
-        if (! $parameter_type->isBuiltin()) {
-            return $parameter_type->getName();
-        }
-
-        return match ($parameter_type->getName()) {
-            'bool' => 'boolean',
-            'int' => 'integer',
-            'float' => 'number',
-
-            default => 'string',
-        };
+        $this->middleware()->onBootAgent(fn () => $this->initializeTools($pendingAgentTask), 'initializeTools');
     }
 
     /**
@@ -180,6 +106,16 @@ trait ManagesTools
     }
 
     /**
+     * Registers the tools.
+     *
+     * @return array<Tool> The registered tools.
+     */
+    protected function resolveTools(): array
+    {
+        return [];
+    }
+
+    /**
      * Parses the parameters of a tool.
      *
      * @param  ReflectionClass  $reflectionClass  The tool reflection class.
@@ -226,8 +162,91 @@ trait ManagesTools
         return $parameters;
     }
 
-    public function bootManagesTools(PendingAgentTask $pendingAgentTask): void
+    /**
+     * Retrieves the type of the tool parameter.
+     *
+     * @param  ReflectionParameter  $reflectionParameter  The reflection parameter.
+     * @return string The type of the tool parameter.
+     */
+    private function getToolParameterType(ReflectionParameter $reflectionParameter): string
     {
-        $this->middleware()->onBootAgent(fn () => $this->initializeTools($pendingAgentTask), 'initializeTools');
+        if (null === $parameter_type = $reflectionParameter->getType()) {
+            return 'string';
+        }
+
+        if (! $parameter_type->isBuiltin()) {
+            return $parameter_type->getName();
+        }
+
+        return match ($parameter_type->getName()) {
+            'bool' => 'boolean',
+            'int' => 'integer',
+            'float' => 'number',
+
+            default => 'string',
+        };
+    }
+
+    /**
+     * Calls a registered tool with the given name and arguments.
+     *
+     * @param  string  $toolName  The name of the tool to call.
+     * @param  array|null  $arguments  The arguments to pass to the tool.
+     * @return mixed The result of calling the tool, or null if the tool is not registered.
+     *               If a required parameter is missing, a string error message is returned.
+     *               If the parameter type is an enum, it attempts to fetch a valid value,
+     *               using the provided argument or the parameter's default value.
+     *
+     * @throws ReflectionException
+     */
+    public function call(PendingAgentTask $pendingAgentTask, string $toolName, ?array $arguments = []): mixed
+    {
+        if (null === $toolClass = $pendingAgentTask->tools()[$toolName]) {
+            return null;
+        }
+        $tool = $toolClass['tool'];
+
+        $toolClass = new ReflectionClass($toolClass['tool']);
+        $reflectionMethod = $toolClass->getMethod('handle');
+
+        $params = [];
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+
+            //TODO: need to add relooping here.
+            //            $parameter_description = $this->getParameterDescription($reflectionParameter);
+            //            if (! array_key_exists($reflectionParameter->name, $arguments) && ! $reflectionParameter->isOptional() && ! $reflectionParameter->isDefaultValueAvailable()) {
+            //                return sprintf('Parameter %s(%s) is required for the tool %s', $reflectionParameter->name, $parameter_description, $tool_name);
+            //            }
+
+            // check if parameter type is an Enum and add fetch a valid value
+            if (
+                ($parameter_type = $reflectionParameter->getType()) !== null &&
+                ! $parameter_type->isBuiltin() &&
+                enum_exists($parameter_type->getName())
+            ) {
+                $params[$reflectionParameter->name] = $parameter_type->getName()::tryFrom($arguments[$reflectionParameter->name]) ?? $reflectionParameter->getDefaultValue();
+
+                continue;
+            }
+
+            $params[$reflectionParameter->name] = $arguments[$reflectionParameter->name] ?? $reflectionParameter->getDefaultValue();
+
+            // Some AIs won't type cast a param even though it's valid.
+            // So we sanitize based on input.
+            $params[$reflectionParameter->name] = $this->sanitizeToolParam($params[$reflectionParameter->name], $reflectionParameter->getType()->getName());
+        }
+
+        return $tool->handle(...$params);
+    }
+
+    private function sanitizeToolParam($value, $type): float|bool|int|string
+    {
+        return match ($type) {
+            'int' => (int) $value,
+            'float' => (float) $value,
+            'double' => (float) $value,
+            'bool' => (bool) $value,
+            'string' => (string) $value,
+        };
     }
 }

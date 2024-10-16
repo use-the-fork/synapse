@@ -23,16 +23,12 @@ export default defineConfig({
     sidebar: [
       {
         text: 'Introduction',
-        items: [{ text: 'Getting Started', link: '/' }],
-      },
-      {
-        text: 'Agents',
         items: [
-          { text: 'Introduction', link: '/agents/' },
-          { text: 'Lifecycle', link: '/agents/agent-lifecycle' },
-          { text: 'Integrations', link: '/agents/integrations' },
-          { text: 'Prompts', link: '/agents/prompts' },
-          { text: 'Traits', link: '/agents/agent-traits' },
+          { text: 'Getting Started', link: '/' },
+          {
+            text: 'Artisan Agent Tutorial',
+            link: '/tutorials/artisan-agent.md',
+          },
         ],
       },
         {
@@ -51,8 +47,22 @@ export default defineConfig({
                     text: 'Chat Rephrase',
                     link: '/prebuilt-agents/chat-rephrase-agent',
                 },
+                {
+                    text: 'SQL Tool',
+                    link: '/prebuilt-agents/sql-tool-agent',
+                },
             ],
         },
+      {
+        text: 'Agents',
+        items: [
+          { text: 'Introduction', link: '/agents/' },
+          { text: 'Lifecycle', link: '/agents/agent-lifecycle' },
+          { text: 'Integrations', link: '/agents/integrations' },
+          { text: 'Prompts', link: '/agents/prompts' },
+          { text: 'Traits', link: '/agents/agent-traits' },
+        ],
+      },
       {
         text: 'Prompts',
         items: [
@@ -75,7 +85,10 @@ export default defineConfig({
           { text: 'Introduction', link: '/memory/' },
           { text: 'Collection Memory', link: '/memory/collection' },
           { text: 'Database Memory', link: '/memory/database' },
-          { text: 'Conversation Summary Memory', link: '/memory/conversation-summary' },
+          {
+            text: 'Conversation Summary Memory',
+            link: '/memory/conversation-summary',
+          },
         ],
       },
       {
@@ -90,7 +103,7 @@ export default defineConfig({
           { text: 'Logs', link: '/traits/log-trait' },
           { text: 'Hooks', link: '/traits/hook-trait' },
         ],
-      }
+      },
     ],
 
     socialLinks: [

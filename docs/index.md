@@ -2,7 +2,7 @@
 
 ## AI Agents for All!
 
-Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Laravel Saloon, this package simplifies AI integration and enables scalability.
+Synapse allows you to easily create and manage AI agents in your Laravel application. Inspired by Langchain and Saloon, this package simplifies AI integration and enables scalability.
 
 ## Installation
 
@@ -63,6 +63,24 @@ return [
     App\Providers\AppServiceProvider::class,
     UseTheFork\Synapse\SynapseServiceProvider::class, // [!code highlight]
 ];
+```
+
+### 3. If you are not using OpenAI as your default integration:
+Open the `config/synapse.php` file and modify the default integration to the one you prefer:
+
+```php
+    'integrations' => [
+        'default' => UseTheFork\Synapse\Integrations\OpenAIIntegration::class, // [!code highlight]
+        'openai' => [
+            'key' => env('OPENAI_API_KEY'),
+            'chat_model' => env('OPENAI_API_CHAT_MODEL', 'gpt-4-turbo'),
+            'embedding_model' => env('OPENAI_API_EMBEDDING_MODEL', 'text-embedding-ada-002'),
+        ],
+        'claude' => [
+            'key' => env('ANTHROPIC_API_KEY'),
+            'chat_model' => env('ANTHROPIC_API_CHAT_MODEL', 'claude-3-5-sonnet-20240620'),
+        ],
+    ],
 ```
 
 You're now ready to use Synapse.

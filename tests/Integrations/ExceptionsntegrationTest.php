@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use UseTheFork\Synapse\Agent;
+use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
 use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Exceptions\MissingResolverException;
@@ -12,7 +13,7 @@ use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 test('Resolve Integration', function (): void {
 
-    class ResolveIntegrationExceptionTestAgent extends Agent implements HasOutputSchema
+    class ResolveIntegrationExceptionTestAgent extends Agent implements HasIntegration, HasOutputSchema
     {
         use ValidatesOutputSchema;
 

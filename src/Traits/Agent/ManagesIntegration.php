@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Traits\Agent;
 
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
+use UseTheFork\Synapse\Contracts\Agent\HasIntegration as HasIntegrationInterface;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Exceptions\MissingResolverException;
 use UseTheFork\Synapse\Traits\HasIntegration;
@@ -16,11 +17,6 @@ trait ManagesIntegration
     use HasMiddleware;
 
     /**
-     * The integration that this Model should use
-     */
-    protected Integration $integration;
-
-    /**
      * Initializes the integration by registering it.
      *
      * This method assigns the integration object returned by the `registerIntegration` method
@@ -28,7 +24,15 @@ trait ManagesIntegration
      */
     public function bootManagesIntegration(PendingAgentTask $pendingAgentTask): void
     {
-        $this->integration = $this->resolveIntegration();
+        if ($this instanceof HasIntegrationInterface) {
+            $this->integration = $this->resolveIntegration();
+        } elseif (config('synapse.integrations.default')) {
+            $integration = config('synapse.integrations.default');
+            $this->integration = new $integration;
+        } else {
+            //if we don't have any integration set we throw an error.
+            throw new MissingResolverException('ManagesIntegration', 'resolveIntegration');
+        }
     }
 
     /**

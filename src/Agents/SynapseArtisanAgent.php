@@ -13,12 +13,12 @@ use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-class ChatRephraseAgent extends Agent implements HasOutputSchema, HasMemory
+class SynapseArtisanAgent extends Agent implements HasOutputSchema, HasMemory
 {
     use ValidatesOutputSchema;
     use ManagesMemory;
 
-    protected string $promptView = 'synapse::Prompts.ChatRephrasePrompt';
+    protected string $promptView = 'synapse::Prompts.SynapseArtisanPrompt';
 
     public function resolveMemory(): Memory
     {
@@ -29,10 +29,10 @@ class ChatRephraseAgent extends Agent implements HasOutputSchema, HasMemory
     {
         return [
             SchemaRule::make([
-                'name' => 'standalone_question',
-                'rules' => 'required|string',
-                'description' => 'The standalone question',
-            ]),
+                                 'name' => 'command',
+                                 'rules' => 'required|string',
+                                 'description' => 'the artisan command to run.',
+                             ]),
         ];
     }
 }
