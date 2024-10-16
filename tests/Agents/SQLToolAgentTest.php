@@ -48,7 +48,7 @@ declare(strict_types=1);
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
-            $count = md5(json_encode($pendingRequest->body()->all()));
+            $count = md5(json_encode($pendingRequest->body()->get('messages')));
 
             return MockResponse::fixture("Agents/SQLToolAgent-{$count}");
         },
@@ -60,5 +60,5 @@ declare(strict_types=1);
     $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->toBeArray()
       ->and($agentResponseArray['content'])->toHaveKey('answer')
-      ->and($agentResponseArray['content']['answer'])->toContain('There are 100 organizations currently operating, and the average number of funding rounds for them is 5.');
+      ->and($agentResponseArray['content']['answer'])->toContain('There are 100 operating organizations and the average number of funding rounds for them is 5.');
 });
