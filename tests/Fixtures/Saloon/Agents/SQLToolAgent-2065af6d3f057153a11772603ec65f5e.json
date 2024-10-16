@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Wed, 16 Oct 2024 23:00:57 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1050",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AJ7IdZYUDQ9fV9dniXMhPPO9ihjDA\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729119655,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_GLbIHjARoUJh2a5aPJg9FI6l\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"query_s_q_l_data_base_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"SELECT COUNT(*) AS total_organizations, AVG(num_funding_rounds) AS average_funding_rounds FROM organizations WHERE status = 'operating'\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 1170,\n    \"completion_tokens\": 48,\n    \"total_tokens\": 1218,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

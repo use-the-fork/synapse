@@ -47,6 +47,10 @@ export default defineConfig({
                     text: 'Chat Rephrase',
                     link: '/prebuilt-agents/chat-rephrase-agent',
                 },
+                {
+                    text: 'SQL Tool',
+                    link: '/prebuilt-agents/sql-tool-agent',
+                },
             ],
         },
       {
