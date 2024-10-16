@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 15 Oct 2024 23:40:26 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "686",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AIlRJAjK5TyYSK2WQ0rbYIL1w3lGG\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729035625,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"command\\\": \\\"make:model Flight -m\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 181,\n    \"completion_tokens\": 17,\n    \"total_tokens\": 198,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

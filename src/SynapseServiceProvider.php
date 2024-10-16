@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse;
 
 use Illuminate\Support\ServiceProvider;
+use UseTheFork\Synapse\Console\Commands\SynapseArtisan;
 use UseTheFork\Synapse\Console\Commands\SynapseInstall;
 
 class SynapseServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class SynapseServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                                 SynapseInstall::class,
+                                SynapseArtisan::class,
                             ]);
         }
 
