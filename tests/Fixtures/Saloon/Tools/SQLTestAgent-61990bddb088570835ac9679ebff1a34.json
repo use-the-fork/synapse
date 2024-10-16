@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Wed, 16 Oct 2024 22:29:59 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "925",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AJ6ofbbJHNhxqlO8izo8PsfwQ2Dq5\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729117797,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_jbH2d8t80nQjfpCQoeyPvbST\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"info_s_q_l_database_tool\",\n              \"arguments\": \"{\\\"tables\\\":\\\"organizations\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 416,\n    \"completion_tokens\": 18,\n    \"total_tokens\": 434,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

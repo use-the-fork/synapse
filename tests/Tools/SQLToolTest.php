@@ -105,7 +105,7 @@ declare(strict_types=1);
     $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('There are 100 organizations currently operating, and the average number of funding rounds for these organizations is 5.');
+        ->and($agentResponseArray['content']['answer'])->toContain('There are 100 organizations operating with an average of 5 funding rounds each.');
 
 });
 

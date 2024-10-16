@@ -7,9 +7,7 @@ namespace UseTheFork\Synapse\Agents;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Contracts\Agent\HasMemory;
 use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Memory\CollectionMemory;
 use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
@@ -21,11 +19,6 @@ class ChatRephraseAgent extends Agent implements HasOutputSchema, HasMemory
     use ManagesMemory;
 
     protected string $promptView = 'synapse::Prompts.ChatRephrasePrompt';
-
-    public function resolveIntegration(): Integration
-    {
-        return new OpenAIIntegration;
-    }
 
     public function resolveMemory(): Memory
     {

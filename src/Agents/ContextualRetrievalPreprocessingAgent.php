@@ -6,8 +6,6 @@ namespace UseTheFork\Synapse\Agents;
 
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
 
@@ -17,11 +15,6 @@ class ContextualRetrievalPreprocessingAgent extends Agent implements HasOutputSc
 
     // Credits to https://www.anthropic.com/news/contextual-retrieval
     protected string $promptView = 'synapse::Prompts.ContextualRetrievalPreprocessingPrompt';
-
-    public function resolveIntegration(): Integration
-    {
-        return new OpenAIIntegration;
-    }
 
     public function resolveOutputSchema(): array
     {

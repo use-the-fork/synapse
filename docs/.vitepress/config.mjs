@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress';
+import {defineConfig} from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: '🧠 Synapse',
@@ -31,6 +31,24 @@ export default defineConfig({
           },
         ],
       },
+        {
+            text: 'Prebuilt Agents',
+            items: [
+                { text: 'Introduction', link: '/prebuilt-agents/' },
+                {
+                    text: 'Multi Query Retriever',
+                    link: '/prebuilt-agents/multi-query-retriever-agent',
+                },
+                {
+                    text: 'Contextual Retrieval Preprocessing',
+                    link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
+                },
+                {
+                    text: 'Chat Rephrase',
+                    link: '/prebuilt-agents/chat-rephrase-agent',
+                },
+            ],
+        },
       {
         text: 'Agents',
         items: [
@@ -39,24 +57,6 @@ export default defineConfig({
           { text: 'Integrations', link: '/agents/integrations' },
           { text: 'Prompts', link: '/agents/prompts' },
           { text: 'Traits', link: '/agents/agent-traits' },
-        ],
-      },
-      {
-        text: 'Prebuilt Agents',
-        items: [
-          { text: 'Introduction', link: '/prebuilt-agents/' },
-          {
-            text: 'Multi Query Retriever',
-            link: '/prebuilt-agents/multi-query-retriever-agent',
-          },
-          {
-            text: 'Contextual Retrieval Preprocessing',
-            link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
-          },
-          {
-            text: 'Chat Rephrase',
-            link: '/prebuilt-agents/chat-rephrase-agent',
-          },
         ],
       },
       {
