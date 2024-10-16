@@ -1,24 +1,18 @@
 # Laravel Artisan Agent Tutorial
 
-So you want to build an agent but don't know where to start? This tutorial is meant to help those who are just starting to use Synapse or are interested in AI in general.
+Interested in building an agent but don’t know where to start? This tutorial will help those who are just starting to use Synapse or are interested in AI in general.
 
-The Agent that we will be building in this tutorial is available as part of Synapse so feel free to review the code as I will link each file .
+The agent we’ll build in this tutorial is available in Synapse.
 
-## Lets start
+## Let's Start
 
-As you may know there are A LOT of artisan commands and many of them I can't remember but I know would be useful in my development process.
+There are many Artisan commands, and I often forget all the options that come with them. For instance, `php artisan make:model` has many options like creating a seeder, migration, resource, etc., at the same time.
 
-For example I often make models using `php artisan make:model` however the `make:model` command has plenty of options connected to it to let you also create a seeder, migration, resource, test, etc at the same time.
-
-I do not remember all these options and the fact is that's for only one command there are tons of others with simalr options.
-
-So here is the idea create a command that will ask an agent to generate an artisan command and if needed execute it. Neat hu?
-
-Okay so lets get going.
+This tutorial will guide you through creating a command that asks an AI agent to generate the correct Artisan command and, if needed, execute it. Neat, right?
 
 ## 1. The Command
 
-We will need to start by setting up a console command to call our agent. To do this we will extend the laravel `Illuminate\Console\Command` class.
+First, we set up a console command to call our agent. We’ll extend Laravel’s `Illuminate\Console\Command` class:
 
 ```php
 <?php
@@ -39,61 +33,45 @@ class SynapseArtisan extends Command
     /**
      * @inheritdoc
      */
-    public $signature = 'synapse:ask {task?}';
+    public $signature = 'synapse:ask';
 
     /**
      * Run the command
      */
     public function handle(): int
     {
-
         return self::SUCCESS;
     }
 }
 ```
 
-In the above we set up our base command that will run when we execute `php artisan synapse:ask`
-
-Since we are being good developers lets set up a unit test here.
+This basic command will run when you execute `php artisan synapse:ask`.
 
 ## 2. `handle` it.
 
-Now we can lay the foundation for what our command is going to do. Fot this we are going to use the excellent prompts package (https://laravel.com/docs/11.x/prompts).
-
-We need our command to ask the user for input if the `task` parameter wasn't filled in.
+Now we add the logic for our command. We'll use Laravel’s excellent [Prompts package](https://laravel.com/docs/11.x/prompts) to ask the user for input.
 
 ```php
-    public function handle(): int
-    {
-
-        if($this->argument('task')){
-            $this->executeAgent($this->argument('task'));
-        }
-
-        $command = text('What would you like artisan to do?');
-        $this->executeAgent($command);
-
-        return self::SUCCESS;
-    }
+public function handle(): int
+{
+    $command = text('What would you like Artisan to do?');
+    return $this->executeAgent($command);
+}
 ```
 
-Okay easy enough so far. Now that we have our task the next thing we want to do is create our Agent. We will start with the "prompt" and then move on to the class.
+Now we have the task. Let's move on to creating the agent.
 
 ## 3. The Prompt
 
-Prompts may seem intimidating but in reality they are pretty simple to understand. All a prompt is is a set of text based instructions that you would like an AI modal to execute. In reality the AI model is just predicting what the next "word" (token) should be when it's responding to you.
+Prompts are instructions given to the AI model. With Laravel's Blade system, we can dynamically build prompts using variables. Here's the `SynapseArtisanPrompt.blade.php`:
 
-This is the reason that Laravel blade templates are such a good fit for prompt building. Because we can dynamically inject variables or make desions based on varibles we can easily build a "dynamic" prompt for most of our use cases.
-
-Below is the `SynapseArtisanPrompt.blade.php` I have created for our agent.
-
-```bladehtml
+```html
 <message type="system">
 # Instruction
-You are a laravel command assistant. Given a user question you must generate a `artisan` command that would complete the task.
-You never explain and always follow the below Output Schema.
+You are a Laravel command assistant. Given a user question, you must generate an `artisan` command that completes the task.
+You never explain and always follow the Output Schema below.
 
-This command MUST be compatible with is Laravel {{$version}}
+This command MUST be compatible with Laravel {{$version}}.
 
 @include('synapse::Parts.OutputSchema')
 </message>
@@ -101,39 +79,152 @@ This command MUST be compatible with is Laravel {{$version}}
 @include('synapse::Parts.Input')
 ```
 
-So in the above we have set up our blade template. We start it with a `system` message that tells the agent what task it will be completing for the user. We left a spot to add our Laravel version that will be inserted as part of the prompt inputs.
+We provide a `system` message outlining the task and include some important Synapse parts:
 
-We also included some Synapse parts:
+- **`OutputSchema`**: Defines the structure the agent’s response must follow.
+- **`MemoryAsMessages`**: Injects any previous interactions with the user.
+- **`Input`**: Displays the user’s input task.
 
-- `@include('synapse::Parts.OutputSchema')` - This inserts the output schema the agent must follow.
-- `@include('synapse::Parts.MemoryAsMessages')` - This inserts the agents "Memory" IE any previous interactions we had with the user. This will be useful if we want the agent to modify the command.
-- `@include('synapse::Parts.Input')` - This inserts the `task` our command first asked for.
-
-Rendered our view would look like this:
+Here's an example of the rendered prompt:
 
 ```html
 <message type="system">
-  # Instruction You are a laravel command assistant. Given a user question you
-  must generate a `artisan` command that would complete the task. You never
-  explain and always follow the below Output Schema. This command MUST be
-  compatible with is Laravel {{$version}} ### You must respond using the
-  following schema. Immediately return valid JSON formatted data: '''json {
-  "command": "required" } '''
+  # Instruction
+  You are a Laravel command assistant. Generate an `artisan` command that completes the task.
+  You never explain and always follow the Output Schema.
+
+  This command MUST be compatible with Laravel 11.27.2.
+  ### You must respond using the following schema. Immediately return valid JSON formatted data:
+  '''json
+  {
+  "command": "(required|string) the artisan command to run."
+  }
+  '''
 </message>
 <message type="user">
-  create a Flights Model with a resource, policy, and controller.
+  create a model migration for Flights
 </message>
 ```
 
-??????? TODO Validate this.
+Now, we'll use a "Few Shot" technique by adding examples to improve the agent’s accuracy:
 
-This is good but Agents typically do better when they have examples to work from. This is called "Few Shot" prompting. To Do this we are going to "fake" some memory directly in the prompt as if we have already asked for commands and the agent responded accordingly.
+```html
+<message type="system">
+# Instruction
+You are a Laravel command assistant. Generate an `artisan` command that completes the task.
+You never explain and always follow the Output Schema.
 
-??????? TODO ADD FEW SHOT
+This command MUST be compatible with Laravel {{$version}}.
 
-## 3. The Agent
+@include('synapse::Parts.OutputSchema')
+</message>
+<message type="user">
+  create a model migration for Flights
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "make:model Flight -m"
+  }
+  '''
+</message>
+<message type="user">
+  a command that sends emails
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "make:command SendEmails"
+  }
+  '''
+</message>
+<message type="user">
+  a model for flights include the migration
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "make:model Flight --migration"
+  }
+  '''
+</message>
+<message type="user">
+  a model for flights include the migration resource and request
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "make:model Flight --controller --resource --requests"
+  }
+  '''
+</message>
+<message type="user">
+  flight model overview
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "model:show Flight"
+  }
+  '''
+</message>
+<message type="user">
+  flight controller
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "make:controller FlightController"
+  }
+  '''
+</message>
+<message type="user">
+  erase and reseed the database forcefully
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "migrate:fresh --seed --force"
+  }
+  '''
+</message>
+<message type="user">
+  what routes are available
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "route:list"
+  }
+  '''
+</message>
+<message type="user">
+  rollback migrations 5 times
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "migrate:rollback --step=5"
+  }
+  '''
+</message>
+<message type="user">
+  start a q worker
+</message>
+<message type="assistant">
+  '''json
+  {
+  "command": "queue:work"
+  }
+  '''
+</message>
+@include('synapse::Parts.MemoryAsMessages')
+@include('synapse::Parts.Input')
+```
 
-Okay! Now that our prompt is done it's time to create our agent. An agent is the glue that combines the Prompt, Memory, Input variables, and integration. It's where the magic happens!
+## 4. The Agent
+
+Next, we create the agent, which combines the prompt, memory, inputs, and integration.
 
 ```php
 <?php
@@ -167,26 +258,67 @@ class SynapseArtisanAgent extends Agent implements HasOutputSchema, HasMemory
     {
         return [
             SchemaRule::make([
-                                 'name' => 'command',
-                                 'rules' => 'required|string',
-                                 'description' => 'the artisan command to run.',
-                             ]),
+                'name' => 'command',
+                'rules' => 'required|string',
+                'description' => 'The Artisan command to run.',
+            ]),
         ];
     }
 }
 ```
 
-So starting from the top down. We have done the following:
+In summary:
+- We extend the base `Agent` class.
+- Implement `HasOutputSchema` to define the output structure.
+- Implement `HasMemory` to remember conversations.
+- Use the `ValidatesOutputSchema` and `ManagesMemory` traits.
 
-- Extended the base `Agent` class.
-- Implment `HasOutputSchema` so that our agent knows we have a `resolveOutputSchema` function. Becuase we want our agent to respond in a very specific way this is necessary.
-- We also implement `HasMemory` since our agent needs to remember the conversation we are having.
-- Since we are using an `OutputSchema` we also have to add the `ValidatesOutputSchema` trait.
-- And since we are using `HasMemory` we also need the `ManagesMemory` trait.
-- We point our `$promptView` to the view we created in the previous step.
-- We define a `resolveMemory` method. Here I have chosen to use `CollectionMemory` becuase I don't want to save the conversation I have had with the agent after the command has run. You can read more about [memory here](/memory/).
-- Finally, we define a `resolveOutputSchema` method. This tells the agent the exact output we reqire as well as validates the agents' response. You can read more about [OutputSchema here](/traits/validates-output-schema.md).
+## 5. Complete the Command
 
-## 4. Finish up the command.
+Finally, we integrate the agent into the `SynapseArtisan` command.
 
-That's it! Now we need to pull our agent in to our command.
+```php
+private function executeAgent(string $task): int
+{
+    $synapseArtisanAgent = new SynapseArtisanAgent;
+
+    while (true) {
+        $result = spin(
+            callback: fn() => $synapseArtisanAgent->handle(['input' => $task, 'version' => Application::VERSION]),
+            message: 'Loading...'
+        );
+        $result = $result->content();
+        $command = $result['command'];
+
+        $choice = select(
+            label: $command,
+            options: [
+                'yes' => '✅ Yes (Run command)',
+                'edit' => '✏ Edit (Modify command)',
+                'revise' => '🔁 Revise (Request new command)',
+                'cancel' => '🛑 Cancel',
+            ]
+        );
+
+        switch ($choice) {
+            case 'yes':
+                Artisan::call($command);
+                return self::SUCCESS;
+            case 'edit':
+                $command = text('Edit command:', $command);
+                Artisan::call($command);
+                return self::SUCCESS;
+            case 'revise':
+                $task = text('Revise command:');
+                break;
+            case 'cancel':
+                return self::FAILURE;
+        }
+    }
+}
+```
+
+The agent’s memory allows it to retain the conversation context, making it easier to adjust commands based on user feedback.
+
+## 6. Profit!
+That’s it! You can find the complete code in the Synapse repository. Run `php artisan synapse:ask` to test it out and generate your Artisan commands!

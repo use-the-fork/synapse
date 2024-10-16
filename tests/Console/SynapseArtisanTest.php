@@ -18,7 +18,7 @@
 
         $this->artisan('synapse:ask')
              ->expectsQuestion('What would you like artisan to do?', 'create a model migration for Flights')
-            ->expectsQuestion('Run This Command?', 'yes')
+            ->expectsQuestion('make:model Flight -m', 'yes')
              ->assertExitCode(0);
 
 	});
@@ -34,7 +34,7 @@
 
         $this->artisan('synapse:ask')
              ->expectsQuestion('What would you like artisan to do?', 'create a model migration for Flights')
-            ->expectsQuestion('Run This Command?', 'cancel')
+            ->expectsQuestion('make:model Flight -m', 'cancel')
              ->assertExitCode(1);
 	});
 
@@ -49,7 +49,7 @@
 
         $this->artisan('synapse:ask')
              ->expectsQuestion('What would you like artisan to do?', 'create a model migration for Flights')
-            ->expectsQuestion('Run This Command?', 'edit')
+            ->expectsQuestion('make:model Flight -m', 'edit')
             ->expectsQuestion('You can edit command here:', 'make:model Flight')
              ->assertExitCode(0);
 	});
@@ -65,7 +65,8 @@
 
         $this->artisan('synapse:ask')
              ->expectsQuestion('What would you like artisan to do?', 'create a model migration for Flights')
-            ->expectsQuestion('Run This Command?', 'revise')
-            ->expectsQuestion('You can edit command here:', 'make:model Flight')
+            ->expectsQuestion('make:model Flight -m', 'revise')
+            ->expectsQuestion('Response to Agent:', 'actually it is for a Planes model and I want to generate the controller as well.')
+            ->expectsQuestion('make:model Plane -m -c', 'yes')
              ->assertExitCode(0);
 	});

@@ -1,4 +1,4 @@
-import {defineConfig} from 'vitepress';
+import { defineConfig } from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: '🧠 Synapse',
@@ -23,7 +23,13 @@ export default defineConfig({
     sidebar: [
       {
         text: 'Introduction',
-        items: [{ text: 'Getting Started', link: '/' }],
+        items: [
+          { text: 'Getting Started', link: '/' },
+          {
+            text: 'Artisan Agent Tutorial',
+            link: '/tutorials/artisan-agent.md',
+          },
+        ],
       },
       {
         text: 'Agents',
@@ -35,24 +41,24 @@ export default defineConfig({
           { text: 'Traits', link: '/agents/agent-traits' },
         ],
       },
-        {
-            text: 'Prebuilt Agents',
-            items: [
-                { text: 'Introduction', link: '/prebuilt-agents/' },
-                {
-                    text: 'Multi Query Retriever',
-                    link: '/prebuilt-agents/multi-query-retriever-agent',
-                },
-                {
-                    text: 'Contextual Retrieval Preprocessing',
-                    link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
-                },
-                {
-                    text: 'Chat Rephrase',
-                    link: '/prebuilt-agents/chat-rephrase-agent',
-                },
-            ],
-        },
+      {
+        text: 'Prebuilt Agents',
+        items: [
+          { text: 'Introduction', link: '/prebuilt-agents/' },
+          {
+            text: 'Multi Query Retriever',
+            link: '/prebuilt-agents/multi-query-retriever-agent',
+          },
+          {
+            text: 'Contextual Retrieval Preprocessing',
+            link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
+          },
+          {
+            text: 'Chat Rephrase',
+            link: '/prebuilt-agents/chat-rephrase-agent',
+          },
+        ],
+      },
       {
         text: 'Prompts',
         items: [
@@ -75,7 +81,10 @@ export default defineConfig({
           { text: 'Introduction', link: '/memory/' },
           { text: 'Collection Memory', link: '/memory/collection' },
           { text: 'Database Memory', link: '/memory/database' },
-          { text: 'Conversation Summary Memory', link: '/memory/conversation-summary' },
+          {
+            text: 'Conversation Summary Memory',
+            link: '/memory/conversation-summary',
+          },
         ],
       },
       {
@@ -90,7 +99,7 @@ export default defineConfig({
           { text: 'Logs', link: '/traits/log-trait' },
           { text: 'Hooks', link: '/traits/hook-trait' },
         ],
-      }
+      },
     ],
 
     socialLinks: [

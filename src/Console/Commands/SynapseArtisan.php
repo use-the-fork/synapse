@@ -8,7 +8,6 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use UseTheFork\Synapse\Agents\SynapseArtisanAgent;
-use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\spin;
 use function Laravel\Prompts\text;
@@ -34,24 +33,29 @@ class SynapseArtisan extends Command
         return $this->executeAgent($command);
     }
 
+    /**
+     * Executes a task using the SynapseArtisanAgent and provides options to the user to run, edit, revise, or cancel the command.
+     *
+     * @param string $task The input task for the SynapseArtisanAgent.
+     *
+     * @return int The status code indicating success or failure.
+     */
     private function executeAgent(string $task): int
     {
         $synapseArtisanAgent = new SynapseArtisanAgent;
 
         while (true) {
             $result = spin(
-                message : 'Loading...',
                 callback: fn() => $synapseArtisanAgent->handle(['input'   => $task,
                                                                 'version' => Application::VERSION
-                                                               ])
+                                                               ]),
+                message : 'Loading...'
             );
             $result = $result->content();
             $command = $result['command'];
 
-            info($command);
-
             $choice = select(
-                label  : 'Run This Command?',
+                label  : $command,
                 options: [
                              'yes'    => '✅ Yes (Run command)',
                              'edit'   => '✏ Edit (Make changes to command before running)',
@@ -82,8 +86,5 @@ class SynapseArtisan extends Command
            }
 
         }
-
-        dd($result);
-
     }
 }
