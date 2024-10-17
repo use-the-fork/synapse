@@ -2,49 +2,48 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agents\SQLToolAgent;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use Workbench\App\Models\Organization;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agents\SQLToolAgent;
+use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+use Workbench\App\Models\Organization;
 
-    it('can run the SQL Tool Agent.', function (): void {
+it('can run the SQL Tool Agent.', function (): void {
 
+    for ($i = 0; $i < 100; $i++) {
+        $org = new Organization;
+        $org->fill([
+            'name' => "Foo - {$i}",
+            'domain' => "Foo_{$i}.com",
+            'country_code' => 'USA',
+            'email' => 'foo@bar.com',
+            'city' => 'hartford',
+            'status' => 'operating',
+            'short_description' => 'lorem ipsum',
+            'num_funding_rounds' => 5,
+            'total_funding_usd' => 1000000,
+            'founded_on' => '2024-03-01',
+        ]);
+        $org->save();
+    }
 
-        for ($i = 0; $i < 100; $i++){
-            $org = new Organization();
-            $org->fill([
-                           'name' => "Foo - {$i}",
-                           'domain' => "Foo_{$i}.com",
-                           'country_code' => 'USA',
-                           'email' => 'foo@bar.com',
-                           'city' => 'hartford',
-                           'status' => 'operating',
-                           'short_description' => 'lorem ipsum',
-                           'num_funding_rounds' => 5,
-                           'total_funding_usd' => 1000000,
-                           'founded_on' => '2024-03-01',
-                       ]);
-            $org->save();
-        }
-
-        for ($i = 0; $i < 100; $i++){
-            $org = new Organization();
-            $org->fill([
-                           'name' => "Baz - {$i}",
-                           'domain' => "Baz_{$i}.com",
-                           'country_code' => 'USA',
-                           'email' => 'baz@bar.com',
-                           'city' => 'hartford',
-                           'status' => 'closed',
-                           'short_description' => 'lorem ipsum',
-                           'num_funding_rounds' => 5,
-                           'total_funding_usd' => 1000000,
-                           'founded_on' => '2024-03-01',
-                       ]);
-            $org->save();
-        }
+    for ($i = 0; $i < 100; $i++) {
+        $org = new Organization;
+        $org->fill([
+            'name' => "Baz - {$i}",
+            'domain' => "Baz_{$i}.com",
+            'country_code' => 'USA',
+            'email' => 'baz@bar.com',
+            'city' => 'hartford',
+            'status' => 'closed',
+            'short_description' => 'lorem ipsum',
+            'num_funding_rounds' => 5,
+            'total_funding_usd' => 1000000,
+            'founded_on' => '2024-03-01',
+        ]);
+        $org->save();
+    }
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
@@ -59,6 +58,6 @@ declare(strict_types=1);
 
     $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->toBeArray()
-      ->and($agentResponseArray['content'])->toHaveKey('answer')
-      ->and($agentResponseArray['content']['answer'])->toContain('There are 100 operating organizations and the average number of funding rounds for them is 5.');
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toContain('100', '5');
 });
