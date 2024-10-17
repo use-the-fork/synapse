@@ -6,6 +6,7 @@ namespace UseTheFork\Synapse\Helpers;
 
 use Closure;
 use ReflectionClass;
+use UseTheFork\Synapse\AgentTask\PendingAgentChain;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 
 /**
@@ -22,7 +23,7 @@ final class Helpers
      *
      * @throws \ReflectionException
      */
-    public static function bootPlugin(PendingAgentTask $pendingAgentTask, string $trait): void
+    public static function bootPlugin(PendingAgentTask|PendingAgentChain $pendingAgentTask, string $trait): void
     {
         $agent = $pendingAgentTask->agent();
 
