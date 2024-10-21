@@ -11,8 +11,8 @@ use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
 use UseTheFork\Synapse\Contracts\Tool;
-use UseTheFork\Synapse\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\ChatRequest;
+use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
 use UseTheFork\Synapse\ValueObject\Message;
 
@@ -27,7 +27,7 @@ class OllamaAIConnector extends Connector
 
     public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
     {
-        throw new NotImplementedException('Claude does not support embedding creation.');
+        return $this->send(new EmbeddingsRequest($input, $extraAgentArgs))->dto();
     }
 
     /**

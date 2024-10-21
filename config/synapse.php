@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 
-    return [
+return [
     'integrations' => [
         'default' => OpenAIIntegration::class,
         'openai' => [
@@ -19,6 +19,7 @@ declare(strict_types=1);
         'ollama' => [
             'base_url' => env('OLLAMA_BASE_URL'),
             'chat_model' => env('OLLAMA_API_CHAT_MODEL', 'llama3.2'),
+            'embedding_model' => env('OLLAMA_API_CHAT_MODEL', 'llama3.2'),
         ],
     ],
     'services' => [
