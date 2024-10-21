@@ -41,7 +41,6 @@
         public function addOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask
         {
             $pendingAgentTask->addInput('outputSchema', $this->getOutputSchema());
-
             return $pendingAgentTask;
         }
 
@@ -116,7 +115,7 @@
                     $errorsFlat = $errorsFlat->implode(PHP_EOL);
                     $errorsAsString = $errorsFlat . "\n\n";
                 }
-                $response = $this->doRevalidate($errorsAsString);
+                $response = $this->doRevalidate($response, $errorsAsString);
 
                 //since all integrations return a Message value object we need to grab the content
                 $response = $response->currentIteration()->getResponse()->content();
@@ -134,9 +133,22 @@
          */
         protected function parseResponse(string $input): ?array
         {
-            return json_decode(
+
+            # we attempt to Decode the Json in a few ways. It's best to give all models a chance before failing.
+            $jsonFormat =  json_decode(
                 str($input)->replace([
                                          '```json',
+                                         '```',
+                                     ], '')->toString(), TRUE
+            );
+
+            if(!empty($jsonFormat)){
+                return $jsonFormat;
+            }
+
+            return json_decode(
+                str($input)->replace([
+                                         '```',
                                          '```',
                                      ], '')->toString(), TRUE
             );
@@ -151,7 +163,7 @@
          *
          * @throws Throwable
          */
-        protected function doRevalidate(string $errors = ''): PendingAgentTask
+        protected function doRevalidate(string $response, string $errors = ''): PendingAgentTask
         {
 
             $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
@@ -159,16 +171,24 @@
                 'errors'      => $errors
             ])->render();
 
-            $prompt = Message::make([
+            $validationPrompt = Message::make([
                                         'role'    => 'user',
                                         'content' => $prompt,
                                     ]);
 
+            $response = Message::make([
+                                        'role'    => 'agent',
+                                        'content' => $response,
+                                    ]);
+
+
             //We get the whole conversation so far but append a validation message
             $promptChain = $this->pendingAgentTask->currentIteration()->getPromptChain();
+
             $this->pendingAgentTask->currentIteration()->setPromptChain([
                 ...$promptChain,
-                $prompt
+                $response,
+                $validationPrompt
                                                                         ]);
 
             // Create the Chat request we will be sending.
