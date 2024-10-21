@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 
-return [
+    return [
     'integrations' => [
         'default' => OpenAIIntegration::class,
         'openai' => [
@@ -15,6 +15,10 @@ return [
         'claude' => [
             'key' => env('ANTHROPIC_API_KEY'),
             'chat_model' => env('ANTHROPIC_API_CHAT_MODEL', 'claude-3-5-sonnet-20240620'),
+        ],
+        'ollama' => [
+            'base_url' => env('OLLAMA_BASE_URL'),
+            'chat_model' => env('OLLAMA_API_CHAT_MODEL', 'llama3.2'),
         ],
     ],
     'services' => [

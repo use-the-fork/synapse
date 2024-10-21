@@ -7,11 +7,11 @@ namespace UseTheFork\Synapse\Integrations;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Exceptions\NotImplementedException;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\OllamaAIConnector;
+use UseTheFork\Synapse\Integrations\Connectors\Ollama\OllamaAIConnector;
 use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
 use UseTheFork\Synapse\ValueObject\Message;
 
-class ClaudeIntegration implements Integration
+class OllamaIntegration implements Integration
 {
     public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
     {
@@ -25,9 +25,9 @@ class ClaudeIntegration implements Integration
         Message $message,
         array $extraAgentArgs = []
     ): Message {
-        $claudeAIConnector = new OllamaAIConnector;
+        $ollamaAIConnector = new OllamaAIConnector;
 
-        return $claudeAIConnector->doCompletionRequest(
+        return $ollamaAIConnector->doCompletionRequest(
             prompt: [$message],
             extraAgentArgs: $extraAgentArgs
         );
@@ -40,8 +40,8 @@ class ClaudeIntegration implements Integration
         PendingAgentTask $pendingAgentTask
     ): PendingAgentTask {
 
-        $claudeAIConnector = new OllamaAIConnector;
-        $message = $claudeAIConnector->doCompletionRequest(
+        $ollamaAIConnector = new OllamaAIConnector;
+        $message = $ollamaAIConnector->doCompletionRequest(
             prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
             tools: $pendingAgentTask->tools(),
             extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
