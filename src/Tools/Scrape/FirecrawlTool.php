@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Tools;
+namespace UseTheFork\Synapse\Tools\Scrape;
 
+use UseTheFork\Synapse\Contracts\Tool\ScrapeTool;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
 use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
+use UseTheFork\Synapse\Tools\BaseTool;
 
-final class FirecrawlTool extends BaseTool
+final class FirecrawlTool extends BaseTool implements ScrapeTool
 {
     private string $apiKey;
 
@@ -25,15 +27,14 @@ final class FirecrawlTool extends BaseTool
      * Useful for getting the contents of a webpage.
      *
      * @param  string  $url  The full URL to get the contents from.
-     * @param  string  $extractionPrompt  A prompt describing what information to extract from the page
+     *
      */
     public function handle(
-        string $url,
-        string $extractionPrompt,
+        string $url
     ): string {
 
         $firecrawlConnector = new FirecrawlConnector($this->apiKey);
-        $firecrawlRequest = new FirecrawlRequest($url, $extractionPrompt);
+        $firecrawlRequest = new FirecrawlRequest($url);
         $results = $firecrawlConnector->send($firecrawlRequest)->array();
 
 
@@ -52,8 +53,8 @@ final class FirecrawlTool extends BaseTool
             $snippets->push("Meta Description: {$results['data']['extract']['metadata']['description']}");
         }
 
-        if (! empty($results['data']['extract']['result'])) {
-            $snippets->push("Content:\n {$results['data']['extract']['result']}");
+        if (! empty($results['data']['markdown'])) {
+            $snippets->push("Content:\n\n {$results['data']['markdown']}");
         }
 
         if ($snippets->isEmpty()) {

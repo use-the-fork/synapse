@@ -17,20 +17,10 @@ class FirecrawlRequest extends Request implements HasBody
 
     /**
      * @param  string  $url  The URL to be used for extraction.
-     * @param  string  $extractionPrompt  The extraction prompt to be used.
      */
     public function __construct(
-        public readonly string $url,
-        public readonly string $extractionPrompt
+        public readonly string $url
     ) {}
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resolveEndpoint(): string
-    {
-        return '/v1/scrape';
-    }
 
     /**
      * {@inheritdoc}
@@ -39,21 +29,15 @@ class FirecrawlRequest extends Request implements HasBody
     {
         return [
             'url' => $this->url,
-            'formats' => ['extract'],
-            'extract' => [
-                'schema' => [
-                    'type' => 'object',
-                    'properties' => [
-                        'result' => [
-                            'description' => "detailed markdown list related to **{$this->extractionPrompt}** if no relevant content is found return `No Relevant Content On Page` DO NOT respond with only a URL or Link.",
-                            'type' => 'string',
-                        ],
-                    ],
-                    'required' => [
-                        'result',
-                    ],
-                ],
-            ],
+            'formats' => ['markdown']
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveEndpoint(): string
+    {
+        return '/v1/scrape';
     }
 }
