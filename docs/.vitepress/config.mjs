@@ -1,4 +1,4 @@
-import {defineConfig} from 'vitepress';
+import { defineConfig } from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: '🧠 Synapse',
@@ -9,6 +9,15 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
+      {
+        text: '0.2.0',
+        items: [
+          {
+            text: 'Changelog',
+            link: 'https://github.com/use-the-fork/synapse/tree/v0.2.0',
+          },
+        ],
+      },
       {
         text: '0.1.0',
         items: [
@@ -31,28 +40,28 @@ export default defineConfig({
           },
         ],
       },
-        {
-            text: 'Prebuilt Agents',
-            items: [
-                { text: 'Introduction', link: '/prebuilt-agents/' },
-                {
-                    text: 'Multi Query Retriever',
-                    link: '/prebuilt-agents/multi-query-retriever-agent',
-                },
-                {
-                    text: 'Contextual Retrieval Preprocessing',
-                    link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
-                },
-                {
-                    text: 'Chat Rephrase',
-                    link: '/prebuilt-agents/chat-rephrase-agent',
-                },
-                {
-                    text: 'SQL Tool',
-                    link: '/prebuilt-agents/sql-tool-agent',
-                },
-            ],
-        },
+      {
+        text: 'Prebuilt Agents',
+        items: [
+          { text: 'Introduction', link: '/prebuilt-agents/' },
+          {
+            text: 'Multi Query Retriever',
+            link: '/prebuilt-agents/multi-query-retriever-agent',
+          },
+          {
+            text: 'Contextual Retrieval Preprocessing',
+            link: '/prebuilt-agents/contextual-retrieval-preprocessing-agent',
+          },
+          {
+            text: 'Chat Rephrase',
+            link: '/prebuilt-agents/chat-rephrase-agent',
+          },
+          {
+            text: 'SQL Tool',
+            link: '/prebuilt-agents/sql-tool-agent',
+          },
+        ],
+      },
       {
         text: 'Agents',
         items: [
