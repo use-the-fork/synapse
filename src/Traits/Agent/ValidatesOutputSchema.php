@@ -167,7 +167,8 @@
         {
 
             $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
-                'outputRules' => $this->getOutputSchema(),
+                'outputSchema' => $this->getOutputSchema(),
+                'lastResponse' => $response,
                 'errors'      => $errors
             ])->render();
 
@@ -176,18 +177,12 @@
                                         'content' => $prompt,
                                     ]);
 
-            $response = Message::make([
-                                        'role'    => 'agent',
-                                        'content' => $response,
-                                    ]);
-
 
             //We get the whole conversation so far but append a validation message
             $promptChain = $this->pendingAgentTask->currentIteration()->getPromptChain();
 
             $this->pendingAgentTask->currentIteration()->setPromptChain([
                 ...$promptChain,
-                $response,
                 $validationPrompt
                                                                         ]);
 
