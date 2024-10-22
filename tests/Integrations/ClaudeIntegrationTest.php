@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\Fixture;
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
-    use UseTheFork\Synapse\Contracts\Integration;
-    use UseTheFork\Synapse\Contracts\Memory;
-    use UseTheFork\Synapse\Integrations\ClaudeIntegration;
-    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-    use UseTheFork\Synapse\Memory\CollectionMemory;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-    use UseTheFork\Synapse\ValueObject\SchemaRule;
+	use Saloon\Http\Faking\Fixture;
+	use Saloon\Http\Faking\MockClient;
+	use Saloon\Http\Faking\MockResponse;
+	use Saloon\Http\PendingRequest;
+	use UseTheFork\Synapse\Agent;
+	use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+	use UseTheFork\Synapse\Contracts\Integration;
+	use UseTheFork\Synapse\Contracts\Memory;
+	use UseTheFork\Synapse\Integrations\ClaudeIntegration;
+	use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
+	use UseTheFork\Synapse\Memory\CollectionMemory;
+	use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+	use UseTheFork\Synapse\Tools\Search\SerperTool;
+	use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+	use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Connects', function (): void {
+	test('Connects', function (): void {
 
     class ClaudeTestAgent extends Agent implements HasIntegration
     {

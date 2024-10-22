@@ -12,7 +12,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\ChatRequest;
     use UseTheFork\Synapse\Integrations\OllamaIntegration;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
     use UseTheFork\Synapse\ValueObject\SchemaRule;
 

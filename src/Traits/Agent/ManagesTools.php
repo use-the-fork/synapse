@@ -222,6 +222,7 @@ trait ManagesTools
             if (
                 ($parameter_type = $reflectionParameter->getType()) !== null &&
                 ! $parameter_type->isBuiltin() &&
+                ! $reflectionParameter->isOptional() &&
                 enum_exists($parameter_type->getName())
             ) {
                 $params[$reflectionParameter->name] = $parameter_type->getName()::tryFrom($arguments[$reflectionParameter->name]) ?? $reflectionParameter->getDefaultValue();
@@ -239,14 +240,14 @@ trait ManagesTools
         return $tool->handle(...$params);
     }
 
-    private function sanitizeToolParam($value, $type): float|bool|int|string
+    private function sanitizeToolParam($value, $type): mixed
     {
         return match ($type) {
             'int' => (int) $value,
-            'float' => (float) $value,
-            'double' => (float) $value,
+            'float', 'double' => (float) $value,
             'bool' => (bool) $value,
             'string' => (string) $value,
+            default => $value,
         };
     }
 }

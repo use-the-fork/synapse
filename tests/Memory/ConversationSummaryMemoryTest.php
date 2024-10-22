@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasMemory;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\ConversationSummaryMemory;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+	use Saloon\Http\Faking\MockClient;
+	use Saloon\Http\Faking\MockResponse;
+	use Saloon\Http\PendingRequest;
+	use UseTheFork\Synapse\Agent;
+	use UseTheFork\Synapse\Contracts\Agent\HasMemory;
+	use UseTheFork\Synapse\Contracts\Integration;
+	use UseTheFork\Synapse\Contracts\Memory;
+	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+	use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+	use UseTheFork\Synapse\Memory\ConversationSummaryMemory;
+	use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+	use UseTheFork\Synapse\Tools\Search\SerperTool;
+	use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
+	use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+	use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-it('Conversation Summary Memory', function (): void {
+	it('Conversation Summary Memory', function (): void {
 
     class ConversationSummaryAgent extends Agent implements HasMemory
     {

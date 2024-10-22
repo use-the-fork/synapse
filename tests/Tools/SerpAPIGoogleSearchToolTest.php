@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\Fixture;
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agent;
-    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-    use UseTheFork\Synapse\Contracts\Integration;
-    use UseTheFork\Synapse\Contracts\Memory;
-    use UseTheFork\Synapse\Contracts\Tool;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-    use UseTheFork\Synapse\Memory\CollectionMemory;
-    use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
-    use UseTheFork\Synapse\Tools\BaseTool;
-    use UseTheFork\Synapse\Tools\SerpAPIGoogleSearchTool;
-    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-    use UseTheFork\Synapse\ValueObject\SchemaRule;
+	use Saloon\Http\Faking\Fixture;
+	use Saloon\Http\Faking\MockClient;
+	use Saloon\Http\Faking\MockResponse;
+	use Saloon\Http\PendingRequest;
+	use UseTheFork\Synapse\Agent;
+	use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+	use UseTheFork\Synapse\Contracts\Integration;
+	use UseTheFork\Synapse\Contracts\Memory;
+	use UseTheFork\Synapse\Contracts\Tool;
+	use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+	use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+	use UseTheFork\Synapse\Memory\CollectionMemory;
+	use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
+	use UseTheFork\Synapse\Tools\BaseTool;
+	use UseTheFork\Synapse\Tools\Search\SerpAPIGoogleSearchTool;
+	use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+	use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-    test('Serp API Tool', function (): void {
+	test('Serp API Tool', function (): void {
 
         class SerpAPIGoogleSearchToolTestAgent extends Agent implements HasOutputSchema
         {

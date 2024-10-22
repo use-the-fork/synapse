@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Tools;
+namespace UseTheFork\Synapse\Tools\Search;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use UseTheFork\Synapse\Contracts\Tool;
+use UseTheFork\Synapse\Contracts\Tool\SearchTool;
+use UseTheFork\Synapse\Enums\ReturnType;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
 use UseTheFork\Synapse\Services\SerpApi\SerpApiConnector;
+use UseTheFork\Synapse\Tools\BaseTool;
 
-final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
+final class SerpAPIGoogleSearchTool extends BaseTool implements Tool, SearchTool
 {
     private string $apiKey;
 
@@ -32,15 +35,20 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool
      */
     public function handle(
         string $query,
-        int $numberOfResults = 10,
-    ): string {
+        ?string $searchType = 'search',
+        ?int $numberOfResults = 10,
+        ReturnType $returnType = ReturnType::STRING,
+    ): string|array {
 
         $serpApiConnector = new SerpApiConnector($this->apiKey);
         $serpApiSearchRequest = new SerpApiSearchRequest($query, $numberOfResults);
 
         $results = $serpApiConnector->send($serpApiSearchRequest)->array();
 
-        return $this->parseResults($results);
+        return match ($returnType) {
+            ReturnType::STRING => $this->parseResults($results),
+            default => $results
+        };
     }
 
     private function parseResults(array $results): string
