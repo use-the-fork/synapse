@@ -1,0 +1,9 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Content-Type": "application\/json; charset=utf-8",
+        "Date": "Tue, 22 Oct 2024 01:12:45 GMT",
+        "Content-Length": "330"
+    },
+    "data": "{\"model\":\"llama3.2\",\"created_at\":\"2024-10-22T01:12:45.859244298Z\",\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answer\\\": \\\"Hello!\\\" }\\n```\"},\"done_reason\":\"stop\",\"done\":true,\"total_duration\":2645440997,\"load_duration\":20609427,\"prompt_eval_count\":111,\"prompt_eval_duration\":1796052000,\"eval_count\":11,\"eval_duration\":704477000}"
+}

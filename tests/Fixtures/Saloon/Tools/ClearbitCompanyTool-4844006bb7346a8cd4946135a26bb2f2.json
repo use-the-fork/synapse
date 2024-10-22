@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 22 Oct 2024 01:29:05 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1181",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "3842",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999764",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "7ms",
+        "x-request-id": "req_ac23ffb783a250f76b95115937089a7e",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=Us0iTr53ncmzPI8qVv.1x9gVdpPlJR5GeAy5hjlRbKI-1729560545-1.0.1.1-.0NSN.9zujuAIUPwIRDuGHoncs0LiyKBgnHv1SaRAmVsY8yH_G3KUmjfM6evehR2C1aoLhBREPPm5BmOLUgBIw; path=\/; expires=Tue, 22-Oct-24 01:59:05 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=JUryU1x.ZbpzxhkUdSU1hFX4eOsscQQdP23.AuOAq_o-1729560545365-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d65b6c689a88c81-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AKxzhNxpVwFrmbcoILCEXEgQwop3G\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560541,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"OpenAI, legally known as OpenAI, Inc., is an AI research company dedicated to developing safe and beneficial artificial intelligence that aligns with human values and promotes diversity in technology. It operates primarily in the Health Care sector and the Life Sciences Tools & Services industry. Its activities span across various areas including Information Technology & Services, Academic Research, Physical Sciences, Engineering, Life Sciences, and Scientific & Academic Research, with a focus on B2B services.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 265,\n    \"completion_tokens\": 103,\n    \"total_tokens\": 368,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

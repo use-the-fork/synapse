@@ -38,5 +38,5 @@ it('can run the Chat Rephrase Agent.', function (): void {
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('standalone_question')
-        ->and($agentResponseArray['content']['standalone_question'] == 'How can one improve heart health?')->toBeTrue();
+        ->and($agentResponseArray['content']['standalone_question'])->toBe('How can one improve heart health through gym activities?');
 });

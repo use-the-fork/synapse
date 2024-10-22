@@ -34,6 +34,10 @@ OPENAI_API_EMBEDDING_MODEL=text-embedding-ada-002
 ANTHROPIC_API_KEY=
 ANTHROPIC_API_CHAT_MODEL=claude-3-5-sonnet-20240620
 
+OLLAMA_BASE_URL=https://foo.bar:1234
+OLLAMA_API_CHAT_MODEL=llama3.2
+OLLAMA_API_EMBEDDING_MODEL=llama3.2
+
 SERPAPI_API_KEY=
 SERPER_API_KEY=
 CLEARBIT_API_KEY=
@@ -79,6 +83,11 @@ Open the `config/synapse.php` file and modify the default integration to the one
         'claude' => [
             'key' => env('ANTHROPIC_API_KEY'),
             'chat_model' => env('ANTHROPIC_API_CHAT_MODEL', 'claude-3-5-sonnet-20240620'),
+        ],
+        'ollama' => [
+            'base_url' => env('OLLAMA_BASE_URL'),
+            'chat_model' => env('OLLAMA_API_CHAT_MODEL', 'llama3.2'),
+            'embedding_model' => env('OLLAMA_API_CHAT_MODEL', 'llama3.2'),
         ],
     ],
 ```

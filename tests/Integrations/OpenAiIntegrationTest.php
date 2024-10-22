@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('Connects with out resolveIntegration', function (): void {
+    test('Connects with out resolveIntegration', function (): void {
 
     class OpenAiWithOutResolveTestAgent extends Agent implements HasOutputSchema
     {
@@ -46,7 +47,8 @@ test('Connects with out resolveIntegration', function (): void {
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toBe('Hello! How can I assist you today?');
 });
 
 test('Connects', function (): void {
@@ -84,30 +86,8 @@ test('Connects', function (): void {
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
-});
-
-test('Connects With OutputSchema', function (): void {
-
-    class OpenAiConnectsTestAgent extends Agent implements HasIntegration
-    {
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
-
-        public function resolveIntegration(): Integration
-        {
-            return new OpenAIIntegration;
-        }
-    }
-
-    MockClient::global([
-        ChatRequest::class => MockResponse::fixture('Integrations/OpenAiTestAgent'),
-    ]);
-
-    $agent = new OpenAiConnectsTestAgent;
-    $message = $agent->handle(['input' => 'hello!']);
-
-    $agentResponseArray = $message->toArray();
-    expect($agentResponseArray['content'])->not->toBeArray();
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toBe('Hello!');
 });
 
 test('uses tools', function (): void {
@@ -141,7 +121,7 @@ test('uses tools', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
             return MockResponse::fixture("Integrations/OpenAiToolTestAgent-{$hash}");
@@ -155,5 +135,6 @@ test('uses tools', function (): void {
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toBe('Joe Biden is the current President of the United States.');
 });

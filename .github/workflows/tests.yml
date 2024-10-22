@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - dev-main
+      - development
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -24,6 +24,7 @@ jobs:
       CRUNCHBASE_API_KEY: FOO
       FIRECRAWL_API_KEY: FOO
       SERPAPI_API_KEY: FOO
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
       - name: Checkout 🛎

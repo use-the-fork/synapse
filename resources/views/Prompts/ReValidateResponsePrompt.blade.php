@@ -1,11 +1,12 @@
-# Instruction
-Your final response did not adhere the required Schema.
-** DO NOT EXPLAIN. Only return your final response with the requested format.**
-
-## You must respond in this format:
-{!! $outputRules !!}
-
 @if(!empty($errors))
-## The following error occurred in the last Rewrite:
+## The following error occurred in the last response:
 {!! $errors !!}
 @endif
+
+@if(!empty($lastResponse))
+### Start Last Response ###
+{!! $lastResponse !!}
+### End Last Response ###
+@endif
+
+@include('synapse::Parts.OutputSchema')

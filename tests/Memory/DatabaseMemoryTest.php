@@ -72,7 +72,7 @@ it('Database Memory', function (): void {
     $followupResponseArray = $followup->toArray();
     expect($followupResponseArray['content'])->toBeArray()
         ->and($followupResponseArray['content'])->toHaveKey('answer')
-        ->and($followupResponseArray['content']['answer'])->toBe('.sdrawkcab yas tsuj I did tahw');
+        ->and($followupResponseArray['content']['answer'])->toBe('.sdrawkcab tuB ?yas tsuj I did tahw');
 
     $this->assertDatabaseCount('agent_memories', 1);
     $this->assertDatabaseCount('messages', 4);

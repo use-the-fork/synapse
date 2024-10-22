@@ -13,23 +13,9 @@ use UseTheFork\Synapse\ValueObject\Message;
 
 class ClaudeIntegration implements Integration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function handlePendingAgentTaskCompletion(
-        PendingAgentTask $pendingAgentTask
-    ): PendingAgentTask {
-
-        $claudeAIConnector = new ClaudeAIConnector;
-        $message = $claudeAIConnector->doCompletionRequest(
-            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
-            tools: $pendingAgentTask->tools(),
-            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
-        );
-
-        $pendingAgentTask->currentIteration()->setResponse($message);
-
-        return $pendingAgentTask;
+    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
+    {
+        throw new NotImplementedException('Claude does not support embedding creation.');
     }
 
     /**
@@ -47,8 +33,22 @@ class ClaudeIntegration implements Integration
         );
     }
 
-    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
-    {
-        throw new NotImplementedException('Claude does not support embedding creation.');
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePendingAgentTaskCompletion(
+        PendingAgentTask $pendingAgentTask
+    ): PendingAgentTask {
+
+        $claudeAIConnector = new ClaudeAIConnector;
+        $message = $claudeAIConnector->doCompletionRequest(
+            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
+            tools: $pendingAgentTask->tools(),
+            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
+        );
+
+        $pendingAgentTask->currentIteration()->setResponse($message);
+
+        return $pendingAgentTask;
     }
 }

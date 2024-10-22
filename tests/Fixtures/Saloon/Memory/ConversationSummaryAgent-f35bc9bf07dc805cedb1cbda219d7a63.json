@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 22 Oct 2024 01:37:08 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "833",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "1472",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999867",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "3ms",
+        "x-request-id": "req_141298f6aa078e29d1afc0e0b3e13a4a",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=Xq_.3B8FFYh0icDGV9BMRsG1XRoKWpn4FR.vPbsrIqY-1729561028-1.0.1.1-CmRScxLczHkErR45.scYJkcdTj8L4HmoXsNAJYSH.p39nsm97GqsK.7PE3JBCZkVJPtVJmhK.9iv_Phn58kQnQ; path=\/; expires=Tue, 22-Oct-24 02:07:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=VQUYWMFih3MXgQW2g18Iiz7Cz5VtxZsT0Bn09DAcTzM-1729561028760-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d65c2a3c9e17d02-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AKy7X6AksadnNQ8O5xKbFuIWTJdz3\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729561027,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"The user's message says \\\"hello this a test\\\" and the assistant responds with \\\"hello this a test\\\". The user then asks what they just said, but backwards. The assistant answers with \\\"tset a si siht olleh\\\".\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 119,\n    \"completion_tokens\": 48,\n    \"total_tokens\": 167,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

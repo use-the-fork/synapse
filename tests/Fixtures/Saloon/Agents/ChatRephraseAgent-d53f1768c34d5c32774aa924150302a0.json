@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 01:28:22 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "725",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "858",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999656",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "10ms",
+    "x-request-id": "req_92c7ea6e5c16152c129ec11fb2b5e172",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=hPO2vobWRuUv61gTCjPAtKKvr39Q1OnxRrf10QS4M7k-1729560502-1.0.1.1-JBD.hk0I9T3n5HJYqlEur46jtDmEFNfy0XU9XtC1Q00Aba3nkBLLxYwL6cv1LgwylMp1jmDiblV7f4lIWDCBBw; path=/; expires=Tue, 22-Oct-24 01:58:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=8uibqfRpr59vivboYsljTlOiDpo5lseCEddnNsMZR_s-1729560502072-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d65b5cbdeef8c9c-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AKxz3P5k2zvdYdRlwudwl1TUpr6hK\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560501,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"standalone_question\\\": \\\"How can one improve heart health through gym activities?\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 272,\n    \"completion_tokens\": 20,\n    \"total_tokens\": 292,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

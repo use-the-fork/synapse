@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 01:29:11 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1127",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "3809",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999230",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "23ms",
+    "x-request-id": "req_db34286a7841fcc189d87cf8e4be8d19",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=o0FpqBcFHHGUkxDANXhS7Xr.gT8kO.heNuPXgBCz6eQ-1729560551-1.0.1.1-.Dwg9rr7MpxbVWO9SznPODRQr9zJn2qHF09HO2ZRf09Zj1PMzxSXC_0dsQbIAJKa1QfkmhtxTD65ShurNIgJAw; path=/; expires=Tue, 22-Oct-24 01:59:11 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=Uc1vEOnA4NTZFd30WQJN2Qu4BuHhfnqRjwStORjqVe4-1729560551263-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d65b6ecce0a8ce6-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AKxznJ52joKwF2QqtalZLLGjV5936\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560547,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Siteimprove offers comprehensive cloud-based digital presence optimization software. Located in Copenhagen, Denmark, the company also has locations in Hovedstaden and is prominent within Europe. Siteimprove has an active presence on LinkedIn, Facebook, and Twitter. More details about the company can be found on their website at http://siteimprove.com. The company was created on June 21, 2014, and the latest update on their profile was on September 3, 2024.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 898,\n    \"completion_tokens\": 110,\n    \"total_tokens\": 1008,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}
