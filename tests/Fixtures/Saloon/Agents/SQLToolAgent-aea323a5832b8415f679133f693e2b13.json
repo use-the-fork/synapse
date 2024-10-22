@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 22 Oct 2024 01:28:36 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "758",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "2097",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1998911",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "32ms",
+        "x-request-id": "req_4fce149cbcb9d6e3df26e6378ea6f79d",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=GEUlC5D1qBJOQxhSRrIXSKecbBwRJWCVSiEaZLy0sow-1729560516-1.0.1.1-OhrdDkGPPQ2.2Ux5kfiD7c3zZhuLLCt7Nx.YzNSKE51AbJwTjPWAc8YPW_iztbsBosyD_J1gfpZ.pOK2yM6Ehg; path=\/; expires=Tue, 22-Oct-24 01:58:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=FNQjNOID.tCjMYC7IoA_jeQQysF9sKoyOwn0_NBC3l8-1729560516806-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d65b6201d410cd9-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AKxzGkfig1506CY7sOwi4eJVTLgUJ\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560514,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"{\\\\n  \\\\\\\"total_operating_organizations\\\\\\\": 100,\\\\n  \\\\\\\"average_funding_rounds\\\\\\\": 5\\\\n}\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 1404,\n    \"completion_tokens\": 38,\n    \"total_tokens\": 1442,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

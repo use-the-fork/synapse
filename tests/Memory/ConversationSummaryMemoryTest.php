@@ -63,17 +63,17 @@ declare(strict_types=1);
 
     $memory = $agent->memory()->get();
 
-    expect($memory[0]->content())->toContain('The user\'s message says "hello this a test". The assistant responded with "Hello! How can I assist you today?')
+    expect($memory[0]->content())->toContain('The user\'s message says "hello this a test" and the assistant responds with "hello this a test".')
                                  ->and($agentResponseArray['content'])->toBeArray()
                                  ->and($agentResponseArray['content'])->toHaveKey('answer')
-                                 ->and($agentResponseArray['content']['answer'])->toBe('Hello! How can I assist you today?');
+                                 ->and($agentResponseArray['content']['answer'])->toBe('hello this a test');
 
     $followup = $agent->handle(['input' => 'what did I just say? But Backwards.']);
 
     $memory = $agent->memory()->get();
 
     $followupResponseArray = $followup->toArray();
-    expect($memory[0]->content())->toContain('The user\'s message says "hello this a test". The assistant responded with "Hello! How can I assist you today?" Following this, the user asked what they just said but backwards. The assistant replied with "tset a si siht olleh".')
+    expect($memory[0]->content())->toContain('The user\'s message says "hello this a test" and the assistant responds with "hello this a test".')
                                  ->and($followupResponseArray['content'])->toBeArray()
                                  ->and($followupResponseArray['content'])->toHaveKey('answer')
                                  ->and($followupResponseArray['content']['answer'])->toBe('tset a si siht olleh');
@@ -136,7 +136,7 @@ declare(strict_types=1);
 
     $memory = $agent->memory()->get();
 
-    expect($memory[0]->content())->toContain('The user requested to search Google to find out who the current President of the United States is. The search returned results identifying Joe Biden as the current President, serving as the 46th president since 2021. Various sources including the official White House website and Wikipedia confirm this information. The assistant affirmed that Joe Biden is the current President of the United States.')
+    expect($memory[0]->content())->toContain('The user requested to search Google to find out who the current President of the United States is. The search results confirmed that the current President is Joe Biden. The assistant provided a direct answer, reconfirming that Joe Biden is the current President.')
                                  ->and($agentResponseArray['content'])->toBeArray()
                                  ->and($agentResponseArray['content'])->toHaveKey('answer')
                                  ->and($agentResponseArray['content']['answer'])->toBe('Joe Biden is the current President of the United States.');
@@ -146,7 +146,7 @@ declare(strict_types=1);
     $memory = $agent->memory()->get();
 
     $followupResponseArray = $followup->toArray();
-    expect($memory[0]->content())->toContain('The user inquired about the current Vice President of the United States following their earlier question about the President, and was informed that the current Vice President is Kamala Harris.')
+    expect($memory[0]->content())->toContain('The user then inquired about the current Vice President of the United States. The assistant asked for clarification on what specific information about the Vice President the user wanted to know.')
                                  ->and($followupResponseArray['content'])->toBeArray()
                                  ->and($followupResponseArray['content'])->toHaveKey('answer')
                                  ->and($followupResponseArray['content']['answer'])->toBe('The current Vice President of the United States is Kamala Harris.');

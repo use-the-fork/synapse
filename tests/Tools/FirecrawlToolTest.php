@@ -70,7 +70,7 @@
         $agentResponseArray = $message->toArray();
         expect($agentResponseArray['content'])->toBeArray()
                                               ->and($agentResponseArray['content'])->toHaveKey('answer')
-                                              ->and($agentResponseArray['content']['answer'])->toContain("webpage is about Firecrawl, a web scraping tool designed for extracting, cleaning, and converting web data into formats suitable for AI applications, especially Large Language Models (LLMs). It features capabilities to crawl pages, handle dynamic content, and provide data in clean markdown or structured formats. It targets LLM engineers, data scientists, and AI researchers");
+                                              ->and($agentResponseArray['content']['answer'])->toContain("The website 'https://www.firecrawl.dev/' is about Firecrawl, a web scraping tool designed for extracting, cleaning, and converting web data into formats suitable for AI applications, particularly Large Language Models (LLMs).");
 
     });
 

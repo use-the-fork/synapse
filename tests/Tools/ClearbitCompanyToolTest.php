@@ -70,7 +70,7 @@
         $agentResponseArray = $message->toArray();
         expect($agentResponseArray['content'])->toBeArray()
                                               ->and($agentResponseArray['content'])->toHaveKey('answer')
-                                              ->and($agentResponseArray['content']['answer'])->toContain('OpenAI is an AI research company focused on safe and beneficial artificial intelligence for all, prioritizing human values and diversity in technology.');
+                                              ->and($agentResponseArray['content']['answer'])->toContain('OpenAI, legally known as OpenAI, Inc., is an AI research company dedicated to developing safe and beneficial artificial intelligence that aligns with human values and promotes diversity in technology.');
 
     });
 

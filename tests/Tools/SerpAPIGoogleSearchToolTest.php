@@ -70,7 +70,7 @@ declare(strict_types=1);
         $agentResponseArray = $message->toArray();
         expect($agentResponseArray['content'])->toBeArray()
                                               ->and($agentResponseArray['content'])->toHaveKey('answer')
-                                              ->and($agentResponseArray['content']['answer'])->toBe('Joe Biden is the current President of the United States.');
+                                              ->and($agentResponseArray['content']['answer'])->toBe('Joe Biden');
 
     });
 

@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 22 Oct 2024 01:29:23 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1044",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "1526",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999814",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "5ms",
+        "x-request-id": "req_2059b123e21a9db863f680b770278918",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=guVqR.qKuJyrWAcltjsK8jsZ16EItRlFsXa.ROQ3oUg-1729560563-1.0.1.1-q_oavJ0x_uuIj1MxntLxATA1dU3Dkzg7HzLm2Ndg4vOTnNyfPv1V8ZwEmF1mBPLDibmeuQAYLdbiXEN2M16FXQ; path=\/; expires=Tue, 22-Oct-24 01:59:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=xYJXGfv7beSxp_v.6fPQ4UGWnSZ86A3455lGlRorIw0-1729560563398-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8d65b746f90d0ce1-EWR",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AKy01tp4VAvOrPo24egK0NiQxcao6\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560561,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_TTyOgEachMKRBCv1QZhbOeaj\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"query_s_q_l_data_base_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"SELECT COUNT(*) AS total_organizations, AVG(funding_rounds) AS average_funding_rounds FROM organizations WHERE status = 'operating'\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 345,\n    \"completion_tokens\": 47,\n    \"total_tokens\": 392,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_83975a045a\"\n}\n"
+}

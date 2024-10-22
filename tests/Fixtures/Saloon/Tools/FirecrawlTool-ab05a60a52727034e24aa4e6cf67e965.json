@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 01:29:19 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1243",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "3743",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999501",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "14ms",
+    "x-request-id": "req_6c49e6f9afc19e947109dfc9ef9ce202",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=nOMULEv5yuI9xFkS7CdqwA5I2RT1MMrui697RxR7lWY-1729560559-1.0.1.1-NXx07yOPtkm_wBncy6piWMBpcgvkwy91py7vKafSkCI_q1_gUkDtFCM43IPnJRPsPmZqGnbt0zUW3mTjLMw_tQ; path=/; expires=Tue, 22-Oct-24 01:59:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=nB4vf77ERmsCEGV.YXAeeJg8hzi4jzIRjmwLmxIeJt4-1729560559792-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d65b722892b1982-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AKxzwFiarb6UIp1MHNP6ix6pjESmk\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560556,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"The website 'https://www.firecrawl.dev/' is about Firecrawl, a web scraping tool designed for extracting, cleaning, and converting web data into formats suitable for AI applications, particularly Large Language Models (LLMs). It offers features like crawling web subpages without needing a sitemap, handling JavaScript-rendered content, and providing clean markdown or structured data for AI training. The target audience includes LLM engineers, data scientists, and AI researchers. Firecrawl is open-source and offers various pricing plans to accommodate different user needs.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 497,\n    \"completion_tokens\": 118,\n    \"total_tokens\": 615,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

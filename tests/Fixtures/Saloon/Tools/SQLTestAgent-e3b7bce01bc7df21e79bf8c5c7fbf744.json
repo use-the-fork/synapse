@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 01:29:28 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1050",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "2142",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999110",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "26ms",
+    "x-request-id": "req_50e972e2d459ebad8d8b2efc671b393d",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=09n047pzK1ARvDHZPk2f0N5N_VdzPp0t7ZvFNdA1.mo-1729560568-1.0.1.1-ZNsGq9Vnotn9x1yolzrlh4y1tEpKaNzhtfv9Oq_p5_gBcm_AXnlYCF.3Yak2kBu_upwxALCausj4oCiw7fjZKQ; path=/; expires=Tue, 22-Oct-24 01:59:28 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=dAOMJBz_uESCqPJqSTnOfjZDmF8LDId7aGFeu4CLfWI-1729560568037-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d65b7601da68cc8-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AKy053cRiePzZPxxhOhoBpyz1t7R4\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560565,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_Yx8Chp7MvDVisrQT9QKYL1na\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"query_s_q_l_data_base_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"SELECT COUNT(*) AS total_organizations, AVG(num_funding_rounds) AS average_funding_rounds FROM organizations WHERE status = 'operating'\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 1180,\n    \"completion_tokens\": 48,\n    \"total_tokens\": 1228,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

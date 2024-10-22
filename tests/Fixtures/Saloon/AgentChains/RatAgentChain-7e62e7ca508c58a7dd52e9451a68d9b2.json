@@ -1,0 +1,31 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 01:28:11 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+    "openai-processing-ms": "8222",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1998750",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "37ms",
+    "x-request-id": "req_eb79e82455779172b64cf352d1fcd0ba",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "Set-Cookie": [
+      "__cf_bm=pthxdFvkAVee_uTckkTmSScEXcueUclhCP26WPMAGlI-1729560491-1.0.1.1-r_SOEF1Xfv22ckOB79QM.bk9YcAvHFxsW5hC14NnclNDLwa5LaURig3B7QldesktEoUplk4YKJrvk6BWLIS5Ew; path=/; expires=Tue, 22-Oct-24 01:58:11 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "_cfuvid=1RlVzYSrZzPIaOYAp0rMVbchRSinWkZR_Wf8Dt.N1O0-1729560491210-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+    ],
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "8d65b559ebfb8cec-EWR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AKxyl6kWTV5RgXszK4gabSDHNO7eh\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560483,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Improving heart health is crucial and can be achieved through a combination of diet, exercise, lifestyle adjustments, and regular medical check-ups. \\\\n\\\\nFirstly, diet plays a fundamental role in heart health. Incorporating a variety of fruits, vegetables, whole grains, and lean proteins into your diet helps manage weight and lowers the risk of heart disease. It is also important to minimize the intake of saturated fats, trans fats, excess sodium, and sugars, all of which can negatively impact heart health. \\\\n\\\\nSecondly, exercise is essential for maintaining a healthy heart. Aim for at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity per week, as recommended by health organizations like the American Heart Association. Regular physical activity not only strengthens the heart but also helps control weight, reduces arterial stiffness, and improves overall cardiovascular endurance. \\\\n\\\\nThirdly, lifestyle changes are vital for heart health. Quitting smoking and reducing alcohol intake are top priorities, as both have been linked to heart disease. Additionally, managing stress through mindfulness, meditation, or yoga can positively affect your heart health by reducing stress hormones and inflammation. \\\\n\\\\nFinally, regular health check-ups are indispensable for maintaining heart health. These check-ups help monitor blood pressure, cholesterol levels, and other heart-related indicators, allowing for early detection and management of potential health issues. \\\\n\\\\nBy integrating these strategies into your daily life, you can significantly enhance your cardiac function and overall heart health, leading to a longer, healthier life.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 928,\n    \"completion_tokens\": 317,\n    \"total_tokens\": 1245,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\Fixture;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Contracts\Tool;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Memory\CollectionMemory;
-use UseTheFork\Synapse\Services\Crunchbase\Requests\CrunchbaseRequest;
-use UseTheFork\Synapse\Tools\BaseTool;
-use UseTheFork\Synapse\Tools\CrunchbaseTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Contracts\Memory;
+    use UseTheFork\Synapse\Contracts\Tool;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Services\Crunchbase\Requests\CrunchbaseRequest;
+    use UseTheFork\Synapse\Tools\BaseTool;
+    use UseTheFork\Synapse\Tools\CrunchbaseTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('Crunchbase Tool', function (): void {
+    test('Crunchbase Tool', function (): void {
 
     class CrunchbaseToolTestAgent extends Agent implements HasOutputSchema
     {
@@ -70,7 +70,7 @@ test('Crunchbase Tool', function (): void {
     $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('Siteimprove offers comprehensive cloud-based digital presence optimization software. This company is based in Copenhagen, Denmark, and has a presence across multiple locations including Hovedstaden and the broader European region.');
+        ->and($agentResponseArray['content']['answer'])->toContain('Siteimprove offers comprehensive cloud-based digital presence optimization software. Located in Copenhagen, Denmark, the company also has locations in Hovedstade');
 
 });
 
