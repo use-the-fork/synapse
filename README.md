@@ -2,7 +2,7 @@
 
 # 🧠 Synapse
 
-Start building AI-driven applications with Laravel Synapse today!
+Start building AI-driven applications with Synapse today!
 
 ![Build Status](https://github.com/use-the-fork/laravel-synapse/actions/workflows/tests.yml/badge.svg)
 ![Downloads](https://img.shields.io/packagist/dm/use-the-fork/synapse)
@@ -11,7 +11,7 @@ Start building AI-driven applications with Laravel Synapse today!
 
 </div>
 
-Synapse allows you to seamlessly integrate and manage AI agents in your Laravel applications. Inspired by Langchain and Laravel Saloon, this package simplifies AI agent creation and management, giving you the tools to run them at scale.
+Synapse allows you to seamlessly integrate and manage AI agents in your Laravel applications. Inspired by Langchain and Saloon, this package simplifies AI agent creation and management, giving you the tools to run them at scale.
 
 ## Features
 
