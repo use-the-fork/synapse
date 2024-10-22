@@ -2,6 +2,8 @@
 
 # 🧠 Synapse
 
+Start building AI-driven applications with Laravel Synapse today!
+
 ![Build Status](https://github.com/use-the-fork/laravel-synapse/actions/workflows/tests.yml/badge.svg)
 ![Downloads](https://img.shields.io/packagist/dm/use-the-fork/synapse)
 
@@ -44,7 +46,3 @@ This project would not have been possible without:
 ## License
 
 This package is open-source and licensed under the [MIT License](LICENSE.md).
-
----
-
-Start building AI-driven applications with Laravel Synapse today!
