@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+    use Saloon\Http\Faking\Fixture;
     use Saloon\Http\Faking\MockClient;
     use Saloon\Http\Faking\MockResponse;
     use Saloon\Http\PendingRequest;
@@ -91,10 +92,9 @@ test('uses tools', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
-
-            return MockResponse::fixture("Integrations/ClaudeTestAgent-{$hash}");
+            return MockResponse::fixture("Integrations/ClaudeToolTestAgent-{$hash}");
         },
         SerperSearchRequest::class => MockResponse::fixture('Integrations/ClaudeTestAgent-Serper-Tool'),
     ]);
@@ -105,5 +105,6 @@ test('uses tools', function (): void {
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('answer');
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president of the United States and took office in 2021. Joe Biden previously served as the 47th Vice President of the United States and represented Delaware in the US Senate for 36 years before becoming president.');
 });

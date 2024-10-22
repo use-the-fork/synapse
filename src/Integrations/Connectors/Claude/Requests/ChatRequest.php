@@ -9,21 +9,18 @@ use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Constants\Role;
 use UseTheFork\Synapse\Enums\FinishReason;
-use UseTheFork\Synapse\Enums\ResponseType;
 use UseTheFork\Synapse\ValueObject\Message;
-use UseTheFork\Synapse\ValueObject\Response as IntegrationResponse;
-use UseTheFork\Synapse\ValueObject\ToolCall;
 
 class ChatRequest extends Request implements HasBody
 {
     use HasJsonBody;
 
-    private string $system = '';
-
     /**
      * The HTTP method
      */
     protected Method $method = Method::POST;
+
+    private string $system = '';
 
     public function __construct(
         public readonly array $prompt,
@@ -31,12 +28,34 @@ class ChatRequest extends Request implements HasBody
         public readonly array $extraAgentArgs = []
     ) {}
 
-    /**
-     * The endpoint
-     */
-    public function resolveEndpoint(): string
+    public function createDtoFromResponse(Response $response): Message
     {
-        return '/messages';
+        $data = $response->array();
+        $message = [];
+
+        $message['role'] = 'assistant';
+        $message['finish_reason'] = $this->convertResponseType($data['stop_reason']) ?? '';
+        foreach ($data['content'] as $choice) {
+
+            if ($choice['type'] === 'text') {
+                $message['content'] = $choice['text'];
+            } else {
+                $message['tool_call_id'] = $choice['id'];
+                $message['tool_name'] = $choice['name'];
+                $message['tool_arguments'] = json_encode($choice['input']);
+                $message['role'] = Role::TOOL;
+            }
+        }
+
+        return Message::make($message);
+    }
+
+    private function convertResponseType($stopReason): string
+    {
+        return match ($stopReason) {
+            'tool_use' => FinishReason::TOOL_CALL->value,
+            default => FinishReason::STOP->value,
+        };
     }
 
     /**
@@ -62,17 +81,6 @@ class ChatRequest extends Request implements HasBody
             ...$this->extraAgentArgs,
         ];
 
-    }
-
-    private function formatTools(): array
-    {
-        return array_values(array_map(function (array $tool) {
-            $claudeTool = $tool['definition']['function'];
-            $claudeTool['input_schema'] = $claudeTool['parameters'];
-            unset($claudeTool['parameters']);
-
-            return $claudeTool;
-        }, $this->tools));
     }
 
     private function formatMessages(): array
@@ -101,27 +109,6 @@ class ChatRequest extends Request implements HasBody
         }
 
         return $payload->values()->toArray();
-    }
-
-    private function formatAssistantMessage(Message $message): array
-    {
-        $message = $message->toArray();
-
-        $content[] = ['type' => 'text', 'text' => $message['content']];
-
-        if (! empty($message['tool_call_id'])) {
-            $content[] = [
-                'type' => 'tool_use',
-                'id' => $message['tool_call_id'],
-                'name' => $message['tool_name'],
-                'input' => json_decode($message['tool_arguments'], true),
-            ];
-        }
-
-        return [
-            'role' => 'assistant',
-            'content' => $content,
-        ];
     }
 
     private function formatToolMessage(Message $message): array
@@ -158,34 +145,43 @@ class ChatRequest extends Request implements HasBody
         return $payload;
     }
 
-    private function convertResponseType($stopReason): string
+    private function formatAssistantMessage(Message $message): array
     {
-        return match ($stopReason) {
-            'tool_use' => FinishReason::TOOL_CALL->value,
-            default => FinishReason::STOP->value,
-        };
-    }
+        $message = $message->toArray();
 
-    public function createDtoFromResponse(Response $response): Message
-    {
-        $data = $response->array();
-        $message = [];
+        $content[] = ['type' => 'text', 'text' => $message['content']];
 
-        $message['role'] = 'assistant';
-        $message['finish_reason'] = $this->convertResponseType($data['stop_reason']) ?? '';
-        foreach ($data['content'] as $choice) {
-
-            if ($choice['type'] === 'text') {
-                $message['content'] = $choice['text'];
-            } else {
-                $message['tool_call_id'] = $choice['id'];
-                $message['tool_name'] = $choice['name'];
-                $message['tool_arguments'] = json_encode($choice['input']);
-                $message['role'] = Role::TOOL;
-            }
+        if (! empty($message['tool_call_id'])) {
+            $content[] = [
+                'type' => 'tool_use',
+                'id' => $message['tool_call_id'],
+                'name' => $message['tool_name'],
+                'input' => json_decode($message['tool_arguments'], true),
+            ];
         }
 
+        return [
+            'role' => 'assistant',
+            'content' => $content,
+        ];
+    }
 
-        return Message::make($message);
+    private function formatTools(): array
+    {
+        return array_values(array_map(function (array $tool) {
+            $claudeTool = $tool['definition']['function'];
+            $claudeTool['input_schema'] = $claudeTool['parameters'];
+            unset($claudeTool['parameters']);
+
+            return $claudeTool;
+        }, $this->tools));
+    }
+
+    /**
+     * The endpoint
+     */
+    public function resolveEndpoint(): string
+    {
+        return '/messages';
     }
 }

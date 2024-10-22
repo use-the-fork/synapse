@@ -7,7 +7,7 @@ namespace UseTheFork\Synapse\Integrations;
 use UseTheFork\Synapse\AgentTask\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Exceptions\NotImplementedException;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\OllamaAIConnector;
+use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
 use UseTheFork\Synapse\ValueObject\EmbeddingResponse;
 use UseTheFork\Synapse\ValueObject\Message;
 
@@ -25,7 +25,7 @@ class ClaudeIntegration implements Integration
         Message $message,
         array $extraAgentArgs = []
     ): Message {
-        $claudeAIConnector = new OllamaAIConnector;
+        $claudeAIConnector = new ClaudeAIConnector;
 
         return $claudeAIConnector->doCompletionRequest(
             prompt: [$message],
@@ -40,7 +40,7 @@ class ClaudeIntegration implements Integration
         PendingAgentTask $pendingAgentTask
     ): PendingAgentTask {
 
-        $claudeAIConnector = new OllamaAIConnector;
+        $claudeAIConnector = new ClaudeAIConnector;
         $message = $claudeAIConnector->doCompletionRequest(
             prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
             tools: $pendingAgentTask->tools(),
