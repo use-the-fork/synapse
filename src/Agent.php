@@ -23,8 +23,8 @@ use UseTheFork\Synapse\ValueObject\Message;
 class Agent
 {
     use HasMiddleware;
-    use ManagesIntegration,
-        ManagesTools;
+    use ManagesIntegration;
+    use ManagesTools;
 
     /**
      * a keyed array of values to be used as extra inputs that are passed to the prompt when it is generated.
