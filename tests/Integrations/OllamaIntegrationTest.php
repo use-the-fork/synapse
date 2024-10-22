@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OllamaIntegration;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OllamaIntegration;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('Connects', function (): void {
+    test('Connects', function (): void {
 
     class OllamaTestAgent extends Agent implements HasIntegration
     {
@@ -41,7 +42,7 @@ test('Connects', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
             return MockResponse::fixture("Integrations/OllamaTestAgent-{$hash}");
