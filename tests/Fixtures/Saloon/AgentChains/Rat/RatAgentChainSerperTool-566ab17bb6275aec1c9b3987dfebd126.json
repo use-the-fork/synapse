@@ -1,0 +1,9 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "access-control-allow-origin": "*",
+        "x-ratelimit-limit": "500",
+        "x-ratelimit-remaining": "499"
+    },
+    "data": "{\"searchParameters\":{\"q\":\"\\\"American Civil War\\\" timeline 1861 \\\"Fort Sumter\\\" \\\"Bull Run\\\" \\\"Battle of Shiloh\\\" effects\",\"type\":\"search\",\"num\":10,\"engine\":\"google\"},\"organic\":[],\"credits\":1}"
+}

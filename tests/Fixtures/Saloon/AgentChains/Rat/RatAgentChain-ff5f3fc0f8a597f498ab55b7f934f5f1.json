@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 22 Oct 2024 23:59:26 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "866",
+        "Connection": "keep-alive"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-ALJ4XBVUCOJP47TDmq0z20WLj7bhl\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729641565,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"query\\\": \\\"American Civil War summary timeline, Battle of Gettysburg 1863, General Grant's leadership, Sherman's March to the Sea, Confederate General Lee's surrender at Appomattox Court House 1865, post-war Reconstruction\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 553,\n    \"completion_tokens\": 56,\n    \"total_tokens\": 609,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

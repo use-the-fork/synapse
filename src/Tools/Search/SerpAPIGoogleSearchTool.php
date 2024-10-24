@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use UseTheFork\Synapse\Contracts\Tool;
 use UseTheFork\Synapse\Contracts\Tool\SearchTool;
-use UseTheFork\Synapse\Enums\ReturnType;
 use UseTheFork\Synapse\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
 use UseTheFork\Synapse\Services\SerpApi\SerpApiConnector;
@@ -36,19 +35,15 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool, SearchTool
     public function handle(
         string $query,
         ?string $searchType = 'search',
-        ?int $numberOfResults = 10,
-        ReturnType $returnType = ReturnType::STRING,
-    ): string|array {
+        ?int $numberOfResults = 10
+    ): string {
 
         $serpApiConnector = new SerpApiConnector($this->apiKey);
         $serpApiSearchRequest = new SerpApiSearchRequest($query, $numberOfResults);
 
         $results = $serpApiConnector->send($serpApiSearchRequest)->array();
 
-        return match ($returnType) {
-            ReturnType::STRING => $this->parseResults($results),
-            default => $results
-        };
+        return $this->parseResults($results);
     }
 
     private function parseResults(array $results): string

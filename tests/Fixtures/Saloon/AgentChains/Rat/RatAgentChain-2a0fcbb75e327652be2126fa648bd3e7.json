@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Tue, 22 Oct 2024 23:58:53 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "738",
+    "Connection": "keep-alive"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-ALJ40egt1p5rATI4JoqpMLM7PBxaw\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729641532,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"query\\\": \\\"American Civil War 1862 key events Emancipation Proclamation and Battle of Antietam\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 439,\n    \"completion_tokens\": 28,\n    \"total_tokens\": 467,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+}

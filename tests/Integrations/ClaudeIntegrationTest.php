@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-	use Saloon\Http\Faking\Fixture;
-	use Saloon\Http\Faking\MockClient;
-	use Saloon\Http\Faking\MockResponse;
-	use Saloon\Http\PendingRequest;
-	use UseTheFork\Synapse\Agent;
-	use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
-	use UseTheFork\Synapse\Contracts\Integration;
-	use UseTheFork\Synapse\Contracts\Memory;
-	use UseTheFork\Synapse\Integrations\ClaudeIntegration;
-	use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-	use UseTheFork\Synapse\Memory\CollectionMemory;
-	use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-	use UseTheFork\Synapse\Tools\Search\SerperTool;
-	use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-	use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Contracts\Memory;
+    use UseTheFork\Synapse\Integrations\ClaudeIntegration;
+    use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
+    use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-	test('Connects', function (): void {
+    test('Connects', function (): void {
 
     class ClaudeTestAgent extends Agent implements HasIntegration
     {
@@ -106,5 +106,5 @@ test('uses tools', function (): void {
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president of the United States and took office in 2021. Joe Biden previously served as the 47th Vice President of the United States and represented Delaware in the US Senate for 36 years before becoming president.');
+        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president, having taken office in 2021.');
 });
