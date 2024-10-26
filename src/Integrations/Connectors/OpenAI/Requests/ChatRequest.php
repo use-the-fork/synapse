@@ -24,9 +24,23 @@ class ChatRequest extends Request implements HasBody
         public readonly array $extraAgentArgs = []
     ) {}
 
-    public function resolveEndpoint(): string
+    public function createDtoFromResponse(Response $response): Message
     {
-        return '/chat/completions';
+        $data = $response->array();
+        $message = $data['choices'][0]['message'] ?? [];
+        $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
+        if (isset($message['tool_calls'])) {
+
+            $message['tool_call_id'] = $message['tool_calls'][0]['id'];
+            $message['tool_name'] = $message['tool_calls'][0]['function']['name'];
+            $message['tool_arguments'] = $message['tool_calls'][0]['function']['arguments'];
+            unset($message['tool_calls']);
+
+            // Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
+            $message['role'] = Role::TOOL;
+        }
+
+        return Message::make($message);
     }
 
     public function defaultBody(): array
@@ -130,22 +144,8 @@ class ChatRequest extends Request implements HasBody
         return $payload;
     }
 
-    public function createDtoFromResponse(Response $response): Message
+    public function resolveEndpoint(): string
     {
-        $data = $response->array();
-        $message = $data['choices'][0]['message'] ?? [];
-        $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
-        if (isset($message['tool_calls'])) {
-
-            $message['tool_call_id'] = $message['tool_calls'][0]['id'];
-            $message['tool_name'] = $message['tool_calls'][0]['function']['name'];
-            $message['tool_arguments'] = $message['tool_calls'][0]['function']['arguments'];
-            unset($message['tool_calls']);
-
-            // Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
-            $message['role'] = Role::TOOL;
-        }
-
-        return Message::make($message);
+        return '/chat/completions';
     }
 }

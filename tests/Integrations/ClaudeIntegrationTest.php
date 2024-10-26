@@ -106,5 +106,5 @@ test('uses tools', function (): void {
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president, having taken office in 2021.');
+        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president of the United States, having taken office in 2021. Biden previously served as the 47th Vice President of the United States and represented Delaware in the U.S. Senate for 36 years before becoming president.');
 });

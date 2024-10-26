@@ -1,16 +1,10 @@
 {
   "statusCode": 200,
   "headers": {
-    "Date": "Wed, 04 Sep 2024 13:34:55 GMT",
+    "Date": "Fri, 25 Oct 2024 22:35:46 GMT",
     "Content-Type": "application/json",
-    "Content-Length": "315",
-    "Connection": "keep-alive",
-    "anthropic-ratelimit-requests-limit": "50",
-    "anthropic-ratelimit-requests-remaining": "49",
-    "anthropic-ratelimit-requests-reset": "2024-09-04T13:35:21Z",
-    "anthropic-ratelimit-tokens-limit": "40000",
-    "anthropic-ratelimit-tokens-remaining": "40000",
-    "anthropic-ratelimit-tokens-reset": "2024-09-04T13:34:55Z"
+    "Content-Length": "302",
+    "Connection": "keep-alive"
   },
-  "data": "{\"id\":\"msg_01Uxhp67wAnDLJVgH9rKc7mX\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"```json\\n{\\n    \\\"answer\\\": \\\"Hello! How can I assist you today?\\\"\\n}\\n```\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":56,\"output_tokens\":26}}"
+  "data": "{\"id\":\"msg_01LmxHhUUB5iGNX8hd7CHQdm\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"{\\n    \\\"answer\\\": \\\"Hello! How can I assist you today?\\\"\\n}\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":102,\"output_tokens\":21}}"
 }

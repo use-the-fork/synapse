@@ -1,10 +1,27 @@
 {
     "statusCode": 200,
     "headers": {
-        "Date": "Tue, 22 Oct 2024 01:14:47 GMT",
+        "Date": "Fri, 25 Oct 2024 22:27:21 GMT",
         "Content-Type": "application\/json",
-        "Content-Length": "985",
-        "Connection": "keep-alive"
+        "Content-Length": "984",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "REDACTED",
+        "openai-processing-ms": "1191",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999865",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "4ms",
+        "x-request-id": "REDACTED",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "REDACTED",
+        "alt-svc": "h3=\":443\"; ma=86400"
     },
-    "data": "{\n  \"id\": \"chatcmpl-AKxluvQCEThkm2qOIuQGOzO4ije0d\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729559686,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_mL9H73EAkD9uUEPZLbDITNRK\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serper_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"current president of the United States\\\",\\\"searchType\\\":\\\"search\\\",\\\"numberOfResults\\\":10}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 213,\n    \"completion_tokens\": 30,\n    \"total_tokens\": 243,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+    "data": "{\n  \"id\": \"chatcmpl-AMN44jCGNROnJSVGGCuPuos6eLyoe\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729895240,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_I0yDdVlYb6QX0TeS3OPfpwDJ\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serper_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"current president of the United States\\\",\\\"searchType\\\":\\\"search\\\",\\\"numberOfResults\\\":1}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 213,\n    \"completion_tokens\": 30,\n    \"total_tokens\": 243,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
 }

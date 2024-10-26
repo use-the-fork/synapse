@@ -42,12 +42,12 @@ class OllamaIntegration implements Integration
 
         $ollamaAIConnector = new OllamaAIConnector;
         $message = $ollamaAIConnector->doCompletionRequest(
-            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
+            prompt: $pendingAgentTask->getPromptChain(),
             tools: $pendingAgentTask->tools(),
-            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
+            extraAgentArgs: $pendingAgentTask->getExtraAgentArgs()
         );
 
-        $pendingAgentTask->currentIteration()->setResponse($message);
+        $pendingAgentTask->setResponse($message);
 
         return $pendingAgentTask;
     }

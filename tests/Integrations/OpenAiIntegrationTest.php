@@ -13,6 +13,7 @@ use UseTheFork\Synapse\Contracts\Integration;
 use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Integrations\OpenAIIntegration;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tests\Fixtures\OpenAi\OpenAiFixture;
 use UseTheFork\Synapse\Tools\Search\SerperTool;
 use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
 use UseTheFork\Synapse\ValueObject\SchemaRule;
@@ -38,7 +39,7 @@ test('Connects with out resolveIntegration', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => MockResponse::fixture('Integrations/OpenAiWithOutResolveTestAgent'),
+        ChatRequest::class => new OpenAiFixture('Integrations/OpenAiWithOutResolveTestAgent'),
     ]);
 
     $agent = new OpenAiWithOutResolveTestAgent;
@@ -77,7 +78,7 @@ test('Connects', function (): void {
     }
 
     MockClient::global([
-        ChatRequest::class => MockResponse::fixture('Integrations/OpenAiTestAgent'),
+        ChatRequest::class => new OpenAiFixture('Integrations/OpenAiTestAgent'),
     ]);
 
     $agent = new OpenAiTestAgent;
@@ -124,7 +125,7 @@ test('uses tools', function (): void {
         ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("Integrations/OpenAiToolTestAgent-{$hash}");
+            return new OpenAiFixture("Integrations/OpenAiToolTestAgent-{$hash}");
         },
         SerperSearchRequest::class => MockResponse::fixture('Integrations/OpenAiToolTestAgent-Serper-Tool'),
     ]);

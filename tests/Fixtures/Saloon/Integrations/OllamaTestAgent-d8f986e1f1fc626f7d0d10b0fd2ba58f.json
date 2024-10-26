@@ -2,8 +2,8 @@
     "statusCode": 200,
     "headers": {
         "Content-Type": "application\/json; charset=utf-8",
-        "Date": "Tue, 22 Oct 2024 01:12:45 GMT",
-        "Content-Length": "330"
+        "Date": "Fri, 25 Oct 2024 22:32:43 GMT",
+        "Content-Length": "331"
     },
-    "data": "{\"model\":\"llama3.2\",\"created_at\":\"2024-10-22T01:12:45.859244298Z\",\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answer\\\": \\\"Hello!\\\" }\\n```\"},\"done_reason\":\"stop\",\"done\":true,\"total_duration\":2645440997,\"load_duration\":20609427,\"prompt_eval_count\":111,\"prompt_eval_duration\":1796052000,\"eval_count\":11,\"eval_duration\":704477000}"
+    "data": "{\"model\":\"llama3.2\",\"created_at\":\"2024-10-25T22:32:43.781790706Z\",\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"answer\\\": \\\"Hi there!\\\"\\n}\"},\"done_reason\":\"stop\",\"done\":true,\"total_duration\":5583213110,\"load_duration\":2327188911,\"prompt_eval_count\":111,\"prompt_eval_duration\":2533807000,\"eval_count\":11,\"eval_duration\":680305000}"
 }

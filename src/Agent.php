@@ -80,7 +80,7 @@ class Agent
 
         $this->pendingAgentTask = $this->pendingAgentTask->middleware()->executeEndThreadPipeline($this->pendingAgentTask);
 
-        return $this->pendingAgentTask->currentIteration()->getResponse();
+        return $this->pendingAgentTask->getResponse();
     }
 
     /**
@@ -94,20 +94,23 @@ class Agent
             $this->pendingAgentTask->middleware()->executeStartIterationPipeline($this->pendingAgentTask);
 
             $prompt = $this->getPrompt($this->pendingAgentTask);
-            // append the prompt chain and iteration memory so tool calls are included
-            $prompt = $prompt."\n".$this->pendingAgentTask->iterationMemory()->asInputs()['memoryWithMessages'];
-
             $prompt = $this->pendingAgentTask->middleware()->executePromptGeneratedPipeline($prompt);
             $promptChain = $this->parsePrompt($prompt);
+            // append the prompt chain and iteration memory so tool calls are included
+            $promptChain = [
+                ...$promptChain,
+                ...$this->pendingAgentTask->getToolCalls()
+            ];
+
             $promptChain = $this->pendingAgentTask->middleware()->executePromptParsedPipeline($promptChain);
 
-            $this->pendingAgentTask->currentIteration()->setPromptChain($promptChain);
+            $this->pendingAgentTask->setPromptChain($promptChain);
 
             // Create the Chat request we will be sending.
             $this->integration->handlePendingAgentTaskCompletion($this->pendingAgentTask);
             $this->pendingAgentTask->middleware()->executeIntegrationResponsePipeline($this->pendingAgentTask);
 
-            switch ($this->pendingAgentTask->currentIteration()->finishReason()) {
+            switch ($this->pendingAgentTask->getFinishReason()) {
                 case FinishReason::TOOL_CALL:
                     $this->pendingAgentTask->middleware()->executeStartToolCallPipeline($this->pendingAgentTask);
                     $this->handleTools($this->pendingAgentTask);
@@ -118,7 +121,7 @@ class Agent
 
                     return $this->pendingAgentTask;
                 default:
-                    throw new UnknownFinishReasonException("{$this->pendingAgentTask->currentIteration()->finishReason()} is not a valid finish reason.");
+                    throw new UnknownFinishReasonException("{$this->pendingAgentTask->getFinishReason()} is not a valid finish reason.");
             }
             $this->pendingAgentTask->middleware()->executeEndIterationPipeline($this->pendingAgentTask);
         }
@@ -219,7 +222,7 @@ class Agent
     private function handleTools(PendingAgentTask $pendingAgentTask): void
     {
 
-        $response = $pendingAgentTask->currentIteration()->getResponse()->toArray();
+        $response = $pendingAgentTask->getResponse()->toArray();
 
         if (! empty($response['tool_call_id'])) {
             $toolResult = $this->executeToolCall($response, $pendingAgentTask);
@@ -227,8 +230,7 @@ class Agent
             $response['tool_content'] = $toolResult;
         }
 
-        $pendingAgentTask->iterationMemory()->create(Message::make($response));
-        $pendingAgentTask->currentIteration()->setResponse(Message::make($response));
+        $pendingAgentTask->addToolCall(Message::make($response));
     }
 
     /**

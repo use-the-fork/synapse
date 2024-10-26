@@ -1,0 +1,27 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Fri, 25 Oct 2024 23:48:07 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1137",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "REDACTED",
+        "openai-processing-ms": "2912",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1994965",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "151ms",
+        "x-request-id": "REDACTED",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "REDACTED",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AMOKCPKcTDVdl4TynfjEaKju1r30H\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729900084,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Firecrawl is a service that provides web scraping and data crawling capabilities focusing on delivering clean, LLM-ready (Large Language Models) data from websites. It's designed to empower AI applications by extracting and structuring web content into markdown or other structured data formats. Firecrawl offers tools and features to handle dynamic content, rate limits, and anti-scraping mechanisms, making it ideal for developers, data scientists, and AI researchers.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 5192,\n    \"completion_tokens\": 98,\n    \"total_tokens\": 5290,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
+}
