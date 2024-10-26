@@ -1,0 +1,27 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 26 Oct 2024 00:23:55 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1704",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "REDACTED",
+        "openai-processing-ms": "8733",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1992623",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "221ms",
+        "x-request-id": "REDACTED",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "REDACTED",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AMOskNNzDHX3dNiuuylgFxGFwGfjZ\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729902226,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"1. Is Apple Stock A Buy Before September-Quarter Earnings? Read more here: https:\/\/www.investors.com\/news\/technology\/apple-stock-buy-now-aapl-stock\/ (Published on 10\/21\/2024)\\\\n2. Apple Loop: iPhone 17 Pro Leaks, Surprise iPad Mini Launch, New MacBook Pro Specs. Full article here: https:\/\/www.forbes.com\/sites\/ewanspence\/2024\/10\/18\/apple-news-headliens-iphone-17-pro-ipad-mini-macbook-pro-macos-ai-iphone-se\/ (Published on 10\/18\/2024)\\\\n3. Apple set to unveil iPhone 16 on Monday. Here's what to expect: https:\/\/www.cbsnews.com\/news\/apple-iphone-16-what-to-expect\/ (Published on 09\/09\/2024)\\\\n4. Apple embraces the AI craze with its newly unleashed iPhone 16 lineup, full story at https:\/\/apnews.com\/article\/apple-iphone-16-artificial-intelligence-google-samsung-4f30bf40ad89793d80f8ac3a20f9e79c (Published on 09\/09\/2024)\\\\n5. Apple picking at Mass. farm ends with racial profiling, scuffle, family says. Details here: https:\/\/www.nbcboston.com\/news\/local\/danvers-apple-picking-racial-profiling-claim\/3520353\/ (Published on 10\/15\/2024)\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 9186,\n    \"completion_tokens\": 323,\n    \"total_tokens\": 9509,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
+}

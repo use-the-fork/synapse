@@ -1,0 +1,27 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 26 Oct 2024 00:23:31 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "959",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "REDACTED",
+        "openai-processing-ms": "1017",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999870",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "3ms",
+        "x-request-id": "REDACTED",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "REDACTED",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AMOsUwBs6HPUh0gSOD743erZmBCyQ\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729902210,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_FwpuiFgRrdAQKAVO5T8PoscY\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serp_a_p_i_google_news_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"Apple current headlines\\\",\\\"numberOfResults\\\":5}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 164,\n    \"completion_tokens\": 27,\n    \"total_tokens\": 191,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
+}

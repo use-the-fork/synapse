@@ -53,30 +53,30 @@ final class SerpAPIGoogleNewsTool extends BaseTool implements Tool, SearchTool
 
             foreach ($newsResults as $newResult) {
                 $result = collect();
-                $result->push("```text\n### Title: {$newResult['title']}");
+                $result['title'] = $newResult['title'];
 
                 if (! empty($newResult['stories'])) {
                     foreach (Arr::get($newResult, 'stories', []) as $story) {
-
-                        $result->push("#### Story: {$story['title']}");
-                        $result->push("- Date: {$story['date']}");
-                        $result->push("- Link: {$story['link']}");
+                        $result['stories'][] = [
+                            'title' => $story['title'],
+                            'date' => $story['date'],
+                            'link' => $story['link'],
+                        ];
                     }
                 }
                 if (! empty($newResult['source'])) {
-                    $result->push("- Date: {$newResult['date']}");
-                    $result->push("- Link: {$newResult['link']}");
+                    $result['date'] = $newResult['date'];
+                    $result['link'] = $newResult['link'];
                 }
-                $result->push("```\n");
 
-                $snippets->push($result->implode("\n"));
+                $snippets->push($result);
             }
         }
 
         if ($snippets->isEmpty()) {
-            return 'No good Google News Result found';
+            return json_encode(['title' => 'No Good Google Search Result was found', 'snippet' => '', 'link' => ''], JSON_PRETTY_PRINT);
         }
 
-        return $snippets->implode("\n");
+        return json_encode($snippets, JSON_PRETTY_PRINT);
     }
 }

@@ -57,6 +57,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool, SearchTool
             $description = Arr::get($knowledgeGraph, 'description');
             if ($description) {
                 $snippets->push($description);
+                $snippets->push(['type' => 'Knowledge Graph Description', 'value' => $description]);
             }
             foreach ($knowledgeGraph as $key => $value) {
                 if (
@@ -67,7 +68,7 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool, SearchTool
                     ! Str::endsWith($key, '_link') &&
                     ! Str::startsWith($value, 'http')
                 ) {
-                    $snippets->push("{$title} {$key}: {$value}.");
+                    $snippets->push(['type' => 'Knowledge Graph Attribute', 'title' => $title, 'key' => $key, 'value' => $value]);
                 }
             }
         }
@@ -76,14 +77,14 @@ final class SerpAPIGoogleSearchTool extends BaseTool implements Tool, SearchTool
             $organicResults = Arr::get($results, 'organic_results');
 
             foreach ($organicResults as $organicResult) {
-                $snippets->push("```text\nTitle: {$organicResult['title']}\nLink: {$organicResult['link']}\nSnippet: {$organicResult['snippet']}\n```");
+                $snippets->push(['type' => 'Organic', 'title' => $organicResult['title'], 'link' => $organicResult['link'], 'snippet' => $organicResult['snippet']]);
             }
         }
 
         if ($snippets->isEmpty()) {
-            return 'No good Google Search Result was found';
+            return json_encode(['title' => 'No Good Google Search Result was found', 'snippet' => '', 'link' => ''], JSON_PRETTY_PRINT);
         }
 
-        return $snippets->implode("\n");
+        return json_encode($snippets, JSON_PRETTY_PRINT);
     }
 }
