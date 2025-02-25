@@ -20,7 +20,7 @@ class Message extends Model
         'image',
     ];
 
-    protected $attributes = [
+    protected $casts = [
         'image' => 'array',
     ];
 
