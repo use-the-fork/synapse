@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('agent_memories', function (Blueprint $table) {
 
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('type')->nullable();
             $table->timestamps();
         });
