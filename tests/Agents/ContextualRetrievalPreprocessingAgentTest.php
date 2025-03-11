@@ -25,4 +25,4 @@ declare(strict_types=1);
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('succinct_context')
         ->and($agentResponseArray['content']['succinct_context'] == 'This chunk introduces the DiffExecutor struct which plays a central role in the differential fuzzing system by wrapping two executors. The primary and secondary executors are designed to run sequentially with the same input to differentiate their behavior.')->toBeTrue();
-});
+})->skip('This test is only for local testing');

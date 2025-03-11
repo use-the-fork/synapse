@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
     use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
     use Saloon\Http\PendingRequest;
     use UseTheFork\Synapse\Agent;
     use UseTheFork\Synapse\Contracts\Agent\HasMemory;
@@ -12,6 +11,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
     use UseTheFork\Synapse\Integrations\OpenAIIntegration;
     use UseTheFork\Synapse\Memory\CollectionMemory;
+    use UseTheFork\Synapse\Tests\Fixtures\OpenAi\OpenAiFixture;
     use UseTheFork\Synapse\Traits\Agent\ManagesMemory;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
     use UseTheFork\Synapse\ValueObject\SchemaRule;
@@ -48,15 +48,15 @@ declare(strict_types=1);
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): OpenAiFixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("Memory/CollectionMemory-{$hash}");
+            return new OpenAiFixture("Memory/CollectionMemory-{$hash}");
         },
     ]);
 
     $agent = new CollectionMemoryAgent;
-    $message = $agent->handle(['input' => 'hello this a test']);
+    $message = $agent->handle(['input' => 'Hi! this a test']);
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
@@ -67,6 +67,6 @@ declare(strict_types=1);
     $followupResponseArray = $followup->toArray();
     expect($followupResponseArray['content'])->toBeArray()
         ->and($followupResponseArray['content'])->toHaveKey('answer')
-        ->and($followupResponseArray['content']['answer'])->toBe('?sdrawkcaB .yas tsuj I did tahw');
+        ->and($followupResponseArray['content']['answer'])->toBe('?yadot uoy tsi**a**ss I nac woH !olleH');
 
 });

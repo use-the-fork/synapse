@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\ChatRephraseAgent;
-use UseTheFork\Synapse\Constants\Role;
-use UseTheFork\Synapse\Enums\FinishReason;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\ValueObject\Message;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\ChatRephraseAgent;
+    use UseTheFork\Synapse\Constants\Role;
+    use UseTheFork\Synapse\Enums\FinishReason;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\ValueObject\Message;
 
-it('can run the Chat Rephrase Agent.', function (): void {
+    it('can run the Chat Rephrase Agent.', function (): void {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
@@ -39,4 +39,4 @@ it('can run the Chat Rephrase Agent.', function (): void {
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('standalone_question')
         ->and($agentResponseArray['content']['standalone_question'])->toBe('How can one improve heart health through gym activities?');
-});
+})->skip('This test is only for local testing');

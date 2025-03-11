@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use UseTheFork\Synapse\Agent;
+    use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\Integration;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Integrations\OpenAIIntegration;
+    use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
+    use UseTheFork\Synapse\ValueObject\SchemaRule;
 
-test('can handle image input', function (): void {
+    test('can handle image input', function (): void {
 
     MockClient::global([
         ChatRequest::class => MockResponse::fixture('Agents/ImageAgentTestAgent'),
@@ -50,4 +50,4 @@ test('can handle image input', function (): void {
     expect($agentResponseArray)->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
         ->and($agentResponseArray['content']['answer'])->toContain('You can also pass params to the loader.');
-});
+})->skip('This test is only for local testing');

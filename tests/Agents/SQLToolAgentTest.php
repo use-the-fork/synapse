@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\SQLToolAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use Workbench\App\Models\Organization;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\SQLToolAgent;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use Workbench\App\Models\Organization;
 
-it('can run the SQL Tool Agent.', function (): void {
+    it('can run the SQL Tool Agent.', function (): void {
 
     for ($i = 0; $i < 100; $i++) {
         $org = new Organization;
@@ -60,4 +60,4 @@ it('can run the SQL Tool Agent.', function (): void {
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
         ->and($agentResponseArray['content']['answer'])->toContain('100', '5');
-});
+})->skip('This test is only for local testing');

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\Fixture;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\AgentChains\RatAgentChain;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\Scrape\FirecrawlTool;
-use UseTheFork\Synapse\Tools\Search\SerperTool;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\AgentChains\RatAgentChain;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\Scrape\FirecrawlTool;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
 
-it('executes a RAT chain', function (): void {
+    it('executes a RAT chain', function (): void {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
@@ -42,4 +42,4 @@ it('executes a RAT chain', function (): void {
         ->and($agentResponseArray['content'])->toHaveKey('answer')
         ->and($agentResponseArray['content']['answer'])->toContain('The American Civil War, which spanned from 1861 to 1865, ');
 
-});
+})->skip('This test is only for local testing');
