@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\Fixture;
     use Saloon\Http\Faking\MockClient;
     use Saloon\Http\Faking\MockResponse;
     use Saloon\Http\PendingRequest;
@@ -15,6 +14,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Integrations\OpenAIIntegration;
     use UseTheFork\Synapse\Memory\CollectionMemory;
     use UseTheFork\Synapse\Services\Crunchbase\Requests\CrunchbaseRequest;
+    use UseTheFork\Synapse\Tests\Fixtures\OpenAi\OpenAiFixture;
     use UseTheFork\Synapse\Tools\BaseTool;
     use UseTheFork\Synapse\Tools\CrunchbaseTool;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
@@ -56,10 +56,9 @@ declare(strict_types=1);
     }
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): OpenAiFixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
-
-            return MockResponse::fixture("Tools/CrunchbaseTool-{$hash}");
+            return new OpenAiFixture("Tools/CrunchbaseTool-{$hash}");
         },
         CrunchbaseRequest::class => MockResponse::fixture('Tools/CrunchbaseTool-Tool'),
     ]);
@@ -70,7 +69,7 @@ declare(strict_types=1);
     $agentResponseArray = $message->toArray();
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('Siteimprove offers comprehensive cloud-based digital presence optimization software. Located in Copenhagen, Denmark, the company also has locations in Hovedstade');
+        ->and($agentResponseArray['content']['answer'])->toContain('Siteimprove is a company that provides comprehensive cloud-based digital presence optimization software.');
 
 });
 

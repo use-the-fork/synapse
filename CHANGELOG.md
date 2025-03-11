@@ -2,284 +2,308 @@
 
 All notable changes to this project will be documented in this file.
 
-## \[0.2.0\] - 2024-10-22
+## [0.3.0] - 2025-03-11
 
 ### 🚀 Features
 
-- _(helpers)_ Add dedent method to remove common leading whitespace
-- _(agent)_ Enhance integration resolution mechanism 📦
-- _(commands)_ Add SynapseArtisan command and agent 🚀
-- _(api)_ Introduce new endpoint for user management ✨
-- _(sql-tool)_ Introduce SQLToolAgent with documentation and tests 🎉
-- _(traits)_ Introduce configurable agents and conditionable utilities 🛠️
-- _(integrations)_ Add Ollama integration and tests 🛠️
-- _(ollama)_ Implement embedding creation functionality
-- _(validation)_ Improve response format handling and validation prompts 🛠️
-- _(integrations)_ Add Ollama integration 🌟
--
-
-### 🐛 Bug Fixes
-
-- _(validation)_ Enhance JSON response handling in output schema 🛠️
-- _(integrations)_ Replace OllamaAIConnector with ClaudeAIConnector and improve ChatRequest handling ✨
+- Rename agent memory and messages tables to synapse_agent_memories and synapse_messages
 
 ### 🚜 Refactor
 
-- _(docs)_ Update references from Laravel Synapse to Synapse 🚀
-- _(agent)_ 🛠️ streamline tool management logic by rearranging methods
-- _(SynapseArtisan)_ Enhance command execution flow and update documentation 🛠️
-- _(agents)_ Remove direct OpenAI integrations
-- _(agent)_ Separate `use` statements for better readability and maintainability
+- *(tools)* [**breaking**] Reorganize tool structure and enhance ReturnType handling 🛠️
+- *(tools)* [**breaking**] Restructure FirecrawlTool and update FirecrawlRequest
+- *(agent/task)* Simplify task iteration management and response handling
+- *(search-tools)* Enhance result formatting with structured JSON output
 
 ### 📚 Documentation
 
-- _(README)_ Update usage instructions and add prebuilt agents info 🚀
+- *(changelog)* Add comprehensive changelog for version 0.1.0 and 0.2.0
+- *(README)* Update project description and references 📝
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Remove unused `update-changelog.yml` workflow file 🗑️
+- *(tests)* Remove obsolete RatAgentChain fixture files 🗑️
+
+## [0.1.1] - 2024-10-16
+
+### 🚀 Features
+
+- *(helpers)* Add dedent method to remove common leading whitespace
+- *(agent)* Enhance integration resolution mechanism 📦
+- *(commands)* Add SynapseArtisan command and agent 🚀
+- *(api)* Introduce new endpoint for user management 🆕✨
+- *(sql-tool)* Introduce SQLToolAgent with documentation and tests 🎉
+- *(traits)* Introduce configurable agents and conditionable utilities 🛠️
+- *(integrations)* Add Ollama integration and tests 🛠️
+- *(ollama)* Implement embedding creation functionality
+- *(validation)* Improve response format handling and validation prompts 🛠️
+
+### 🐛 Bug Fixes
+
+- *(validation)* Enhance JSON response handling in output schema 🛠️
+- *(integrations)* Replace OllamaAIConnector with ClaudeAIConnector and improve ChatRequest handling ✨
+
+### 🚜 Refactor
+
+- *(docs)* Update references from Laravel Synapse to Synapse 🚀
+- *(docs)* Update references from Laravel Synapse to Synapse 🚀
+- *(agent)* 🛠️ streamline tool management logic by rearranging methods
+- *(SynapseArtisan)* Enhance command execution flow and update documentation 🛠️
+- *(agents)* Remove direct OpenAI integrations
+- *(agent)* Separate `use` statements for better readability and maintainability
+
+### 📚 Documentation
+
+- *(README)* Update usage instructions and add prebuilt agents info 🚀
 - Correct package inspiration reference in documentation
+- *(integrations)* Add Ollama integration 🌟
+- *(integrations)* Add Ollama integration 🌟
 
 ### 🎨 Styling
 
-- _(tests)_ Adjust indentation in ClaudeIntegrationTest.php 📏
+- *(tests)* Adjust indentation in ClaudeIntegrationTest.php 📏
 
 ### 🧪 Testing
 
-- _(SQLToolAgent)_ Add new JSON fixtures and update test verification logic
-- _(SQLToolAgentTest)_ Simplify content assertion using multiple contains
-- _(integrations)_ Update tests with improved output assertions and fixture usage ♻️
-- _(tests)_ Update test expectations and improve readability 🧪
-- _(memory)_ Update conversation test summaries for clearer content verification 🧪
+- *(SQLToolAgent)* Add new JSON fixtures and update test verification logic
+- *(SQLToolAgentTest)* Simplify content assertion using multiple contains
+- *(integrations)* Update tests with improved output assertions and fixture usage ♻️
+- *(tests)* Update test expectations and improve readability 🧪
+- *(memory)* Update conversation test summaries for clearer content verification 🧪
 
 ### ⚙️ Miscellaneous Tasks
 
-- _(tests)_ Remove outdated fixtures for clearbit, crunchbase, and firecrawl
-- _(ci)_ Update checkout action to v4
-- _(workflows)_ Update branch name and add OpenAI API key to tests.yml
+- *(tests)* Remove outdated fixtures for clearbit, crunchbase, and firecrawl
+- *(ci)* Update checkout action to v4
+- *(workflows)* Update branch name and add OpenAI API key to tests.yml
 
-## \[0.1.0\] - 2024-10-12
+## [0.1.0] - 2024-10-12
 
 ### 🚀 Features
 
-- _(nix)_ Introduce snow-blower configuration with PHP and Composer setups
-- _(workbench)_ Initialize Laravel project structure with essential configurations
-- _(tests)_ Add initial test infrastructure and setup
-- _(synapse)_ Introduce tools for handling AI-generated tasks and enhanced project management
-- _(agents)_ Enhance tool handling with new Service and ValueObject refactor
-- _(parsers)_ Implement output parsing for JSON and string
-- _(services)_ Add Clearbit company search tool and related tests
-- _(toolList)_ Add tool list view and enhance tool handling
-- _(agent)_ Support multi-message prompts and improve parsing
-- _(flake)_ Add publicKeys and enable agenix for .env secrets
-- _(memory)_ Add asString method to serialize agent messages
-- _(provider)_ Add migration publishing to SynapseServiceProvider
-- _(crunchbase)_ Add Crunchbase service and tool for organization data handling
-- _(FirecrawlTool)_ Introduce FirecrawlTool for webpage content scraping
-- _(agent)_ Add SearchAndScrapeAgent with error handling and new view template
-- _(agent)_ Add SearchAndScrapeAgent with error handling and new view template
-- _(chat-rephrase)_ Add Chat Rephrase Agent with prompt and test
-- _(openai)_ Add support for extra agent arguments in handle methods
-- _(FirecrawlTool)_ Enhance URL scraping with extraction prompts and add tests
-- _(tool)_ Enhance SerperTool, add test coverage
-- _(tools)_ Add SerpAPI Google search capability
-- _(SerpAPIGoogleNewsTool)_ Add tool for Google News searches, update agent and tests
-- _(logging)_ Add event logging to Agent class
-- _(memory)_ Add set and clear methods for agent memory management
-- _(memory)_ Add set and clear methods to CollectionMemory class
-- _(memory)_ Expand payload structure and add new tests
-- _(output-rules)_ Improve validation error handling and messaging
-- _(VectorStores)_ Add new contract and base implementation for vector store
-- _(exceptions)_ Add MissingApiKeyException class for handling missing API key errors
-- _(integration)_ Add support for Claude AI integration and improve tool handling
-- _(openai)_ Add validation request for output formatting in OpenAI integration
-- _(integrations)_ Update model configuration and add embeddings support
-- _(embeddings)_ Add embedding creation support
-- _(output-rules)_ Enhance validation prompt handling and add error view
-- _(tools)_ Enhance tool handling with better parameter description and validation
-- _(tools)_ Add AI integration capability with Saloon Connector
-- _(tests)_ Enhance ChatRephraseAgent tests with mock client, add message handling, and fixture data
-- _(image input)_ Update message type, improve test structure for ImageAgent
-- _(agent)_ Add custom exception for unknown finish reasons
-- _(linting)_ Add `refactor-file` command to flake.nix and composer.json
-- _(docs)_ Revamp documentation structure and add VitePress for better dev experience
-- _(agent)_ Add KnowledgeGraphExtractionAgent with prompt and test
-- _(agent)_ Add ContextualRetrievalPreprocessingAgent with fixtures and tests
-- _(Synapse)_ Add installation command and refine publishing logic
-- _(agent)_ Add ContextualRetrievalPreprocessingAgent with fixtures and tests
-- _(logging)_ Add comprehensive logging to middleware pipelines and agent tasks
-- _(agent)_ Add maximum iteration limit to prevent infinite loops
-- _(agent)_ Introduce HasOutputSchema interface for output schema validation
-- _(agents)_ Introduce boot agent pipeline and update memory management
-- _(memory)_ Enhance database memory functionality and add tests
-- _(agent)_ Introduce event handling and new Agent event classes
-- _(agent)_ Enhance agent functionality and documentation 🌟
-- _(validation)_ Implement output schema validation for agents 🚀
-- _(memory)_ Add DatabaseMemory implementation and improve documentation 💾📚
-- _(agents)_ Add prebuilt MultiQueryRetrieverAgent and documentation 🛠️
-- _(agent)_ Enhance memory management and update schemas 🎉
-- _(contextual-retrieval-preprocessing-agent)_ Add new Contextual Retrieval Preprocessing Agent with tests and documentation 🚀
-- _(logging)_ Enhance agent activity logging and add unit tests 📝
-- _(tests)_ Add SQL tools and integration tests 🎉
+- *(nix)* Introduce snow-blower configuration with PHP and Composer setups
+- *(workbench)* Initialize Laravel project structure with essential configurations
+- *(tests)* Add initial test infrastructure and setup
+- *(synapse)* Introduce tools for handling AI-generated tasks and enhanced project management
+- *(agents)* Enhance tool handling with new Service and ValueObject refactor
+- *(parsers)* Implement output parsing for JSON and string
+- *(services)* Add Clearbit company search tool and related tests
+- *(toolList)* Add tool list view and enhance tool handling
+- *(agent)* Support multi-message prompts and improve parsing
+- *(flake)* Add publicKeys and enable agenix for .env secrets
+- *(memory)* Add asString method to serialize agent messages
+- *(provider)* Add migration publishing to SynapseServiceProvider
+- *(crunchbase)* Add Crunchbase service and tool for organization data handling
+- *(FirecrawlTool)* Introduce FirecrawlTool for webpage content scraping
+- *(agent)* Add SearchAndScrapeAgent with error handling and new view template
+- *(agent)* Add SearchAndScrapeAgent with error handling and new view template
+- *(chat-rephrase)* Add Chat Rephrase Agent with prompt and test
+- *(openai)* Add support for extra agent arguments in handle methods
+- *(FirecrawlTool)* Enhance URL scraping with extraction prompts and add tests
+- *(tool)* Enhance SerperTool, add test coverage
+- *(tools)* Add SerpAPI Google search capability
+- *(SerpAPIGoogleNewsTool)* Add tool for Google News searches, update agent and tests
+- *(logging)* Add event logging to Agent class
+- *(memory)* Add set and clear methods for agent memory management
+- *(memory)* Add set and clear methods to CollectionMemory class
+- *(memory)* Expand payload structure and add new tests
+- *(output-rules)* Improve validation error handling and messaging
+- *(VectorStores)* Add new contract and base implementation for vector store
+- *(exceptions)* Add MissingApiKeyException class for handling missing API key errors
+- *(integration)* Add support for Claude AI integration and improve tool handling
+- *(openai)* Add validation request for output formatting in OpenAI integration
+- *(integrations)* Update model configuration and add embeddings support
+- *(embeddings)* Add embedding creation support
+- *(output-rules)* Enhance validation prompt handling and add error view
+- *(tools)* Enhance tool handling with better parameter description and validation
+- *(tools)* Add AI integration capability with Saloon Connector
+- *(tests)* Enhance ChatRephraseAgent tests with mock client, add message handling, and fixture data
+- *(image input)* Update message type, improve test structure for ImageAgent
+- *(agent)* Add custom exception for unknown finish reasons
+- *(linting)* Add `refactor-file` command to flake.nix and composer.json
+- *(docs)* Revamp documentation structure and add VitePress for better dev experience
+- *(agent)* Add KnowledgeGraphExtractionAgent with prompt and test
+- *(agent)* Add ContextualRetrievalPreprocessingAgent with fixtures and tests
+- *(Synapse)* Add installation command and refine publishing logic
+- *(agent)* Add ContextualRetrievalPreprocessingAgent with fixtures and tests
+- *(logging)* Add comprehensive logging to middleware pipelines and agent tasks
+- *(agent)* Add maximum iteration limit to prevent infinite loops
+- *(agent)* Introduce HasOutputSchema interface for output schema validation
+- *(agents)* Introduce boot agent pipeline and update memory management
+- *(memory)* Enhance database memory functionality and add tests
+- *(agent)* Introduce event handling and new Agent event classes
+- *(agent)* Enhance agent functionality and documentation 🌟
+- *(validation)* Implement output schema validation for agents 🚀
+- *(memory)* Add DatabaseMemory implementation and improve documentation 💾📚
+- *(agents)* Add prebuilt MultiQueryRetrieverAgent and documentation 🛠️
+- *(agent)* Enhance memory management and update schemas 🎉
+- *(contextual-retrieval-preprocessing-agent)* Add new Contextual Retrieval Preprocessing Agent with tests and documentation 🚀
+- *(logging)* Enhance agent activity logging and add unit tests 📝
+- *(tests)* Add SQL tools and integration tests 🎉
 
 ### 🐛 Bug Fixes
 
-- _(memory)_ Correct array keys to prevent improper payload handling
-- _(models)_ Update relationship in Message to use AgentMemory instead of Assistant
-- _(memory)_ Ensure proper formatting of message payloads with newlines
-- _(BaseTool)_ Correct class name retrieval in log method
-- _(FirecrawlService)_ Improve extraction prompt for content relevance
-- _(logging)_ Remove redundant results logging in tools and set default context in BaseTool
-- _(FirecrawlService)_ Improve clarity of extraction prompt
-- _(FirecrawlService)_ Improve clarity of extraction prompt
-- _(FirecrawlService)_ Correct grammar in extraction prompt for clarity
-- _(tests)_ Remove unused Serper service configuration in TestCase
-- _(views)_ Correct order of includes and message sorting
-- _(OpenAI)_ Remove debugging code and correct response data handling in EmbeddingsRequest
-- _(agent)_ Add memory and integration resolver exception handling 🚀
-- _(memory)_ Correct input key and debug statements in CollectionMemoryTest
-- _(agent)_ Correct middleware method for tool initialization
-- _(agent)_ Correct middleware method for tool initialization
-- _(tests)_ Remove outdated memory fixture files 🗑️
-- _(tests)_ Update assertions for messages and standalone_question
+- *(memory)* Correct array keys to prevent improper payload handling
+- *(models)* Update relationship in Message to use AgentMemory instead of Assistant
+- *(memory)* Ensure proper formatting of message payloads with newlines
+- *(BaseTool)* Correct class name retrieval in log method
+- *(FirecrawlService)* Improve extraction prompt for content relevance
+- *(logging)* Remove redundant results logging in tools and set default context in BaseTool
+- *(FirecrawlService)* Improve clarity of extraction prompt
+- *(FirecrawlService)* Improve clarity of extraction prompt
+- *(FirecrawlService)* Correct grammar in extraction prompt for clarity
+- *(tests)* Remove unused Serper service configuration in TestCase
+- *(views)* Correct order of includes and message sorting
+- *(OpenAI)* Remove debugging code and correct response data handling in EmbeddingsRequest
+- *(agent)* Add memory and integration resolver exception handling 🚀
+- *(memory)* Correct input key and debug statements in CollectionMemoryTest
+- *(agent)* Correct middleware method for tool initialization
+- *(agent)* Correct middleware method for tool initialization
+- *(tests)* Remove outdated memory fixture files 🗑️
+- *(tests)* Update assertions for messages and standalone_question
 
 ### 🚜 Refactor
 
-- _(agent)_ Streamline agent implementation, enhance OpenAI integration
-- _(core)_ Update tool call handling and Google search feature
-- _(memory)_ Implement new agent executor, enhance tool handling and OpenAI integration
-- _(SystemPrompts)_ Convert BaseSystemPrompt to abstract class and clean up imports in tests
-- _(prompts)_ Standardize prompt architecture and update invocation flow
-- _(core)_ Remove obsolete classes and decouple concerns
-- _(Message)_ Rename MessageValueObject to Message
-- _(messages)_ Update prompt syntax and improve parsing logic
-- _(SerperService)_ Inject apiKey via constructor, enhance SearchGoogleTool output format
-- _(output)_ Convert Message object to array for prompt handling
-- _(api)_ Replace Message with Response for better encapsulation
-- _(memory)_ Split memory into two formats, update prompts to use new memory format
-- _(models)_ Remove unused Eloquent models
-- _(Message)_ Flatten tool attributes in value object and remove unused method
-- _(tools)_ Extract common logic to BaseTool and remove unused method from Tool contract
-- _(events)_ Rename model event methods to agent event methods and update related logic
-- _(FirecrawlTool)_ Remove unused imports and adjust indentation
-- _(logging)_ Consolidate logging logic into BaseTool class
-- _(SimpleAgent)_ Replace SearchGoogleTool with SerperTool
-- _(search)_ Streamline SerpAPIService parameter handling and update method signature
-- _(test)_ Remove unused 'serper' config from TestCase setup
-- _(migrations)_ Change `agent_memory_id` to UUID in `messages` table migration
-- _(tools)_ Simplify query parameter descriptions in search tools
-- _(SynapseServiceProvider)_ Replace publishesMigrations with loadMigrationsFrom
-- _(tools)_ Standardize API key retrieval using config files
-- _(config)_ Restructure API key and model configurations
-- _(openai)_ Replace direct integration calls with Saloon for OpenAI interactions
-- _(serper)_ Modularize Serper integration and update usage
-- _(services)_ Modularize ClearbitService into separate request and connector classes
-- _(crunchbase)_ Modularize and enhance Crunchbase integration
-- _(Firecrawl)_ Modernize Firecrawl service architecture
-- _(serpapi)_ Integrate new SerpApiConnector, remove deprecated service, and enhance API key handling
-- _(SerpAPI)_ Streamline Google News tool handling; update tests and fixtures
-- _(integrations)_ Reorganize OpenAI integration structure
-- _(tests)_ Remove redundant `only` call in ClaudeIntegrationTest
-- _(connectors/claude)_ Remove unused import in ValidateOutputRequest
-- _(integrations)_ Update message formatting and tool handling
-- _(integrations)_ Relocate Integration contract for better organization
-- _(ValueObjects)_ Update comment to accurately reflect the Message validator
-- _(agent)_ Streamline constructor and optimize methods for clarity and efficiency
-- _(integrations)_ Update docblocks in HasIntegration.php for clarity
-- _(memory)_ Reorganize memory methods and improve doc comments
-- _(memory)_ Improve method visibility and documentation in memory classes
-- _(logging)_ Consolidate logging functionality into HasLogging trait
-- _(models)_ Reorganize memory-related models to improve structure
-- _(tests)_ Relocate and update MultiQueryRetrieverAgent tests for improved structure and mocking
-- _(agent)_ Remove ProfessionalEditorAgent and associated tests and resources
-- _(SearchAndScrapeAgent)_ Remove deprecated agent and related files
-- _(codebase)_ Optimize null/empty checks and type hints across various classes
-- _(codebase)_ Optimize null/empty checks and type hints across various classes
-- _(src)_ Standardize variable names and signatures
-- _(schema)_ Rename OutputRules to OutputSchema across the codebase
-- _(tests)_ Reorganize CollectionMemoryTest directory structure
-- _(agent)_ Enhance PendingAgentTask and integration handling
-- _(agents)_ Restructure traits for better organization and functionality
-- _(integrations)_ Remove unused Message import and method
-- _(agent)_ Move Agent class to base namespace 🛠️
-- _(project)_ Restructure namespaces and traits for consistency ♻️
-- _(agent)_ Standardize namespaces and manage memory/tools
-- _(value-objects)_ Reorganize Message and EmbeddingResponse namespaces 🔄
-- _(memory)_ Move Memory contract to new namespace ♻️
-- _(integrations)_ Relocate `Response` value object to new namespace ♻️
-- _(integration)_ Rename OpenAiIntegration to OpenAIIntegration and update methods
-- _(integration)_ Rename OpenAiIntegration to OpenAIIntegration and update methods
-- _(agent)_ Rename traits for clarity 🌟
-- _(models)_ 🦊 relocate models to a new namespace for better organization
-- _(tools)_ Remove ToolCallValueObject and update references 💅
-- _(tool)_ Modify BaseTool to initialize with PendingAgentTask
-- _(tools)_ Improve tool handling and integration
-- _(agent)_ Rename Agent namespace to AgentTask for clarity
-- _(agents)_ Move agent classes from Templates to Agents namespace
-- _(agent)_ Streamline integration management and tool handling
-- _(memory)_ Unify memory management and enhance tool initialization 🌟✨
-- _(agent/memory)_ Synchronize memory management with middleware pipeline and integrate new interfaces 🧠
-- _(tests)_ Rename fixture files for OpenAi integration tests for better organization
-- _(tests)_ Streamline fixture paths and remove unused imports
-- _(SerpAPIGoogleSearchTool)_ Streamline API key handling and enhance tests
-- _(SerpAPIGoogleNewsTool)_ Streamline API key handling and enhance test coverage
-- _(firecrawl)_ Update endpoint and extraction schema handling
-- _(CrunchbaseTool)_ Simplify initialization and enhance boot method
-- _(clearbit)_ Streamline ClearbitCompanyTool logic, update tests
-- _(Message)_ Update content return type to mixed
-- _(agent-hooks)_ Split and enhance hook interfaces, add tests🐛
-- _(agent-hooks)_ Split and enhance hook interfaces, add tests🐛
-- _(memory)_ Remove deprecated memory trait and methods 💾
-- _(tools)_ Streamline API key handling and remove unnecessary boot method 🔧
-- _(tools)_ Streamline API key handling and remove unnecessary boot method 🔧
-- _(KnowledgeGraphExtractionAgent)_ Implement HasOutputSchema interface and update schema validation 🎯
-- _(command)_ Streamline SynapseInstall.php structure
+- *(agent)* Streamline agent implementation, enhance OpenAI integration
+- *(core)* Update tool call handling and Google search feature
+- *(memory)* Implement new agent executor, enhance tool handling and OpenAI integration
+- *(SystemPrompts)* Convert BaseSystemPrompt to abstract class and clean up imports in tests
+- *(prompts)* Standardize prompt architecture and update invocation flow
+- *(core)* Remove obsolete classes and decouple concerns
+- *(Message)* Rename MessageValueObject to Message
+- *(messages)* Update prompt syntax and improve parsing logic
+- *(SerperService)* Inject apiKey via constructor, enhance SearchGoogleTool output format
+- *(output)* Convert Message object to array for prompt handling
+- *(api)* Replace Message with Response for better encapsulation
+- *(memory)* Split memory into two formats, update prompts to use new memory format
+- *(models)* Remove unused Eloquent models
+- *(Message)* Flatten tool attributes in value object and remove unused method
+- *(tools)* Extract common logic to BaseTool and remove unused method from Tool contract
+- *(events)* Rename model event methods to agent event methods and update related logic
+- *(FirecrawlTool)* Remove unused imports and adjust indentation
+- *(logging)* Consolidate logging logic into BaseTool class
+- *(SimpleAgent)* Replace SearchGoogleTool with SerperTool
+- *(search)* Streamline SerpAPIService parameter handling and update method signature
+- *(test)* Remove unused 'serper' config from TestCase setup
+- *(migrations)* Change `agent_memory_id` to UUID in `messages` table migration
+- *(tools)* Simplify query parameter descriptions in search tools
+- *(SynapseServiceProvider)* Replace publishesMigrations with loadMigrationsFrom
+- *(tools)* Standardize API key retrieval using config files
+- *(config)* Restructure API key and model configurations
+- *(openai)* Replace direct integration calls with Saloon for OpenAI interactions
+- *(serper)* Modularize Serper integration and update usage
+- *(services)* Modularize ClearbitService into separate request and connector classes
+- *(crunchbase)* Modularize and enhance Crunchbase integration
+- *(Firecrawl)* Modernize Firecrawl service architecture
+- *(serpapi)* Integrate new SerpApiConnector, remove deprecated service, and enhance API key handling
+- *(SerpAPI)* Streamline Google News tool handling; update tests and fixtures
+- *(integrations)* Reorganize OpenAI integration structure
+- *(tests)* Remove redundant `only` call in ClaudeIntegrationTest
+- *(connectors/claude)* Remove unused import in ValidateOutputRequest
+- *(integrations)* Update message formatting and tool handling
+- *(integrations)* Relocate Integration contract for better organization
+- *(ValueObjects)* Update comment to accurately reflect the Message validator
+- *(agent)* Streamline constructor and optimize methods for clarity and efficiency
+- *(integrations)* Update docblocks in HasIntegration.php for clarity
+- *(memory)* Reorganize memory methods and improve doc comments
+- *(memory)* Improve method visibility and documentation in memory classes
+- *(logging)* Consolidate logging functionality into HasLogging trait
+- *(models)* Reorganize memory-related models to improve structure
+- *(tests)* Relocate and update MultiQueryRetrieverAgent tests for improved structure and mocking
+- *(agent)* Remove ProfessionalEditorAgent and associated tests and resources
+- *(SearchAndScrapeAgent)* Remove deprecated agent and related files
+- *(codebase)* Optimize null/empty checks and type hints across various classes
+- *(codebase)* Optimize null/empty checks and type hints across various classes
+- *(src)* Standardize variable names and signatures
+- *(schema)* Rename OutputRules to OutputSchema across the codebase
+- *(tests)* Reorganize CollectionMemoryTest directory structure
+- *(agent)* Enhance PendingAgentTask and integration handling
+- *(agents)* Restructure traits for better organization and functionality
+- *(integrations)* Remove unused Message import and method
+- *(agent)* Move Agent class to base namespace 🛠️
+- *(project)* Restructure namespaces and traits for consistency ♻️
+- *(agent)* Standardize namespaces and manage memory/tools
+- *(value-objects)* Reorganize Message and EmbeddingResponse namespaces 🔄
+- *(memory)* Move Memory contract to new namespace ♻️
+- *(integrations)* Relocate `Response` value object to new namespace ♻️
+- *(integration)* Rename OpenAiIntegration to OpenAIIntegration and update methods
+- *(integration)* Rename OpenAiIntegration to OpenAIIntegration and update methods
+- *(agent)* Rename traits for clarity 🌟
+- *(models)* 🦊 relocate models to a new namespace for better organization
+- *(tools)* Remove ToolCallValueObject and update references 💅
+- *(tool)* Modify BaseTool to initialize with PendingAgentTask
+- *(tools)* Improve tool handling and integration
+- *(agent)* Rename Agent namespace to AgentTask for clarity
+- *(agents)* Move agent classes from Templates to Agents namespace
+- *(agent)* Streamline integration management and tool handling
+- *(memory)* Unify memory management and enhance tool initialization 🌟✨
+- *(agent/memory)* Synchronize memory management with middleware pipeline and integrate new interfaces 🧠
+- *(tests)* Rename fixture files for OpenAi integration tests for better organization
+- *(tests)* Streamline fixture paths and remove unused imports
+- *(SerpAPIGoogleSearchTool)* Streamline API key handling and enhance tests
+- *(SerpAPIGoogleNewsTool)* Streamline API key handling and enhance test coverage
+- *(firecrawl)* Update endpoint and extraction schema handling
+- *(CrunchbaseTool)* Simplify initialization and enhance boot method
+- *(clearbit)* Streamline ClearbitCompanyTool logic, update tests
+- *(Message)* Update content return type to mixed
+- *(agent-hooks)* Split and enhance hook interfaces, add tests🐛
+- *(agent-hooks)* Split and enhance hook interfaces, add tests🐛
+- *(memory)* Remove deprecated memory trait and methods 💾
+- *(tools)* Streamline API key handling and remove unnecessary boot method 🔧
+- *(tools)* Streamline API key handling and remove unnecessary boot method 🔧
+- *(KnowledgeGraphExtractionAgent)* Implement HasOutputSchema interface and update schema validation 🎯
+- *(command)* Streamline SynapseInstall.php structure
 
 ### 📚 Documentation
 
-- _(getting-started)_ Add installation guide for Laravel Synapse
-- _(Response)_ Correct annotation for validationRules method
-- _(agent)_ Add detailed docblocks for methods
-- _(ClearbitCompanyTool)_ Add missing docblocks and exceptions, improve method annotations
-- _(OutputRule)_ Add PHPDoc comments for better code clarity and documentation
-- _(SynapseServiceProvider)_ Enhance boot method docblock for clarity and detail
-- _(vitepress)_ Add initial VitePress configuration for documentation
-- _(agents)_ Add comprehensive documentation for agent memory and collection memory 🍱
-- _(agent-traits)_ Add `HasHooks` contract and `ManagesHooks` trait ✍️
+- *(getting-started)* Add installation guide for Laravel Synapse
+- *(Response)* Correct annotation for validationRules method
+- *(agent)* Add detailed docblocks for methods
+- *(ClearbitCompanyTool)* Add missing docblocks and exceptions, improve method annotations
+- *(OutputRule)* Add PHPDoc comments for better code clarity and documentation
+- *(SynapseServiceProvider)* Enhance boot method docblock for clarity and detail
+- *(vitepress)* Add initial VitePress configuration for documentation
+- *(agents)* Add comprehensive documentation for agent memory and collection memory 🍱
+- *(agent-traits)* Add `HasHooks` contract and `ManagesHooks` trait ✍️
 - Reorganize and add new sections to documentation 📄
-- _(prompt)_ Enhance documentation with new prompt parts and examples ✍️
-- _(agents)_ Add integration setup documentation for OpenAI and Claude 🚀
-- _(prompts)_ Enhance documentation for clarity and consistency ✨📚
-- _(traits)_ Add documentation for events and log traits 📝
-- _(agent-lifecycle)_ Fix broken link to message tags 📚
-- _(license)_ Add MIT License to the repository 📄
+- *(prompt)* Enhance documentation with new prompt parts and examples ✍️
+- *(agents)* Add integration setup documentation for OpenAI and Claude 🚀
+- *(prompts)* Enhance documentation for clarity and consistency ✨📚
+- *(traits)* Add documentation for events and log traits 📝
+- *(agent-lifecycle)* Fix broken link to message tags 📚
+- *(license)* Add MIT License to the repository 📄
 
 ### 🎨 Styling
 
-- _(codebase)_ Adhere to strict type declarations and coding standards
-- _(output-rules)_ Refine prompt formatting for better readability
-- _(provider)_ Specify return type and update doc comment in SynapseServiceProvider
-- _(docblocks)_ Add comprehensive docblocks for constructors and methods
-- _(codebase)_ Improve code formatting and consistency across files
-- _(agent, tests)_ ⭐️ Ensure consistent code indentation 🌟
+- *(codebase)* Adhere to strict type declarations and coding standards
+- *(output-rules)* Refine prompt formatting for better readability
+- *(provider)* Specify return type and update doc comment in SynapseServiceProvider
+- *(docblocks)* Add comprehensive docblocks for constructors and methods
+- *(codebase)* Improve code formatting and consistency across files
+- *(agent, tests)* ⭐️ Ensure consistent code indentation 🌟
 
 ### 🧪 Testing
 
-- _(agent)_ Add SearchAndScrapeAgentTest and cleanup existing tests
-- _(ImageAgent)_ Add basic test structure for scraping functionality
-- _(SerperTool)_ Enhance coverage and restructure tests with mocking
-- _(OpenAiIntegration)_ Add test for Connects With OutputSchema
-- _(memory)_ Update and reorganize CollectionMemory test fixtures
-- _(ImageAgent)_ Add new fixture for image agent test 🤖
-- _(memory)_ Add new CollectionMemory test and fixture 🚀
+- *(agent)* Add SearchAndScrapeAgentTest and cleanup existing tests
+- *(ImageAgent)* Add basic test structure for scraping functionality
+- *(SerperTool)* Enhance coverage and restructure tests with mocking
+- *(OpenAiIntegration)* Add test for Connects With OutputSchema
+- *(memory)* Update and reorganize CollectionMemory test fixtures
+- *(ImageAgent)* Add new fixture for image agent test 🤖
+- *(memory)* Add new CollectionMemory test and fixture 🚀
 
 ### ⚙️ Miscellaneous Tasks
 
-- _(dependencies)_ Remove unused dependencies 'saloonphp/saloon' and 'spatie/laravel-data'
-- _(tests)_ Restructure OpenAiIntegrationTest.php directory
-- _(config)_ Add .editorconfig for consistent code formatting
-- _(secrets)_ Update encrypted environment variables
-- _(docs)_ Add GitHub Actions workflow to deploy VitePress site to Pages 🚀
-- _(ci)_ Cleanup workflow and add funding configuration 🧹
-- _(workflows)_ Add GitHub Actions workflow for running tests 🚀
-- _(workflow)_ Add GitHub Action to automate changelog updates upon release 🚀
-- _(workflows)_ Update CI config to use PHP 8.2 and streamline testing process 🛠
-- _(workflow)_ Add environment API keys for workflows 🛠️
+- *(dependencies)* Remove unused dependencies 'saloonphp/saloon' and 'spatie/laravel-data'
+- *(tests)* Restructure OpenAiIntegrationTest.php directory
+- *(config)* Add .editorconfig for consistent code formatting
+- *(secrets)* Update encrypted environment variables
+- *(docs)* Add GitHub Actions workflow to deploy VitePress site to Pages 🚀
+- *(ci)* Cleanup workflow and add funding configuration 🧹
+- *(workflows)* Add GitHub Actions workflow for running tests 🚀
+- *(workflow)* Add GitHub Action to automate changelog updates upon release 🚀
+- *(workflows)* Update CI config to use PHP 8.2 and streamline testing process 🛠
+- *(workflow)* Add environment API keys for workflows 🛠️
 
 <!-- generated by git-cliff -->

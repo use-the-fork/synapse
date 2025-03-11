@@ -13,23 +13,9 @@ use UseTheFork\Synapse\ValueObject\Message;
 
 class OpenAIIntegration implements Integration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function handlePendingAgentTaskCompletion(
-        PendingAgentTask $pendingAgentTask
-    ): PendingAgentTask {
-
-        $openAIConnector = new OpenAIConnector;
-        $message = $openAIConnector->doCompletionRequest(
-            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
-            tools: $pendingAgentTask->tools(),
-            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
-        );
-
-        $pendingAgentTask->currentIteration()->setResponse($message);
-
-        return $pendingAgentTask;
+    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
+    {
+        return $this->send(new EmbeddingsRequest($input, $extraAgentArgs))->dto();
     }
 
     /**
@@ -47,8 +33,22 @@ class OpenAIIntegration implements Integration
         );
     }
 
-    public function createEmbeddings(string $input, array $extraAgentArgs = []): EmbeddingResponse
-    {
-        return $this->send(new EmbeddingsRequest($input, $extraAgentArgs))->dto();
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePendingAgentTaskCompletion(
+        PendingAgentTask $pendingAgentTask
+    ): PendingAgentTask {
+
+        $openAIConnector = new OpenAIConnector;
+        $message = $openAIConnector->doCompletionRequest(
+            prompt: $pendingAgentTask->getPromptChain(),
+            tools: $pendingAgentTask->tools(),
+            extraAgentArgs: $pendingAgentTask->getExtraAgentArgs()
+        );
+
+        $pendingAgentTask->setResponse($message);
+
+        return $pendingAgentTask;
     }
 }

@@ -61,7 +61,7 @@ class DatabaseMemory implements Memory
     public function boot(?PendingAgentTask $pendingAgentTask = null): void
     {
         if(!empty($this->memoryId)){
-            $this->agentMemory = AgentMemory::firstOrNew($this->memoryId);
+            $this->agentMemory = AgentMemory::firstOrNew(['id' => $this->memoryId]);
         } else {
             $this->agentMemory = new AgentMemory;
             $this->agentMemory->save();

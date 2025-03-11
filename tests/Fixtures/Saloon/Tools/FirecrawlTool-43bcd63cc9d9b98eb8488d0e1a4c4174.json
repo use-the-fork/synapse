@@ -1,31 +1,27 @@
 {
-    "statusCode": 200,
-    "headers": {
-        "Date": "Tue, 22 Oct 2024 01:29:15 GMT",
-        "Content-Type": "application\/json",
-        "Content-Length": "1001",
-        "Connection": "keep-alive",
-        "access-control-expose-headers": "X-Request-ID",
-        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
-        "openai-processing-ms": "1423",
-        "openai-version": "2020-10-01",
-        "x-ratelimit-limit-requests": "10000",
-        "x-ratelimit-limit-tokens": "2000000",
-        "x-ratelimit-remaining-requests": "9999",
-        "x-ratelimit-remaining-tokens": "1999868",
-        "x-ratelimit-reset-requests": "6ms",
-        "x-ratelimit-reset-tokens": "3ms",
-        "x-request-id": "req_83947e3fedb8e55c0cecd4763dc7106a",
-        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
-        "CF-Cache-Status": "DYNAMIC",
-        "Set-Cookie": [
-            "__cf_bm=kl0HCYhDWdQBHgu.au70qqhChKk5RaAT1LEbZ7.6R18-1729560555-1.0.1.1-QcPuKMjTG83kHEndnvp.zEX6Q9wx94nCOc_NpD56yCySJKLKQ._VUZyb7N9NQW6MVPNcwO32Qxwp_YrIcZYu2A; path=\/; expires=Tue, 22-Oct-24 01:59:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-            "_cfuvid=.MwFI73GnUCEax2U8GwoTYEDfqLLG6ccDc.TIosZQrY-1729560555299-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-        ],
-        "X-Content-Type-Options": "nosniff",
-        "Server": "cloudflare",
-        "CF-RAY": "8d65b714de574252-EWR",
-        "alt-svc": "h3=\":443\"; ma=86400"
-    },
-    "data": "{\n  \"id\": \"chatcmpl-AKxzt9uuS0RxiTGLtYoHR26gRNPjy\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560553,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_N1tuNKzGU3rp68ipitruNElF\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"firecrawl_tool\",\n              \"arguments\": \"{\\\"url\\\":\\\"https:\/\/www.firecrawl.dev\/\\\",\\\"extractionPrompt\\\":\\\"Describe the main purpose or focus of the website.\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 176,\n    \"completion_tokens\": 36,\n    \"total_tokens\": 212,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 25 Oct 2024 23:47:58 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "925",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "REDACTED",
+    "openai-processing-ms": "787",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999868",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "3ms",
+    "x-request-id": "REDACTED",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "REDACTED",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AMOK69XqSun7nD4c0mmAnALLAT122\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729900078,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_0NAw7fAgEA7GoNFhDraQqkfY\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"firecrawl_tool\",\n              \"arguments\": \"{\\\"url\\\":\\\"https://www.firecrawl.dev/\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 158,\n    \"completion_tokens\": 21,\n    \"total_tokens\": 179,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
 }

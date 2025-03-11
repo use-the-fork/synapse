@@ -16,7 +16,7 @@ SERPER_API_KEY=
 Then, include the `SerperTool` in your agent:
 
 ```php
-use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\Tools\Search\SerperTool;
 
 protected function resolveTools(): array
 {
@@ -38,8 +38,7 @@ SERPAPI_API_KEY=
 Then, include either the `SerpAPIGoogleSearchTool` or the `SerpAPIGoogleNewsTool` in your agent:
 
 ```php
-use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
-use UseTheFork\Synapse\Tools\SerpAPIGoogleSearchTool;
+use UseTheFork\Synapse\Tools\Search\SerpAPIGoogleNewsTool;use UseTheFork\Synapse\Tools\Search\SerpAPIGoogleSearchTool;
 
 protected function resolveTools(): array
 {
@@ -64,7 +63,7 @@ FIRECRAWL_API_KEY=
 Then, include the `FirecrawlTool` in your agent:
 
 ```php
-use UseTheFork\Synapse\Tools\FirecrawlTool;
+use UseTheFork\Synapse\Tools\Scrape\FirecrawlTool;
 
 protected function resolveTools(): array
 {

@@ -93,6 +93,7 @@
           };
 
           services = {
+            aider.enable = true;
           };
 
           integrations = {

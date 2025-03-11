@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
+
+    protected $casts = [
+        'image' => 'array',
+    ];
     protected $fillable = [
         'assistant_id',
         'role',
@@ -19,10 +23,7 @@ class Message extends Model
         'tool_content',
         'image',
     ];
-
-    protected $attributes = [
-        'image' => 'array',
-    ];
+    protected $table = 'synapse_messages';
 
     public function assistant()
     {

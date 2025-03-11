@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 11 Mar 2025 22:35:02 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-BA2TWQ0fWQ14cPG8xAvRbVnEE2fMr\",\n  \"object\": \"chat.completion\",\n  \"created\": 1741732494,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_0yhH0Zokg7KeawPgHLsR5XFK\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"query_s_q_l_data_base_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"SELECT COUNT(*) AS organization_count, AVG(funding_rounds) AS average_funding_rounds FROM organizations WHERE status = 'operating'\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null,\n        \"annotations\": []\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 349,\n    \"completion_tokens\": 47,\n    \"total_tokens\": 396,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0,\n      \"audio_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0,\n      \"accepted_prediction_tokens\": 0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\": \"default\",\n  \"system_fingerprint\": \"fp_7c63087da1\"\n}\n"
+}

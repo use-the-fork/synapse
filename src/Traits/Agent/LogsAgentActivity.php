@@ -45,8 +45,7 @@ trait LogsAgentActivity
     protected function logStartIteration(PendingAgentTask $pendingAgentTask): void
     {
         $inputs = $pendingAgentTask->inputs();
-        $iterationCount = $pendingAgentTask->currentIteration()->getIterationCount();
-        Log::debug("Start Iteration {$iterationCount}", $inputs);
+        Log::debug("Start Iteration", $inputs);
     }
 
     /**
@@ -56,35 +55,34 @@ trait LogsAgentActivity
      */
     protected function logIntegrationResponse(PendingAgentTask $pendingAgentTask): void
     {
-        Log::debug("Finished Integration with {$pendingAgentTask->currentIteration()->finishReason()->value}");
+        Log::debug("Finished Integration with {$pendingAgentTask->getResponse()->finishReason()}");
     }
 
     protected function logStartToolCall(PendingAgentTask $pendingAgentTask): void
     {
-        $currentMessage = $pendingAgentTask->currentIteration()->getResponse()->toArray();
+        $currentMessage = $pendingAgentTask->getResponse()->toArray();
         Log::debug("Entering Tool Call: {$currentMessage['tool_name']}", $currentMessage);
     }
 
     protected function logAgentFinish(PendingAgentTask $pendingAgentTask): void
     {
-        $currentMessage = $pendingAgentTask->currentIteration()->getResponse()->toArray();
+        $currentMessage = $pendingAgentTask->getResponse()->toArray();
         Log::debug('Agent Finished', $currentMessage);
     }
 
     protected function logEndIteration(PendingAgentTask $pendingAgentTask): void
     {
 
-        $currentMessage = $pendingAgentTask->currentIteration()->getResponse();
-        if ($currentMessage) {
-            $iterationCount = $pendingAgentTask->currentIteration()->getIterationCount();
-            Log::debug("End Iteration {$iterationCount}", $currentMessage->toArray());
+        $currentMessage = $pendingAgentTask->getResponse();
+        if ($currentMessage->finishReason() == 'tool_calls') {
+            Log::debug("End Iteration", $currentMessage->toArray());
         }
     }
 
     protected function logEndThread(PendingAgentTask $pendingAgentTask): void
     {
         $inputs = $pendingAgentTask->inputs();
-        $currentMessage = $pendingAgentTask->currentIteration()->getResponse()->toArray();
+        $currentMessage = $pendingAgentTask->getResponse()->toArray();
 
         Log::debug('End Thread', [
             'inputs' => $inputs,
@@ -94,7 +92,7 @@ trait LogsAgentActivity
 
     protected function logEndToolCall(PendingAgentTask $pendingAgentTask): void
     {
-        $currentMessage = $pendingAgentTask->currentIteration()->getResponse()->toArray();
+        $currentMessage = $pendingAgentTask->getResponse()->toArray();
         Log::debug("Finished Tool Call: {$currentMessage['tool_name']}", $currentMessage);
     }
 }

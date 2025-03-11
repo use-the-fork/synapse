@@ -5,14 +5,7 @@ Tools allow your agent to interact with your application or external APIs. Essen
 Tools are inherently part of all agents, but they are not invoked unless the `resolveTools` method returns an array of tools that the agent can use. Below is an example where the `SerperTool` is added to an agent, allowing it to perform Google searches.
 
 ```php
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;
-use UseTheFork\Synapse\Contracts\Integration;
-use UseTheFork\Synapse\Contracts\Tool;
-use UseTheFork\Synapse\Integrations\OpenAIIntegration;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
-use UseTheFork\Synapse\ValueObject\SchemaRule;
+use UseTheFork\Synapse\Agent;use UseTheFork\Synapse\Contracts\Agent\HasOutputSchema;use UseTheFork\Synapse\Contracts\Integration;use UseTheFork\Synapse\Integrations\OpenAIIntegration;use UseTheFork\Synapse\Tools\Search\SerperTool;use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;use UseTheFork\Synapse\ValueObject\SchemaRule;
 
 class SerperAgent extends Agent implements HasOutputSchema
 {

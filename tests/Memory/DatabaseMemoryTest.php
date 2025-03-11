@@ -58,7 +58,7 @@ it('Database Memory', function (): void {
         },
     ]);
 
-    $this->assertDatabaseCount('agent_memories', 0);
+    $this->assertDatabaseCount('synapse_agent_memories', 0);
 
     $agent = new DatabaseMemoryAgent;
     $message = $agent->handle(['input' => 'hello this a test']);
@@ -72,9 +72,9 @@ it('Database Memory', function (): void {
     $followupResponseArray = $followup->toArray();
     expect($followupResponseArray['content'])->toBeArray()
         ->and($followupResponseArray['content'])->toHaveKey('answer')
-        ->and($followupResponseArray['content']['answer'])->toBe('.sdrawkcab tuB ?yas tsuj I did tahw');
+        ->and($followupResponseArray['content']['answer'])->toBe('sdrawkcaB .yas tsuj I did tahw');
 
-    $this->assertDatabaseCount('agent_memories', 1);
-    $this->assertDatabaseCount('messages', 4);
+    $this->assertDatabaseCount('synapse_agent_memories', 1);
+    $this->assertDatabaseCount('synapse_messages', 2);
 
 });

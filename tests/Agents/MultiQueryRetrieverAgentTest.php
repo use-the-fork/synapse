@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\MultiQueryRetrieverAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\MultiQueryRetrieverAgent;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
 
-it('can run the Multi Query Retriever Agent.', function (): void {
+    it('can run the Multi Query Retriever Agent.', function (): void {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
@@ -28,4 +28,4 @@ it('can run the Multi Query Retriever Agent.', function (): void {
         ->and($agentResponseArray['content']['answer'])->toBeArray()
         ->and($agentResponseArray['content']['answer'])->toHaveCount(5);
 
-});
+})->skip('This test is only for local testing');

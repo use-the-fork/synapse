@@ -1,10 +1,10 @@
 {
-  "statusCode": 200,
-  "headers": {
-    "Date": "Tue, 22 Oct 2024 01:10:30 GMT",
-    "Content-Type": "application/json",
-    "Content-Length": "557",
-    "Connection": "keep-alive"
-  },
-  "data": "{\"id\":\"msg_01Eq8LoF24ttPcPdZCx5FVzq\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"To search Google for information about the current president of the United States, I'll use the serper_tool function. Here's how I'll structure the query:\"},{\"type\":\"tool_use\",\"id\":\"toolu_01AZWBaBr57C7x92FbW8GxuX\",\"name\":\"serper_tool\",\"input\":{\"query\":\"current president of the United States\",\"searchType\":\"search\"}}],\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":554,\"output_tokens\":111}}"
+    "statusCode": 200,
+    "headers": {
+        "Date": "Fri, 25 Oct 2024 22:35:49 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "523",
+        "Connection": "keep-alive"
+    },
+    "data": "{\"id\":\"msg_01C2qd8JZoxH5moRkypwc8cT\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"Certainly! I'll use the Google search tool to find information about the current president of the United States for you.\"},{\"type\":\"tool_use\",\"id\":\"toolu_01Ao9PHvVowGeBp41eFnNxHo\",\"name\":\"serper_tool\",\"input\":{\"query\":\"current president of the United States\",\"searchType\":\"search\"}}],\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":554,\"output_tokens\":102}}"
 }

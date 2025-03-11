@@ -1,10 +1,27 @@
 {
   "statusCode": 200,
   "headers": {
-    "Date": "Tue, 22 Oct 2024 01:14:46 GMT",
+    "Date": "Fri, 25 Oct 2024 22:29:57 GMT",
     "Content-Type": "application/json",
     "Content-Length": "655",
-    "Connection": "keep-alive"
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "REDACTED",
+    "openai-processing-ms": "440",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999879",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "3ms",
+    "x-request-id": "REDACTED",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "REDACTED",
+    "alt-svc": "h3=\":443\"; ma=86400"
   },
-  "data": "{\n  \"id\": \"chatcmpl-AKxltPt5yDOlBBJmGR7TAth1NH7bS\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729559685,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"answer\\\": \\\"Hello!\\\"\\n}\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 96,\n    \"completion_tokens\": 9,\n    \"total_tokens\": 105,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+  "data": "{\n  \"id\": \"chatcmpl-AMN6bR6Xy3bGwGT4fZppmiTROIaSz\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729895397,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"answer\\\": \\\"Hello!\\\"\\n}\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 96,\n    \"completion_tokens\": 9,\n    \"total_tokens\": 105,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
 }

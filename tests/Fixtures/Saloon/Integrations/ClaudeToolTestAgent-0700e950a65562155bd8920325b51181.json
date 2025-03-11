@@ -1,0 +1,10 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 25 Oct 2024 22:35:52 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "693",
+    "Connection": "keep-alive"
+  },
+  "data": "{\"id\":\"msg_01U46oa7ef3riiRKkdj7tYHS\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"Based on the search results, I can provide you with the information about the current president of the United States.\\n\\n```json\\n{\\n    \\\"answer\\\": \\\"The current president of the United States is Joe Biden. He is the 46th president of the United States, having taken office in 2021. Biden previously served as the 47th Vice President of the United States and represented Delaware in the U.S. Senate for 36 years before becoming president.\\\"\\n}\\n```\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":1634,\"output_tokens\":105}}"
+}

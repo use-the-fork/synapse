@@ -1,31 +1,27 @@
 {
     "statusCode": 200,
     "headers": {
-        "Date": "Tue, 22 Oct 2024 01:29:31 GMT",
+        "Date": "Sat, 26 Oct 2024 00:23:31 GMT",
         "Content-Type": "application\/json",
-        "Content-Length": "929",
+        "Content-Length": "959",
         "Connection": "keep-alive",
         "access-control-expose-headers": "X-Request-ID",
-        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
-        "openai-processing-ms": "1293",
+        "openai-organization": "REDACTED",
+        "openai-processing-ms": "1017",
         "openai-version": "2020-10-01",
         "x-ratelimit-limit-requests": "10000",
         "x-ratelimit-limit-tokens": "2000000",
         "x-ratelimit-remaining-requests": "9999",
-        "x-ratelimit-remaining-tokens": "1999869",
+        "x-ratelimit-remaining-tokens": "1999870",
         "x-ratelimit-reset-requests": "6ms",
         "x-ratelimit-reset-tokens": "3ms",
-        "x-request-id": "req_8923e9fd27fdf4c71c793871bb1e7728",
+        "x-request-id": "REDACTED",
         "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
         "CF-Cache-Status": "DYNAMIC",
-        "Set-Cookie": [
-            "__cf_bm=kpMEZlG9LXuUY7.KeKSdeRYEXv8A3zzF52Yawk0n9iY-1729560571-1.0.1.1-RpHwS3B6cX2zMPV6RXNAlm5SNYR6770etyc007R12TzIiVXrbvBqWOESUig3FoKxKHnWBPAVMv1sKrQtWfXUIA; path=\/; expires=Tue, 22-Oct-24 01:59:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-            "_cfuvid=irhipbpfUKI6EJeYDSNkQG1M3ohGDv6GaASL3TO5pME-1729560571556-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-        ],
         "X-Content-Type-Options": "nosniff",
         "Server": "cloudflare",
-        "CF-RAY": "8d65b77b6e5b43dc-EWR",
+        "CF-RAY": "REDACTED",
         "alt-svc": "h3=\":443\"; ma=86400"
     },
-    "data": "{\n  \"id\": \"chatcmpl-AKy0APamYmgS1VTadZJi7C5FrEqqP\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729560570,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_V5KWoIiGuHXsVshlA3A7dNa7\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serp_a_p_i_google_news_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"Apple headlines\\\"}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 154,\n    \"completion_tokens\": 21,\n    \"total_tokens\": 175,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_eae715ec6a\"\n}\n"
+    "data": "{\n  \"id\": \"chatcmpl-AMOsUwBs6HPUh0gSOD743erZmBCyQ\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729902210,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_FwpuiFgRrdAQKAVO5T8PoscY\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serp_a_p_i_google_news_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"Apple current headlines\\\",\\\"numberOfResults\\\":5}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 164,\n    \"completion_tokens\": 27,\n    \"total_tokens\": 191,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
 }

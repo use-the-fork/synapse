@@ -2,42 +2,44 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\AgentChain;
-use UseTheFork\Synapse\Agents\Rat\RatDraftAgent;
-use UseTheFork\Synapse\Agents\Rat\RatSplitAnswerAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use Saloon\Http\Faking\Fixture;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\AgentChains\RatAgentChain;
+    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\Scrape\FirecrawlTool;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
 
-it('executes a RAT chain', function (): void {
+    it('executes a RAT chain', function (): void {
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
+        ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
             $hash = md5(json_encode($pendingRequest->body()->get('messages')));
 
-            return MockResponse::fixture("AgentChains/RatAgentChain-{$hash}");
+            return MockResponse::fixture("AgentChains/Rat/RatAgentChain-{$hash}");
+        },
+        SerperSearchRequest::class => function (PendingRequest $pendingRequest): Fixture {
+
+            $hash = md5(json_encode($pendingRequest->body()->all()));
+
+            return MockResponse::fixture("AgentChains/Rat/RatAgentChainSerperTool-{$hash}");
+        },
+        FirecrawlRequest::class => function (PendingRequest $pendingRequest): Fixture {
+            $hash = md5(json_encode($pendingRequest->body()->all()));
+
+            return MockResponse::fixture("AgentChains/Rat/RatAgentChainFirecrawlTool-{$hash}");
         },
     ]);
 
-    $agentChain = AgentChain::make([
-        new RatDraftAgent,
-        new RatSplitAnswerAgent,
-    ])->persistInputs([
-        'question' => 'how so I improve my heart health?',
-        'number_of_paragraphs' => '5',
-    ]);
-
-    $message = $agentChain->handle([]);
+    $ratAgentChain = new RatAgentChain(new SerperTool, new FirecrawlTool);
+    $message = $ratAgentChain->handle(['question' => 'Summarize the American Civil War according to the timeline.', 'number_of_paragraphs' => '5']);
     $agentResponseArray = $message->toArray();
 
     expect($agentResponseArray['content'])->toBeArray()
-        ->and($agentResponseArray['content'])->toHaveKey('paragraphs')
-        ->and($agentResponseArray['content']['paragraphs'])->toBeArray();
+        ->and($agentResponseArray['content'])->toHaveKey('answer')
+        ->and($agentResponseArray['content']['answer'])->toContain('The American Civil War, which spanned from 1861 to 1865, ');
 
-    $answer = '';
-    foreach ($agentResponseArray['content']['paragraphs'] as $paragraph) {
-        $answer = "{$answer}\n\n{$paragraph}";
-    }
-
-});
+})->skip('This test is only for local testing');

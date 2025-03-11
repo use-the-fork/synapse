@@ -14,7 +14,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
     use UseTheFork\Synapse\Memory\CollectionMemory;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
     use UseTheFork\Synapse\ValueObject\SchemaRule;
 
@@ -106,5 +106,5 @@ test('uses tools', function (): void {
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president of the United States and took office in 2021. Joe Biden previously served as the 47th Vice President of the United States and represented Delaware in the US Senate for 36 years before becoming president.');
+        ->and($agentResponseArray['content']['answer'])->toContain('The current president of the United States is Joe Biden. He is the 46th president of the United States, having taken office in 2021. Biden previously served as the 47th Vice President of the United States and represented Delaware in the U.S. Senate for 36 years before becoming president.');
 });

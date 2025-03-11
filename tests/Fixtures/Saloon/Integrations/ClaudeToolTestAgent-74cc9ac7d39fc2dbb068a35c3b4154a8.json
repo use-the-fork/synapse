@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Fri, 25 Oct 2024 22:35:54 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "557",
+        "Connection": "keep-alive"
+    },
+    "data": "{\"id\":\"msg_01V8MMPaJ5dns4C1KavzLoXq\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-5-sonnet-20240620\",\"content\":[{\"type\":\"text\",\"text\":\"{\\n    \\\"answer\\\": \\\"The current president of the United States is Joe Biden. He is the 46th president of the United States, having taken office in 2021. Biden previously served as the 47th Vice President of the United States and represented Delaware in the U.S. Senate for 36 years before becoming president.\\\"\\n}\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"usage\":{\"input_tokens\":1834,\"output_tokens\":76}}"
+}

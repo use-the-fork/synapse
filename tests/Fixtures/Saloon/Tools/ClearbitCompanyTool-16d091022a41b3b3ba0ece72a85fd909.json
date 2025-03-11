@@ -1,0 +1,27 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Fri, 25 Oct 2024 23:46:30 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "1199",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID",
+    "openai-organization": "REDACTED",
+    "openai-processing-ms": "2440",
+    "openai-version": "2020-10-01",
+    "x-ratelimit-limit-requests": "10000",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "9999",
+    "x-ratelimit-remaining-tokens": "1999764",
+    "x-ratelimit-reset-requests": "6ms",
+    "x-ratelimit-reset-tokens": "7ms",
+    "x-request-id": "REDACTED",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "CF-Cache-Status": "DYNAMIC",
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "CF-RAY": "REDACTED",
+    "alt-svc": "h3=\":443\"; ma=86400"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-AMOIdmmNsVS1uOqx9EIa4cpLTvZIN\",\n  \"object\": \"chat.completion\",\n  \"created\": 1729899987,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"OpenAI, Inc. is an AI research company dedicated to creating and promoting friendly AI in a way that benefits humanity as a whole. They prioritize human values and emphasize diversity in the development of AI technologies. This company operates in the Health Care sector, specifically in Life Sciences Tools & Services. Their activities span various fields including Information Technology & Services, Academic Research, Physical Sciences, Engineering, Life Sciences, and Scientific & Academic Research, with a focus on B2B services.\\\"\\n}\\n```\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 265,\n    \"completion_tokens\": 107,\n    \"total_tokens\": 372,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_ed14c08274\"\n}\n"
+}

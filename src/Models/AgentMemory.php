@@ -16,6 +16,7 @@ class AgentMemory extends Model
     protected $fillable = [
         'type',
     ];
+    protected $table = 'synapse_agent_memories';
 
     public function messages(): HasMany
     {

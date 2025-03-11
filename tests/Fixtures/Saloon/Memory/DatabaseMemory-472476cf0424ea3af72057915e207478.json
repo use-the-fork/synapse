@@ -1,0 +1,31 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 11 Mar 2025 22:47:38 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "1236",
+        "openai-version": "2020-10-01",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999877",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "3ms",
+        "x-request-id": "req_c3e7c4e20282d5e03bfe92a7803d3f14",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=i8XmZzY5PUFvBVWUq5eiU3BIQzXe8d7V5BbxH5JX.VA-1741733258-1.0.1.1-XM0.NktYe8xZ38S3d0XJaPkMj2P_vwjBoR3EZTMFrX_9Xwi6Wd4_yxffoyttCzgni3d9IdjcerxIUPCRbkhIv_nAfxG552jr_VSPKfE4xKQ; path=\/; expires=Tue, 11-Mar-25 23:17:38 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=RmsQgvpflf3.oAK9MgV4Rky3mtZ4eww83no4QrhmKGo-1741733258377-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "91ee9837ed07306b-BOS",
+        "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-BA2fpmkKc9ZJ6Zd8IyXkw0SApDQUr\",\n  \"object\": \"chat.completion\",\n  \"created\": 1741733257,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"```json\\n{\\n    \\\"answer\\\": \\\"Hello! How can I assist you today?\\\"\\n}\\n```\",\n        \"refusal\": null,\n        \"annotations\": []\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 98,\n    \"completion_tokens\": 21,\n    \"total_tokens\": 119,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\": 0,\n      \"audio_tokens\": 0\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0,\n      \"accepted_prediction_tokens\": 0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\": \"default\",\n  \"system_fingerprint\": \"fp_7c63087da1\"\n}\n"
+}

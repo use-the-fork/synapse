@@ -2,7 +2,6 @@
 
     declare(strict_types=1);
 
-    use Saloon\Http\Faking\Fixture;
     use Saloon\Http\Faking\MockClient;
     use Saloon\Http\Faking\MockResponse;
     use Saloon\Http\PendingRequest;
@@ -15,6 +14,7 @@
     use UseTheFork\Synapse\Integrations\OpenAIIntegration;
     use UseTheFork\Synapse\Memory\CollectionMemory;
     use UseTheFork\Synapse\Services\Clearbit\Requests\ClearbitCompanyRequest;
+    use UseTheFork\Synapse\Tests\Fixtures\OpenAi\OpenAiFixture;
     use UseTheFork\Synapse\Tools\BaseTool;
     use UseTheFork\Synapse\Tools\ClearbitCompanyTool;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
@@ -56,10 +56,9 @@
         }
 
         MockClient::global([
-                               ChatRequest::class => function (PendingRequest $pendingRequest): Fixture {
+                               ChatRequest::class => function (PendingRequest $pendingRequest): OpenAiFixture {
                                    $hash = md5(json_encode($pendingRequest->body()->get('messages')));
-
-                                   return MockResponse::fixture("Tools/ClearbitCompanyTool-{$hash}");
+                                   return new OpenAiFixture("Tools/ClearbitCompanyTool-{$hash}");
                                },
                                ClearbitCompanyRequest::class => MockResponse::fixture('Tools/ClearbitCompanyTool-Tool'),
                            ]);
@@ -70,7 +69,7 @@
         $agentResponseArray = $message->toArray();
         expect($agentResponseArray['content'])->toBeArray()
                                               ->and($agentResponseArray['content'])->toHaveKey('answer')
-                                              ->and($agentResponseArray['content']['answer'])->toContain('OpenAI, legally known as OpenAI, Inc., is an AI research company dedicated to developing safe and beneficial artificial intelligence that aligns with human values and promotes diversity in technology.');
+                                              ->and($agentResponseArray['content']['answer'])->toContain('OpenAI, Inc. is an AI research company dedicated to creating and promoting friendly AI in a way that benefits humanity as a whole.');
 
     });
 

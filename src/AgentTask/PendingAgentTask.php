@@ -8,27 +8,26 @@ use Illuminate\Support\Collection;
 use UseTheFork\Synapse\Agent;
 use UseTheFork\Synapse\AgentTask\StartTasks\BootTraits;
 use UseTheFork\Synapse\AgentTask\StartTasks\MergeProperties;
-use UseTheFork\Synapse\Contracts\Memory;
-use UseTheFork\Synapse\Memory\CollectionMemory;
+use UseTheFork\Synapse\Enums\FinishReason;
+use UseTheFork\Synapse\Traits\HasConfig;
 use UseTheFork\Synapse\Traits\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\Message;
 
 class PendingAgentTask
 {
     use HasMiddleware;
+    use hasConfig;
 
     protected Agent $agent;
-    protected CurrentIteration $currentIteration;
     protected Collection $inputs;
-    protected Memory $iterationMemory;
+    protected Message $response;
+    protected Collection $toolCalls;
+
     protected array $tools = [];
 
     public function __construct(Agent $agent)
     {
         $this->agent = $agent;
-
-        $this->currentIteration = new CurrentIteration;
-        $this->iterationMemory = new CollectionMemory();
-        $this->iterationMemory->boot();
 
         $this
             ->tap(new BootTraits)
@@ -75,6 +74,11 @@ class PendingAgentTask
         $this->tools[$key] = $value;
     }
 
+    public function addToolCall(Message $toolCallWithContent): void
+    {
+        $this->toolCalls->push($toolCallWithContent);
+    }
+
     /**
      * Retrieve the agent associated with the current task.
      *
@@ -85,14 +89,14 @@ class PendingAgentTask
         return $this->agent;
     }
 
-    /**
-     * Get the current iteration of the agent task.
-     *
-     * @return CurrentIteration|null The current iteration instance or null if not set.
-     */
-    public function currentIteration(): ?CurrentIteration
+    public function getExtraAgentArgs(): array
     {
-        return $this->currentIteration;
+        return $this->config()->get('extraAgentArgs');
+    }
+
+    public function getFinishReason(): FinishReason
+    {
+        return FinishReason::from($this->response->finishReason());
     }
 
     /**
@@ -105,6 +109,26 @@ class PendingAgentTask
     public function getInput(string $key): mixed
     {
         return $this->inputs[$key] ?? null;
+    }
+
+    public function getPromptChain(): array
+    {
+        return $this->config()->get('promptChain');
+    }
+
+    public function getResponse(): Message
+    {
+        return $this->response;
+    }
+
+    public function setResponse(Message $message): void
+    {
+        $this->response = $message;
+    }
+
+    public function getToolCalls(): array
+    {
+        return $this->toolCalls->all();
     }
 
     /**
@@ -127,23 +151,17 @@ class PendingAgentTask
      */
     public function reboot(array $inputs, array $extraAgentArgs = []): void
     {
-        $this->currentIteration = new CurrentIteration;
-        $this->currentIteration->setExtraAgentArgs($extraAgentArgs);
 
+        $this->config()->add('extraAgentArgs', $extraAgentArgs);
         $this->inputs = collect($inputs);
-        $this->iterationMemory()->clear();
+        $this->toolCalls = collect();
 
         $this->middleware()->executeStartThreadPipeline($this);
     }
 
-    /**
-     * Retrieve the current tasks memory instance.
-     *
-     * @return Memory The pending tasks memory instance.
-     */
-    public function iterationMemory(): Memory
+    public function setPromptChain(array $promptChain): void
     {
-        return $this->iterationMemory;
+        $this->config()->add('promptChain', $promptChain);
     }
 
     /**

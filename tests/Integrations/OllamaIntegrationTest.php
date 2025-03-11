@@ -12,7 +12,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Integrations\Connectors\Ollama\Requests\ChatRequest;
     use UseTheFork\Synapse\Integrations\OllamaIntegration;
     use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Tools\Search\SerperTool;
     use UseTheFork\Synapse\Traits\Agent\ValidatesOutputSchema;
     use UseTheFork\Synapse\ValueObject\SchemaRule;
 
@@ -56,7 +56,7 @@ declare(strict_types=1);
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toBe('Hello!');
+        ->and($agentResponseArray['content']['answer'])->toBe('Hi there!');
 });
 
 test('uses tools', function (): void {
@@ -106,5 +106,5 @@ test('uses tools', function (): void {
 
     expect($agentResponseArray['content'])->toBeArray()
         ->and($agentResponseArray['content'])->toHaveKey('answer')
-        ->and($agentResponseArray['content']['answer'])->toBe('The current President of the United States is Joe Biden.');
+        ->and($agentResponseArray['content']['answer'])->toBe('Joe Biden is the current president of the United States.');
 });

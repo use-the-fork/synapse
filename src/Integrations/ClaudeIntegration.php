@@ -42,12 +42,12 @@ class ClaudeIntegration implements Integration
 
         $claudeAIConnector = new ClaudeAIConnector;
         $message = $claudeAIConnector->doCompletionRequest(
-            prompt: $pendingAgentTask->currentIteration()->getPromptChain(),
+            prompt: $pendingAgentTask->getPromptChain(),
             tools: $pendingAgentTask->tools(),
-            extraAgentArgs: $pendingAgentTask->currentIteration()->getExtraAgentArgs()
+            extraAgentArgs: $pendingAgentTask->getExtraAgentArgs()
         );
 
-        $pendingAgentTask->currentIteration()->setResponse($message);
+        $pendingAgentTask->setResponse($message);
 
         return $pendingAgentTask;
     }
